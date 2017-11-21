@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.example.a10609516.myapplication.CustomerActivity">
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout9"
+                android:layout_width="343dp"
+                android:layout_height="34dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/warningtextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="29dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="限查詢自己上傳之客戶資料" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout8"
+                android:layout_width="91dp"
+                android:layout_height="220dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="9dp"
+                android:orientation="vertical"
+                android:weightSum="1"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
+
+                <TextView
+                    android:id="@+id/timetextView"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="上傳時間:"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/customertextView"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.55"
+                    android:gravity="center"
+                    android:text="客戶姓名:"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/phonetextView"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.38"
+                    android:gravity="center"
+                    android:text="聯絡電話:"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/addresstextView"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="地址:"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout7"
+                android:layout_width="252dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginStart="8dp"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                app:layout_constraintHorizontal_bias="0.93"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
+
+                <Button
+                    android:id="@+id/startbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.42"
+                    android:background="#F5F5F5"
+                    android:onClick="showDatePickerDialog"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/sql_total_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.15"
+                    android:gravity="center"
+                    android:text="~" />
+
+                <Button
+                    android:id="@+id/endbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.42"
+                    android:background="#F5F5F5"
+                    android:onClick="showDatePickerDialog"
+                    android:text="" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout10"
+                android:layout_width="252dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                app:layout_constraintHorizontal_bias="0.938"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
+
+                <EditText
+                    android:id="@+id/customereditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/phoneeditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Phone"
+                    android:inputType="phone" />
+
+                <EditText
+                    android:id="@+id/addresseditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Address"
+                    android:inputType="textPostalAddress" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout23"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="262dp"
+                android:orientation="vertical"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/linearLayout9">
+
+                <Button
+                    android:id="@+id/searchbutton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:text="查詢"
+                    android:textColor="#0000ff"
+                    android:textSize="20dp"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="81dp" />
+
+                <TextView
+                    android:id="@+id/empty_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:gravity="center"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="81dp" />
+
+                <TextView
+                    android:id="@+id/datatextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@drawable/titleline"
+                    android:gravity="center"
+                    android:text=""
+                    android:visibility="invisible"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="81dp" />
+
+                <com.example.a10609516.myapplication.ListViewForScrollView
+                    android:id="@+id/data_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.62"
+                    android:visibility="invisible"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="8dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout19"
+                android:layout_width="343dp"
+                android:layout_height="130dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/warningline"
+                android:orientation="vertical"
+                android:weightSum="1"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout23">
+
+
+                <TextView
+                    android:id="@+id/directiontextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="53dp"
+                    android:gravity="center"
+                    android:text="使用說明\n"
+                    android:textSize="30dp" />
+
+                <TextView
+                    android:id="@+id/detailtextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1.進入專櫃或通路時，請先行定位打卡於1公里內。\n2.有打卡商品時，就須於當日完成已賣之商品。\n3.預購商品，可以填寫單據拍照上傳照片，每日於下午17:00止，管理部會於下班前回覆上傳照片內容。" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout30"
+                android:layout_width="343dp"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout19">
+
+                <TextView
+                    android:id="@+id/warningtextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:text="公司系統資訊 請勿外流於非他人使用與查詢" />
+            </LinearLayout>
+
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

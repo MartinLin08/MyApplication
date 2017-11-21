@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.a10609516.myapplication.MaintainActivity">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.example.a10609516.myapplication.MaintainActivity">
+
+        <TextView
+            android:id="@+id/maintain_textView"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:textSize="17dp"
+            android:textColor="@color/colorAccent"
+            android:gravity="center"
+            android:text="出勤維護" />
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableLayout>
+
+        <Button
+            android:id="@+id/check_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="OK"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:background="@drawable/button"/>
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="取消"
+            android:textSize="20dp"
+            android:background="@drawable/button"
+            android:textColor="@color/colorAccent"/>
+    </LinearLayout>
+</ScrollView>

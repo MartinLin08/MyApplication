@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+    <ImageView
+        android:id="@+id/about_imageView1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/about" />
+
+    <TextView
+        android:id="@+id/time_textView1"
+        android:layout_width="110dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorAccent"
+        android:text="派工日期時間:"
+        android:textSize="17dp"
+        app:layout_constraintLeft_toRightOf="@+id/about_imageView1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/method_textView1"
+        android:layout_width="75dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="50dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorAccent"
+        android:text="處理方式:"
+        android:textSize="17dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/time_textView1" />
+
+    <TextView
+        android:id="@+id/sql_time_textView1"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:text="2017/09/27 11:00"
+        android:textSize="19dp"
+        app:layout_constraintLeft_toRightOf="@+id/time_textView1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sql_method_textView1"
+        android:layout_width="115dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="38dp"
+        android:gravity="center_vertical"
+        android:text="換濾心"
+        android:textSize="19dp"
+        app:layout_constraintLeft_toRightOf="@+id/method_textView1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/total_textView"
+        android:layout_width="135dp"
+        android:layout_height="32dp"
+        android:textColor="@color/colorAccent"
+        android:text="未結案件數:"
+        android:textSize="25dp"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/method_textView1" />
+
+    <TextView
+        android:id="@+id/sql_total_textView"
+        android:layout_width="50dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="1"
+        android:textSize="25dp"
+        app:layout_constraintLeft_toRightOf="@+id/total_textView"
+        app:layout_constraintTop_toBottomOf="@+id/sql_method_textView1" />
+
+    <Button
+        android:onClick="get_miss_more_Btn"
+        android:id="@+id/more_button3"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:text="more..."
+        android:textAllCaps="false"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/total_textView"
+        android:layout_marginLeft="28dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
