@@ -166,8 +166,8 @@ public class MenuActivity extends BackKeyActivity {
         });
     }
 
+    //公告區的各部門下拉選單
     private void AnnouncementSpinner() {
-        //公告區的各部門下拉選單
         Spinner spinner = (Spinner) findViewById(R.id.announcement_spinner);
         final String[] announcement = {"--- 全 部 分 類 ---", "--- 內 部 公 告 區 ---", "--- 管 理 部 ---", "--- 財 會 部 ---",
                 "--- 水 資 部 ---", "--- 管 財 部 ---", "--- 設 計/經 銷 部 ---", "--- 電 商 部 ---", "--- 技 術 部 ---",

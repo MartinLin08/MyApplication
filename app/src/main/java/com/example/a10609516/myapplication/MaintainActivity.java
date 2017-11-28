@@ -19,23 +19,15 @@ public class MaintainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maintain);
-/*        date_textView = (TextView) findViewById(R.id.date_textView);
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, 0);
-        Date resultdate = new Date(c.getTimeInMillis());
-        String date = simpleDateFormat.format(resultdate);
-
-        date_textView.setText(date);*/
 
         cancel_button = (Button) findViewById(R.id.cancel_button);
+
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
     }
 }

@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +42,7 @@ public class SearchActivity extends AppCompatActivity {
     private Button time_end_button;
     private Button clean_start_button;
     private Button clean_end_button;
+    private Button [] dynamically_btn;
     private Spinner spinner;
     private EditText customer_editText;
     private TableLayout search_tablelayout;
@@ -111,84 +111,6 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
-    //更新UI
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-
-            final String[] title_array = {"  派工類別", "  派工單號", "  送貨客戶", "  預約日期時段", "  聯絡人", "  主要電話",
-                    "  次要電話", "  派工地址", "  是否要收款", "  是否已收款", "  付款方式", "  單據金額", "  已收款金額",
-                    "  抵達日期", "  抵達時間", "  結束時間", "  任務說明", "  料品說明", "  工作說明"};
-
-            switch (msg.what) {
-                case 1:
-                    search_tablelayout.setStretchAllColumns(true);
-                    Bundle b = msg.getData();
-                    ArrayList<String> JArrayList = new ArrayList<String>();
-                    //int i = b.getStringArrayList("Jdata").size();
-                    JArrayList = b.getStringArrayList("Jdata");
-
-                    for (int i = 0; i < b.getStringArrayList("Jdata").size(); i++) {
-
-                        //顯示每筆TableLayout的Title
-                        TextView dynamically_title;
-                        dynamically_title = new TextView(SearchActivity.this);
-                        dynamically_title.setText(title_array[i].toString());
-                        //dynamically_title.setGravity(Gravity.CENTER);
-                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                        dynamically_title.setMaxWidth(200);
-
-                        //顯示每筆TableLayout的SQL資料
-                        TextView dynamically_txt;
-                        dynamically_txt = new TextView(SearchActivity.this);
-                        dynamically_txt.setText(JArrayList.get(i));
-                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                        dynamically_txt.setMaxWidth(200);
-                        TableRow tr = new TableRow(SearchActivity.this);
-
-                        tr.addView(dynamically_title);
-                        tr.addView(dynamically_txt);
-                        search_tablelayout.addView(tr);
-                    }
-
-                    //設置每筆TableLayout的Button
-                    Button dynamically_btn = new Button(SearchActivity.this);
-                    dynamically_btn.setBackgroundResource(R.drawable.button);
-                    dynamically_btn.setText("修改");
-                    dynamically_btn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                    dynamically_btn.setTextColor(0xff0000ff);
-
-                    TableRow tr1 = new TableRow(SearchActivity.this);
-                    tr1.addView(dynamically_btn);
-                    //將動態新增TableRow合併 讓Button置中
-                    TableRow.LayoutParams the_param;
-                    the_param = (TableRow.LayoutParams) dynamically_btn.getLayoutParams();
-                    the_param.span = 2;
-                    dynamically_btn.setLayoutParams(the_param);
-
-                    search_tablelayout.addView(tr1);
-
-                    //設置每筆TableLayout的分隔線
-                    LinearLayout dynamically_llt = new LinearLayout(SearchActivity.this);
-                    dynamically_llt.setBackgroundResource(R.drawable.table_h_divider);
-                    TableRow tr2 = new TableRow(SearchActivity.this);
-                    tr2.addView(dynamically_llt);
-                    //將動態新增TableRow合併 讓分隔線延伸
-                    TableRow.LayoutParams the_param2;
-                    the_param2 = (TableRow.LayoutParams) dynamically_llt.getLayoutParams();
-                    the_param2.span = 2;
-                    dynamically_llt.setLayoutParams(the_param2);
-
-                    search_tablelayout.addView(tr2);
-
-                    break;
-                default:
-                    break;
-            }
-
-            super.handleMessage(msg);
-        }
-    };
 
 
     @Override
@@ -196,15 +118,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        search_tablelayout = (TableLayout) findViewById(R.id.search_tablelayot);
-        search_linearlayout = (LinearLayout) findViewById(R.id.search_linearlayout);
-        spinner = (Spinner) findViewById(R.id.selectList);
-        time_start_button = (Button) findViewById(R.id.start2);
-        time_end_button = (Button) findViewById(R.id.end2);
-        clean_start_button = (Button) findViewById(R.id.clean_button1);
-        clean_end_button = (Button) findViewById(R.id.clean_button2);
-        customer_editText = (EditText) findViewById(R.id.customer_editText);
-        search_button = (Button) findViewById(R.id.search_button);
+        initfunction();
 
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,9 +150,26 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+
         WorkTypeSpinner();
 
+
+
     }
+
+    private void initfunction() {
+        search_tablelayout = (TableLayout) findViewById(R.id.search_tablelayot);
+        search_linearlayout = (LinearLayout) findViewById(R.id.search_linearlayout);
+        spinner = (Spinner) findViewById(R.id.selectList);
+        time_start_button = (Button) findViewById(R.id.start2);
+        time_end_button = (Button) findViewById(R.id.end2);
+        clean_start_button = (Button) findViewById(R.id.clean_button1);
+        clean_end_button = (Button) findViewById(R.id.clean_button2);
+        customer_editText = (EditText) findViewById(R.id.customer_editText);
+        search_button = (Button) findViewById(R.id.search_button);
+    }
+
+
 
 
 
@@ -268,14 +199,14 @@ public class SearchActivity extends AppCompatActivity {
                             .add("ESV_NOTE",customer_edt)
                             .add("WORK_TYPE_NAME",spinner_select)
                             .build();
-                    //Log.i("SearchActivity",);
+                    Log.i("SearchActivity",spinner_select);
                     Request request = new Request.Builder()
                             .url("http://192.168.0.172/Test1/SearchData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    //Log.i("SearchActivity",responseData);
+                    Log.i("SearchActivity",responseData);
                     parseJSONWithJSONObject(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -289,6 +220,7 @@ public class SearchActivity extends AppCompatActivity {
         try {
 
             JSONArray jsonArray = new JSONArray(jsonData);
+            dynamically_btn = new Button[jsonArray.length()];
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -338,6 +270,10 @@ public class SearchActivity extends AppCompatActivity {
                 JArrayList.add(esvd_remark);
 
 
+                /*dynamically_btn[i] = new Button(this) ;
+                dynamically_btn[i].setId(i);*/
+
+
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
                 b.putStringArrayList("Jdata", JArrayList);
@@ -351,6 +287,137 @@ public class SearchActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
+    //更新UI
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            final String[] title_array = {"  派工類別", "  派工單號", "  送貨客戶", "  預約日期時段", "  聯絡人", "  主要電話",
+                    "  次要電話", "  派工地址", "  是否要收款", "  是否已收款", "  付款方式", "  單據金額", "  已收款金額",
+                    "  抵達日期", "  抵達時間", "  結束時間", "  任務說明", "  料品說明", "  工作說明"};
+
+            switch (msg.what) {
+                case 1:
+                    search_tablelayout.setStretchAllColumns(true);
+                    Bundle b = msg.getData();
+                    ArrayList<String> JArrayList = new ArrayList<String>();
+                    //int i = b.getStringArrayList("Jdata").size();
+                    JArrayList = b.getStringArrayList("Jdata");
+
+                    for (int i = 0; i < b.getStringArrayList("Jdata").size(); i++) {
+
+                        //顯示每筆TableLayout的Title
+                        TextView dynamically_title;
+                        dynamically_title = new TextView(SearchActivity.this);
+                        dynamically_title.setText(title_array[i].toString());
+                        //dynamically_title.setGravity(Gravity.CENTER);
+                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                        dynamically_title.setMaxWidth(200);
+
+                        //顯示每筆TableLayout的SQL資料
+                        TextView dynamically_txt;
+                        dynamically_txt = new TextView(SearchActivity.this);
+                        dynamically_txt.setText(JArrayList.get(i));
+                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                        dynamically_txt.setMaxWidth(200);
+                        TableRow tr = new TableRow(SearchActivity.this);
+
+                        tr.addView(dynamically_title);
+                        tr.addView(dynamically_txt);
+                        search_tablelayout.addView(tr);
+                    }
+
+                    /*//設置每筆TableLayout的Button
+                    Button dynamically_btn = new Button(SearchActivity.this);
+                    dynamically_btn.setBackgroundResource(R.drawable.button);
+                    dynamically_btn.setText("修改");
+                    dynamically_btn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                    dynamically_btn.setTextColor(0xff0000ff);
+                    dynamically_btn.setId(dynamically_btn.length()-1);
+                    dynamically_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            for(int i = 0 ; i < dynamically_btn.length()-1 ; i++) {
+                                if (v.getId() == dynamically_btn[i].getId()) {
+                                    Intent intent_maintain = new Intent(SearchActivity.this, MaintainActivity.class);
+                                    startActivity(intent_maintain);
+                                }
+                            }
+                        }
+                    });
+
+                    TableRow tr1 = new TableRow(SearchActivity.this);
+                    tr1.addView(dynamically_btn);
+                    //將動態新增TableRow合併 讓Button置中
+                    TableRow.LayoutParams the_param;
+                    the_param = (TableRow.LayoutParams) dynamically_btn.getLayoutParams();
+                    the_param.span = 2;
+                    dynamically_btn.setLayoutParams(the_param);
+
+                    search_tablelayout.addView(tr1);*/
+
+                    //設置每筆TableLayout的Button
+                    // dynamically_btn = new Button(SearchActivity.this);
+
+
+                    int loc ;
+                        loc = dynamically_btn.length-1;
+
+                    dynamically_btn[loc] = new Button(SearchActivity.this);
+                    dynamically_btn[loc].setBackgroundResource(R.drawable.button);
+                    dynamically_btn[loc].setText("修改");
+                    dynamically_btn[loc].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                    dynamically_btn[loc].setTextColor(0xff0000ff);
+                    dynamically_btn[loc].setId(loc);
+                    dynamically_btn[loc].setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            for( int loc = 0;loc<dynamically_btn.length ;loc++)
+                            {
+                                if (v.getId() == dynamically_btn[loc].getId()) {
+
+                                    Intent intent_maintain = new Intent(SearchActivity.this, MaintainActivity.class);
+                                    startActivity(intent_maintain);
+
+                                }
+                            }
+                        }
+                    });
+
+                    TableRow tr1 = new TableRow(SearchActivity.this);
+                    tr1.addView(dynamically_btn[loc]);
+                    //將動態新增TableRow合併 讓Button置中
+                    TableRow.LayoutParams the_param;
+                    the_param = (TableRow.LayoutParams) dynamically_btn[loc].getLayoutParams();
+                    the_param.span = 2;
+                    dynamically_btn[loc].setLayoutParams(the_param);
+
+                    search_tablelayout.addView(tr1);
+
+                    //設置每筆TableLayout的分隔線
+                    LinearLayout dynamically_llt = new LinearLayout(SearchActivity.this);
+                    dynamically_llt.setBackgroundResource(R.drawable.table_h_divider);
+                    TableRow tr2 = new TableRow(SearchActivity.this);
+                    tr2.addView(dynamically_llt);
+                    //將動態新增TableRow合併 讓分隔線延伸
+                    TableRow.LayoutParams the_param2;
+                    the_param2 = (TableRow.LayoutParams) dynamically_llt.getLayoutParams();
+                    the_param2.span = 2;
+                    dynamically_llt.setLayoutParams(the_param2);
+
+                    search_tablelayout.addView(tr2);
+
+                    break;
+                default:
+                    break;
+            }
+
+            super.handleMessage(msg);
+        }
+    };
+
 
     //日期挑選器
     public void showDatePickerDialog(View v) {

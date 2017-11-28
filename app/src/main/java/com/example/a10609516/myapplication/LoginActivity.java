@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
+
     EditText accountEdit;
     EditText passwordEdit;
     Button login;
@@ -110,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
+    //確認accountEdit、passwordEdit是否為空值
     public void CheckEditTextIsEmptyOrNot() {
 
         IDEdT = accountEdit.getText().toString();
