@@ -1,6 +1,7 @@
 package com.example.a10609516.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,11 @@ import okhttp3.Response;
 
 
 public class MenuActivity extends BackKeyActivity {
+
+    private ListView listview1;
+    private String[] show_text = {"Test1", "Test2", "Test3", "Test4", "Test5"};
+    private ArrayAdapter listAdapter;
+    TextView name_textView;
 
     //創建Menu
     @Override
@@ -87,25 +93,12 @@ public class MenuActivity extends BackKeyActivity {
         return true;
     }
 
-    private ListView listview1;
-    private String[] show_text = {"Test1", "Test2", "Test3", "Test4", "Test5"};
-    private ArrayAdapter listAdapter;
-
-    TextView name_textView;
-    public static final String Userid = "";
-    //String HttpURL = "http://192.168.172/Test1/MenuUserName.php";
-    //String finalResult;
-    //HttpParse httpParse = new HttpParse();
-    //HashMap<String, String> hashMap = new HashMap<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-        //MenuFunction("");
-        sendRequestWithOkHttp();
 
         name_textView = (TextView)findViewById(R.id.name_textView);
         listview1= (ListView) findViewById(R.id.announcement_listView);
@@ -123,8 +116,59 @@ public class MenuActivity extends BackKeyActivity {
             } //end onItemClick
         }); //end setOnItemClickListener
 
+        sendRequestWithOkHttp();
+        AnnouncementSpinner();
+
+    }
+
+
+    //與資料庫連線 藉由登入輸入的員工ID取得員工姓名
+    private void sendRequestWithOkHttp(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data" , MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID" , "");
+                Log.i("MenuActivity",user_id_data);
+
+                try{
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id",user_id_data)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("http://192.168.0.172/Test1/MenuUserName.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.i("MenuActivity",responseData);
+                    showResponse(responseData);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    //在TextView上SHOW出回傳值
+    private void showResponse(final String response){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                name_textView.setText(response);
+            }
+        });
+    }
+
+    private void AnnouncementSpinner() {
         //公告區的各部門下拉選單
-        Spinner spinner = (Spinner)findViewById(R.id.announcement_spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.announcement_spinner);
         final String[] announcement = {"--- 全 部 分 類 ---", "--- 內 部 公 告 區 ---", "--- 管 理 部 ---", "--- 財 會 部 ---",
                 "--- 水 資 部 ---", "--- 管 財 部 ---", "--- 設 計/經 銷 部 ---", "--- 電 商 部 ---", "--- 技 術 部 ---",
                 "--- 行 銷 部 ---", "--- 建 設 部 ---", "--- D I Y 部 ---", "--- 百 貨 部 ---", "--- 客 服 工 程 師 ---"};
@@ -146,87 +190,6 @@ public class MenuActivity extends BackKeyActivity {
             }
         });
     }
-
-    //與資料庫連線 藉由登入輸入的員工ID取得員工姓名
-    private void sendRequestWithOkHttp(){
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                //接收LoginActivity傳過來的值
-                Intent intent = getIntent();
-                String data = intent.getStringExtra(Userid);
-                Log.d("MenuActivity",data);
-
-                try{
-                    OkHttpClient client = new OkHttpClient();
-                    //POST
-                    /*RequestBody requestBody = new FormBody.Builder()
-                            .add("User_id",data)
-                            .build();*/ //POST
-                    //GET
-                    Request request = new Request.Builder()
-                            .url("http://192.168.0.172/Test1/MenuUserName.php?User_id="+data)
-                            //.post(requestBody)
-                            .build(); //GET
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    Log.i("MenuActivity",responseData);
-                    showResponse(responseData);
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    //在TextView上SHOW出回傳值
-    private void showResponse(final String response){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                name_textView.setText(response);
-            }
-        });
-    }
-
-    /*public void MenuFunction(final String User_name) {
-
-        class Menu extends AsyncTask<String, Void, String> {
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onPostExecute(String httpResponseMsg) {
-
-                super.onPostExecute(httpResponseMsg);
-
-                name_textView.setText(httpResponseMsg);
-
-                Toast.makeText(MenuActivity.this, httpResponseMsg, Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            protected String doInBackground(String... params) {
-
-                hashMap.put("User_name", params[0]);
-                finalResult = httpParse.postRequest(hashMap, HttpURL);
-
-                return finalResult;
-
-            }
-
-        }
-
-        Menu MenuClass = new Menu();
-
-        MenuClass.execute(User_name);
-    }*/
 
 
     @Override

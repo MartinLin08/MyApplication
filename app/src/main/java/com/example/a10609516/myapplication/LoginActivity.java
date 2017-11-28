@@ -38,11 +38,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         accountEdit = (EditText) findViewById(R.id.account);
         passwordEdit = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.loginBtn);
         remember_checkBox = (CheckBox) findViewById(R.id.remember_checkBox);
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,12 +63,21 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
                     SharedPreferences.Editor edit = remdname.edit();
                     edit.putString("account", accountEdit.getText().toString());
-                    edit.putString("passeord", passwordEdit.getText().toString());
+                    edit.putString("password", passwordEdit.getText().toString());
                     edit.commit();
                 }
 
+                SharedPreferences sharedPreferences = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                sharedPreferences.edit().putString("ID", accountEdit.getText().toString()).apply();
+
             }
-        });
+        });//end setOnItemClickListener
+
+        SharedPreferencesWithLogin();
+
+    }
+
+    private void SharedPreferencesWithLogin() {
 
         SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
         //SharedPreferences將account 和 password 記錄起來 每次進去APP時 開始從中讀取資料 放入accountEdit，passwordEdit中
@@ -77,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         accountEdit.setText(account_str);
         passwordEdit.setText(password_str);
 
+        //如果remember_checkBox勾選，記住帳密   remember_checkBox不勾選，不記住帳密
         remember_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -99,6 +109,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
+
     public void CheckEditTextIsEmptyOrNot() {
 
         IDEdT = accountEdit.getText().toString();
@@ -116,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
 
         class Login extends AsyncTask<String, Void, String> {
 
+            //執行前，一些基本設定可以在這邊做
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -124,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
 
+            //執行後，最後的結果會在這邊
             @Override
             protected void onPostExecute(String httpResponseMsg) {
 
@@ -150,6 +164,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
 
+            //執行中，在背景做任務
             @Override
             protected String doInBackground(String... params) {
 
@@ -167,7 +182,6 @@ public class LoginActivity extends AppCompatActivity {
 
         userLoginClass.execute(User_id, User_password);
     }
-
 
 }
 

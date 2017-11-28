@@ -1,6 +1,7 @@
 package com.example.a10609516.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -89,10 +90,17 @@ public class CorrectActivity extends AppCompatActivity {
 
         record_tablelayout = (TableLayout) findViewById(R.id.record_tablelayot);
         searchbutton = (Button) findViewById(R.id.searchbutton);
+
+
         searchbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 record_tablelayout.setVisibility(View.VISIBLE);
+
+                /*SharedPreferences user_id = getSharedPreferences("user_id_data" , MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID" , "");
+                Log.i("CorrectActivity",user_id_data);*/
+
             }
         });
     }
