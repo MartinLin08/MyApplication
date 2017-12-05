@@ -83,6 +83,8 @@
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.28"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/button"
                 android:onClick="LoginBtn"
                 android:text="登入"
@@ -91,4 +93,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </ScrollView>

@@ -42,7 +42,7 @@ public class SearchActivity extends AppCompatActivity {
     private Button time_end_button;
     private Button clean_start_button;
     private Button clean_end_button;
-    private Button [] dynamically_btn;
+    private Button[] dynamically_btn;
     private Spinner spinner;
     private EditText customer_editText;
     private TableLayout search_tablelayout;
@@ -112,52 +112,24 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        initfunction();
-
-        search_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //讓search_tablelayout資料清空
-                search_tablelayout.removeAllViews();
-                //按search_button顯示物件search_linearlayout、search_tablelayout
-                search_linearlayout.setVisibility(View.VISIBLE);
-                search_tablelayout.setVisibility(View.VISIBLE);
-
-                sendRequestWithOkHttp();
-
-            }
-        });//end setOnItemClickListener
-
-        //清空time_start_button內的文字
-        clean_start_button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                time_start_button.setText("");
-            }
-        });
-
-        //清空time_end_button內的文字
-        clean_end_button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                time_end_button.setText("");
-            }
-        });
-
-
+        //動態取得 View 物件
+        InItFunction();
+        //派工類別的Spinner下拉選單
         WorkTypeSpinner();
-
-
+        //Button.setOnClickListener監聽器
+        search_button.setOnClickListener(search_btnListener);//傳遞JSON字串與動態新增TableLayout
+        clean_start_button.setOnClickListener(CS_btnListener);//清空time_start_button內的文字
+        clean_end_button.setOnClickListener(CE_btnListener);//清空time_end_button內的文字
 
     }
 
-    private void initfunction() {
+    //動態取得 View 物件
+    private void InItFunction() {
         search_tablelayout = (TableLayout) findViewById(R.id.search_tablelayot);
         search_linearlayout = (LinearLayout) findViewById(R.id.search_linearlayout);
         spinner = (Spinner) findViewById(R.id.selectList);
@@ -169,19 +141,46 @@ public class SearchActivity extends AppCompatActivity {
         search_button = (Button) findViewById(R.id.search_button);
     }
 
+    //Search_Button.setOnClickListener監聽器
+    private Button.OnClickListener search_btnListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //讓search_tablelayout資料清空
+            search_tablelayout.removeAllViews();
+            //按search_button顯示物件search_linearlayout、search_tablelayout
+            search_linearlayout.setVisibility(View.VISIBLE);
+            search_tablelayout.setVisibility(View.VISIBLE);
+            //與OKHttp連線
+            sendRequestWithOkHttp();
+        }
+    };//end setOnItemClickListener
 
+    //Clean_Start_Button.setOnClickListener監聽器
+    private Button.OnClickListener CS_btnListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            time_start_button.setText("");
+        }
+    };//end setOnItemClickListener
 
+    //Clean_End_Button.setOnClickListener監聽器
+    private Button.OnClickListener CE_btnListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            time_end_button.setText("");
+        }
+    };//end setOnItemClickListener
 
-
+    //與OkHttp建立連線
     private void sendRequestWithOkHttp() {
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 //接收LoginActivity傳過來的值
-                SharedPreferences user_id = getSharedPreferences("user_id_data" , MODE_PRIVATE);
-                String user_id_data = user_id.getString("ID" , "");
-                Log.i("SearchActivity",user_id_data);
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.i("SearchActivity", user_id_data);
 
                 //獲取日期挑選器的數據
                 String time_start = time_start_button.getText().toString();
@@ -193,20 +192,20 @@ public class SearchActivity extends AppCompatActivity {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("User_id",user_id_data)
-                            .add("ESVD_BEGIN_DATE1",time_start)
-                            .add("ESVD_BEGIN_DATE2",time_end)
-                            .add("ESV_NOTE",customer_edt)
-                            .add("WORK_TYPE_NAME",spinner_select)
+                            .add("User_id", user_id_data)
+                            .add("ESVD_BEGIN_DATE1", time_start)
+                            .add("ESVD_BEGIN_DATE2", time_end)
+                            .add("ESV_NOTE", customer_edt)
+                            .add("WORK_TYPE_NAME", spinner_select)
                             .build();
-                    Log.i("SearchActivity",spinner_select);
+                    Log.i("SearchActivity", spinner_select);
                     Request request = new Request.Builder()
                             .url("http://192.168.0.172/Test1/SearchData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.i("SearchActivity",responseData);
+                    Log.i("SearchActivity", responseData);
                     parseJSONWithJSONObject(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -215,6 +214,7 @@ public class SearchActivity extends AppCompatActivity {
         }).start();
     }
 
+    //獲得JSON字串並解析成String字串
     private void parseJSONWithJSONObject(String jsonData) {
         search_tablelayout.setStretchAllColumns(true);
         try {
@@ -270,13 +270,9 @@ public class SearchActivity extends AppCompatActivity {
                 JArrayList.add(esvd_remark);
 
 
-                /*dynamically_btn[i] = new Button(this) ;
-                dynamically_btn[i].setId(i);*/
-
-
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
-                b.putStringArrayList("Jdata", JArrayList);
+                b.putStringArrayList("JSON_data", JArrayList);
                 Message msg = mHandler.obtainMessage();
                 msg.setData(b);
                 msg.what = 1;
@@ -294,91 +290,96 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
 
-            final String[] title_array = {"  派工類別", "  派工單號", "  送貨客戶", "  預約日期時段", "  聯絡人", "  主要電話",
-                    "  次要電話", "  派工地址", "  是否要收款", "  是否已收款", "  付款方式", "  單據金額", "  已收款金額",
-                    "  抵達日期", "  抵達時間", "  結束時間", "  任務說明", "  料品說明", "  工作說明"};
+            final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
+                    "次要電話", "派工地址", "是否要收款", "是否已收款", "付款方式", "應收款金額", "已收款金額",
+                    "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明"};
 
             switch (msg.what) {
                 case 1:
+                    //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
                     search_tablelayout.setStretchAllColumns(true);
+
+                    //設置大TableLayout的TableRow
+                    TableRow big_tbr = new TableRow(SearchActivity.this);
+                    //設置每筆資料的小TableLayout
+                    TableLayout small_tb = new TableLayout(SearchActivity.this);
+                    small_tb.setStretchAllColumns(true);
+                    small_tb.setBackgroundResource(R.drawable.titleline);
+
                     Bundle b = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
-                    //int i = b.getStringArrayList("Jdata").size();
-                    JArrayList = b.getStringArrayList("Jdata");
+                    //int i = b.getStringArrayList("JSON_data").size();
+                    JArrayList = b.getStringArrayList("JSON_data");
 
-                    for (int i = 0; i < b.getStringArrayList("Jdata").size(); i++) {
+                    for (int i = 0; i < b.getStringArrayList("JSON_data").size(); i++) {
 
                         //顯示每筆TableLayout的Title
                         TextView dynamically_title;
                         dynamically_title = new TextView(SearchActivity.this);
                         dynamically_title.setText(title_array[i].toString());
                         //dynamically_title.setGravity(Gravity.CENTER);
-                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                        dynamically_title.setPadding(100,0,0,0);
+                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                         dynamically_title.setMaxWidth(200);
+
 
                         //顯示每筆TableLayout的SQL資料
                         TextView dynamically_txt;
                         dynamically_txt = new TextView(SearchActivity.this);
                         dynamically_txt.setText(JArrayList.get(i));
-                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                         dynamically_txt.setMaxWidth(200);
-                        TableRow tr = new TableRow(SearchActivity.this);
 
-                        tr.addView(dynamically_title);
-                        tr.addView(dynamically_txt);
-                        search_tablelayout.addView(tr);
+                        TableRow tr1 = new TableRow(SearchActivity.this);
+                        tr1.addView(dynamically_title);
+                        tr1.addView(dynamically_txt);
+                        //search_tablelayout.addView(tr1);
+                        small_tb.addView(tr1);
                     }
 
-                    /*//設置每筆TableLayout的Button
-                    Button dynamically_btn = new Button(SearchActivity.this);
-                    dynamically_btn.setBackgroundResource(R.drawable.button);
-                    dynamically_btn.setText("修改");
-                    dynamically_btn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                    dynamically_btn.setTextColor(0xff0000ff);
-                    dynamically_btn.setId(dynamically_btn.length()-1);
-                    dynamically_btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            for(int i = 0 ; i < dynamically_btn.length()-1 ; i++) {
-                                if (v.getId() == dynamically_btn[i].getId()) {
-                                    Intent intent_maintain = new Intent(SearchActivity.this, MaintainActivity.class);
-                                    startActivity(intent_maintain);
-                                }
-                            }
+
+                    //設置每筆TableLayout的Button監聽器、與動態新增Button的ID
+                    int loc = 0;
+                    for (int i = 0; i < dynamically_btn.length; i++) {
+                        if (dynamically_btn[i] == null) {
+                            loc = i;
+                            break;
                         }
-                    });
-
-                    TableRow tr1 = new TableRow(SearchActivity.this);
-                    tr1.addView(dynamically_btn);
-                    //將動態新增TableRow合併 讓Button置中
-                    TableRow.LayoutParams the_param;
-                    the_param = (TableRow.LayoutParams) dynamically_btn.getLayoutParams();
-                    the_param.span = 2;
-                    dynamically_btn.setLayoutParams(the_param);
-
-                    search_tablelayout.addView(tr1);*/
-
-                    //設置每筆TableLayout的Button
-                    // dynamically_btn = new Button(SearchActivity.this);
-
-
-                    int loc ;
-                        loc = dynamically_btn.length-1;
-
+                    }
                     dynamically_btn[loc] = new Button(SearchActivity.this);
                     dynamically_btn[loc].setBackgroundResource(R.drawable.button);
                     dynamically_btn[loc].setText("修改");
                     dynamically_btn[loc].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                     dynamically_btn[loc].setTextColor(0xff0000ff);
                     dynamically_btn[loc].setId(loc);
+
                     dynamically_btn[loc].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            for( int loc = 0;loc<dynamically_btn.length ;loc++)
+                            for( int a = 0;a<dynamically_btn.length ;a++)
                             {
-                                if (v.getId() == dynamically_btn[loc].getId()) {
+                                if (v.getId() == dynamically_btn[a].getId()) {
 
                                     Intent intent_maintain = new Intent(SearchActivity.this, MaintainActivity.class);
+                                    //取得大TableLayout中的大TableRow位置
+                                    TableRow tb_tbr = (TableRow) search_tablelayout.getChildAt(a);
+                                    //取得大TableRow中的小TableLayout位置
+                                    TableLayout tb_tbr_tb = (TableLayout)tb_tbr. getChildAt(0);
+                                    //派工資料的迴圈
+                                    for (int x = 0 ; x <19 ; x++){
+                                        //取得小TableLayout中的小TableRow位置
+                                        TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
+                                        //小TableRow中的layout_column位置
+                                        //TextView FirstTextView = (TextView) tb_tbr_tb_tbr.getChildAt(0);
+                                        TextView SecondTextView = (TextView) tb_tbr_tb_tbr.getChildAt(1);
+
+                                        //String TitleText = FirstTextView.getText().toString();
+                                        String ResponseText = SecondTextView.getText().toString();
+
+                                        //intent_maintain.putExtra("TitleText" + x, TitleText);//可放所有基本類別
+                                        intent_maintain.putExtra("ResponseText" + x, ResponseText);//可放所有基本類別
+                                    }
+
                                     startActivity(intent_maintain);
 
                                 }
@@ -386,28 +387,39 @@ public class SearchActivity extends AppCompatActivity {
                         }
                     });
 
-                    TableRow tr1 = new TableRow(SearchActivity.this);
-                    tr1.addView(dynamically_btn[loc]);
+                    TableRow tr2 = new TableRow(SearchActivity.this);
+                    tr2.addView(dynamically_btn[loc]);
                     //將動態新增TableRow合併 讓Button置中
                     TableRow.LayoutParams the_param;
                     the_param = (TableRow.LayoutParams) dynamically_btn[loc].getLayoutParams();
                     the_param.span = 2;
                     dynamically_btn[loc].setLayoutParams(the_param);
+                    small_tb.addView(tr2);
+                    //search_tablelayout.addView(tr2);
 
-                    search_tablelayout.addView(tr1);
 
                     //設置每筆TableLayout的分隔線
                     LinearLayout dynamically_llt = new LinearLayout(SearchActivity.this);
                     dynamically_llt.setBackgroundResource(R.drawable.table_h_divider);
-                    TableRow tr2 = new TableRow(SearchActivity.this);
-                    tr2.addView(dynamically_llt);
+                    TableRow tr3 = new TableRow(SearchActivity.this);
+                    tr3.addView(dynamically_llt);
                     //將動態新增TableRow合併 讓分隔線延伸
                     TableRow.LayoutParams the_param2;
                     the_param2 = (TableRow.LayoutParams) dynamically_llt.getLayoutParams();
                     the_param2.span = 2;
                     dynamically_llt.setLayoutParams(the_param2);
+                    small_tb.addView(tr3);
+                    //search_tablelayout.addView(tr3);
 
-                    search_tablelayout.addView(tr2);
+                    big_tbr.addView(small_tb);
+
+                    TableRow.LayoutParams the_param3;
+                    the_param3 = (TableRow.LayoutParams) small_tb.getLayoutParams();
+                    the_param3.span = 2;
+                    the_param3.width=TableRow.LayoutParams.MATCH_PARENT;
+                    small_tb.setLayoutParams(the_param3);
+
+                    search_tablelayout.addView(big_tbr);
 
                     break;
                 default:
@@ -421,6 +433,7 @@ public class SearchActivity extends AppCompatActivity {
 
     //日期挑選器
     public void showDatePickerDialog(View v) {
+        //日期挑選器
         DialogFragment newFragment = new DatePickerFragment();
         Bundle bData = new Bundle();
         bData.putInt("view", v.getId());
@@ -430,6 +443,7 @@ public class SearchActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "日期挑選器");
     }
 
+    //派工類別的Spinner下拉選單
     private void WorkTypeSpinner() {
         //Spinner下拉選單
         final String[] select = {"選擇", "臨時取消", "換濾心", "換濾料", "加鹽", "末端", "小前置", "全屋", "社區保養", "檢修(一)", "檢修(二)"};
@@ -440,14 +454,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d("SearchActivity", "onDestroy");
     }
 }
-
-
-
-

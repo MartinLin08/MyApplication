@@ -94,33 +94,47 @@ public class MenuActivity extends BackKeyActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        name_textView = (TextView)findViewById(R.id.name_textView);
-        listview1= (ListView) findViewById(R.id.announcement_listView);
-        listAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,show_text);
-        listview1.setAdapter(listAdapter);
-
-        //ListView監聽器
-        listview1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),
-                        "點選的是"+show_text[position], //postition是指點選到的index
-                        Toast.LENGTH_SHORT).show();
-                /*listview1.setVisibility(view.INVISIBLE); *///隱藏ListView
-            } //end onItemClick
-        }); //end setOnItemClickListener
-
+        //動態取得 View 物件
+        InItFunction();
+        //與OKHttp建立連線
         sendRequestWithOkHttp();
+        //公告區的各部門下拉選單
         AnnouncementSpinner();
+        //ListView監聽器
+        ListViewonClick();
 
     }
 
+    //動態取得 View 物件
+    private void InItFunction() {
+
+        name_textView = (TextView) findViewById(R.id.name_textView);
+        listview1 = (ListView) findViewById(R.id.announcement_listView);
+
+    }
+
+    //ListView監聽器
+    private void ListViewonClick(){
+            listAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, show_text);
+        listview1.setAdapter(listAdapter);
+    //ListView監聽器
+        listview1.setOnItemClickListener(new AdapterView.OnItemClickListener()
+
+    {
+        @Override
+        public void onItemClick (AdapterView < ? > parent, View view,int position, long id){
+        Toast.makeText(getApplicationContext(),
+                "點選的是" + show_text[position], //postition是指點選到的index
+                Toast.LENGTH_SHORT).show();
+                /*listview1.setVisibility(view.INVISIBLE); *///隱藏ListView
+    } //end onItemClick
+    }); //end setOnItemClickListener
+}
 
     //與資料庫連線 藉由登入輸入的員工ID取得員工姓名
     private void sendRequestWithOkHttp(){
@@ -154,7 +168,6 @@ public class MenuActivity extends BackKeyActivity {
             }
         }).start();
     }
-
 
     //在TextView上SHOW出回傳值
     private void showResponse(final String response){

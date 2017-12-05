@@ -39,45 +39,59 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //動態取得 View 物件
+        InItFunction();
+        //記住帳密功能
+        SharedPreferencesWithLogin();
+        //Button.setOnClickListener監聽器
+        login.setOnClickListener(login_btnListener);
+
+
+    }
+
+    //動態取得 View 物件
+    private void InItFunction() {
+
         accountEdit = (EditText) findViewById(R.id.account);
         passwordEdit = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.loginBtn);
         remember_checkBox = (CheckBox) findViewById(R.id.remember_checkBox);
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                CheckEditTextIsEmptyOrNot();
-
-                if (CheckEditText) {
-
-                    UserLoginFunction(IDEdT, PwdEdT);
-
-                } else {
-
-                    Toast.makeText(LoginActivity.this, "請輸入員工ID及密碼", Toast.LENGTH_LONG).show();
-
-                }
-
-                if (remember_checkBox.isChecked()) { //檢測使用者帳號密碼
-                    SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor edit = remdname.edit();
-                    edit.putString("account", accountEdit.getText().toString());
-                    edit.putString("password", passwordEdit.getText().toString());
-                    edit.commit();
-                }
-
-                SharedPreferences sharedPreferences = getSharedPreferences("user_id_data", MODE_PRIVATE);
-                sharedPreferences.edit().putString("ID", accountEdit.getText().toString()).apply();
-
-            }
-        });//end setOnItemClickListener
-
-        SharedPreferencesWithLogin();
-
     }
 
+    //Button.setOnClickListener監聽器
+    private Button.OnClickListener login_btnListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            CheckEditTextIsEmptyOrNot();
+
+            if (CheckEditText) {
+
+                UserLoginFunction(IDEdT, PwdEdT);
+
+            } else {
+
+                Toast.makeText(LoginActivity.this, "請輸入員工ID及密碼", Toast.LENGTH_LONG).show();
+
+            }
+
+            if (remember_checkBox.isChecked()) { //檢測使用者帳號密碼
+                SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
+                SharedPreferences.Editor edit = remdname.edit();
+                edit.putString("account", accountEdit.getText().toString());
+                edit.putString("password", passwordEdit.getText().toString());
+                edit.commit();
+            }
+
+            SharedPreferences sharedPreferences = getSharedPreferences("user_id_data", MODE_PRIVATE);
+            sharedPreferences.edit().putString("ID", accountEdit.getText().toString()).apply();
+
+        }
+    };//end setOnItemClickListener
+
+
+    //記住帳密功能
     private void SharedPreferencesWithLogin() {
 
         SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
@@ -125,6 +139,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+    //AsyncTask非同步任務
     public void UserLoginFunction(final String User_id, final String User_password) {
 
         class Login extends AsyncTask<String, Void, String> {
@@ -186,57 +202,5 @@ public class LoginActivity extends AppCompatActivity {
 
 }
 
-              /*String account = accountEdit.getText().toString();
-                String password = passwordEdit.getText().toString();
-                //如果帳號是martin 密碼是123456 就登入成功
-                if (account.equals("martin") && password.equals("123456")){
-                    Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                    startActivity(intent); //登入成功 進入首頁
-                    Toast.makeText(LoginActivity.this, "登入成功",Toast.LENGTH_SHORT).show();
-                    finish();
-                }else{
-                    accountEdit.setText("");
-                    passwordEdit.setText("");
-                    Toast.makeText(LoginActivity.this, "帳號或密碼輸入錯誤",Toast.LENGTH_SHORT).show();
-                    //登入失敗 再輸入一次帳號密碼
-                }
-
-                if (remember_checkBox.isChecked()){ //檢測使用者帳號密碼
-                    SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor edit = remdname.edit();
-                    edit.putString("account",accountEdit.getText().toString());
-                    edit.putString("passeord",passwordEdit.getText().toString());
-                    edit.commit();
-                }
-            }
-        });
-
-        SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
-        //SharedPreferences將account 和 password 記錄起來 每次進去APP時 開始從中讀取資料 放入accountEdit，passwordEdit中
-        String account_str = remdname.getString("account", "");
-        String password_str = remdname.getString("password", "");
-        accountEdit.setText(account_str);
-        passwordEdit.setText(password_str);
-
-        remember_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked){
-                    SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor edit = remdname.edit();
-                    edit.putString("account",accountEdit.getText().toString());
-                    edit.putString("password",passwordEdit.getText().toString());
-                    edit.commit();
-                }
-                if(!isChecked){
-                    SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor edit = remdname.edit();
-                    edit.putString("account","");
-                    edit.putString("password","");
-                    edit.commit();
-                }
-            }
-        });*/
 
 
