@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -43,10 +44,11 @@ public class SearchActivity extends AppCompatActivity {
     private Button clean_start_button;
     private Button clean_end_button;
     private Button[] dynamically_btn;
-    private Spinner spinner;
+    private Spinner SelectList;
     private EditText customer_editText;
     private TableLayout search_tablelayout;
     private LinearLayout search_linearlayout;
+    private ScrollView search_scrollView;
 
     //創建Menu
     @Override
@@ -130,9 +132,10 @@ public class SearchActivity extends AppCompatActivity {
 
     //動態取得 View 物件
     private void InItFunction() {
+        search_scrollView = (ScrollView)findViewById(R.id.search_scrollView);
         search_tablelayout = (TableLayout) findViewById(R.id.search_tablelayot);
         search_linearlayout = (LinearLayout) findViewById(R.id.search_linearlayout);
-        spinner = (Spinner) findViewById(R.id.selectList);
+        SelectList = (Spinner) findViewById(R.id.selectList);
         time_start_button = (Button) findViewById(R.id.start2);
         time_end_button = (Button) findViewById(R.id.end2);
         clean_start_button = (Button) findViewById(R.id.clean_button1);
@@ -186,7 +189,7 @@ public class SearchActivity extends AppCompatActivity {
                 String time_start = time_start_button.getText().toString();
                 String time_end = time_end_button.getText().toString();
                 String customer_edt = customer_editText.getText().toString();
-                String spinner_select = String.valueOf(spinner.getSelectedItem());
+                String spinner_select = String.valueOf(SelectList.getSelectedItem());
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -234,10 +237,10 @@ public class SearchActivity extends AppCompatActivity {
                 String esv_tel_no1 = jsonObject.getString("主要電話");
                 String esv_tel_no2 = jsonObject.getString("次要電話");
                 String esv_address = jsonObject.getString("派工地址");
-                String esvd_is_get_money = jsonObject.getString("是否要收款");
-                String esvd_is_eng_money = jsonObject.getString("是否已收款");
                 String cp_name = jsonObject.getString("付款方式");
-                String esvd_is_money = jsonObject.getString("單據金額");
+                String esvd_is_get_money = jsonObject.getString("是否要收款");
+                String esvd_is_money = jsonObject.getString("應收款金額");
+                String esvd_is_eng_money = jsonObject.getString("是否已收款");
                 String esvd_get_eng_money = jsonObject.getString("已收款金額");
                 String esvd_begin_date = jsonObject.getString("抵達日期");
                 String esvd_begin_time = jsonObject.getString("抵達時間");
@@ -257,10 +260,10 @@ public class SearchActivity extends AppCompatActivity {
                 JArrayList.add(esv_tel_no1);
                 JArrayList.add(esv_tel_no2);
                 JArrayList.add(esv_address);
-                JArrayList.add(esvd_is_get_money);
-                JArrayList.add(esvd_is_eng_money);
                 JArrayList.add(cp_name);
+                JArrayList.add(esvd_is_get_money);
                 JArrayList.add(esvd_is_money);
+                JArrayList.add(esvd_is_eng_money);
                 JArrayList.add(esvd_get_eng_money);
                 JArrayList.add(esvd_begin_date);
                 JArrayList.add(esvd_begin_time);
@@ -291,7 +294,7 @@ public class SearchActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
 
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
-                    "次要電話", "派工地址", "是否要收款", "是否已收款", "付款方式", "應收款金額", "已收款金額",
+                    "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
                     "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明"};
 
             switch (msg.what) {
@@ -318,9 +321,10 @@ public class SearchActivity extends AppCompatActivity {
                         dynamically_title = new TextView(SearchActivity.this);
                         dynamically_title.setText(title_array[i].toString());
                         //dynamically_title.setGravity(Gravity.CENTER);
-                        dynamically_title.setPadding(100,0,0,0);
+                        //dynamically_title.setWidth(50);
+                        dynamically_title.setPadding(40,0,0,0);
                         dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                        dynamically_title.setMaxWidth(200);
+                        dynamically_title.setMaxWidth(350);
 
 
                         //顯示每筆TableLayout的SQL資料
@@ -328,7 +332,7 @@ public class SearchActivity extends AppCompatActivity {
                         dynamically_txt = new TextView(SearchActivity.this);
                         dynamically_txt.setText(JArrayList.get(i));
                         dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                        dynamically_txt.setMaxWidth(200);
+                        dynamically_txt.setMaxWidth(350);
 
                         TableRow tr1 = new TableRow(SearchActivity.this);
                         tr1.addView(dynamically_title);
@@ -376,8 +380,11 @@ public class SearchActivity extends AppCompatActivity {
                                         //String TitleText = FirstTextView.getText().toString();
                                         String ResponseText = SecondTextView.getText().toString();
 
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("ResponseText" + x, ResponseText);
+
                                         //intent_maintain.putExtra("TitleText" + x, TitleText);//可放所有基本類別
-                                        intent_maintain.putExtra("ResponseText" + x, ResponseText);//可放所有基本類別
+                                        intent_maintain.putExtras(bundle);//可放所有基本類別
                                     }
 
                                     startActivity(intent_maintain);
@@ -450,9 +457,21 @@ public class SearchActivity extends AppCompatActivity {
         ArrayAdapter<String> selectList = new ArrayAdapter<>(SearchActivity.this,
                 android.R.layout.simple_spinner_dropdown_item,
                 select);
-        spinner.setAdapter(selectList);
+        SelectList.setAdapter(selectList);
     }
 
+    //實現畫面置頂按鈕
+    public void GoTopBtn(View view) {
+
+        Handler mHandler = new Handler();
+
+        mHandler.post(new Runnable() {
+            public void run() {
+                //實現畫面置頂按鈕
+                search_scrollView.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+    }
 
     @Override
     protected void onDestroy() {

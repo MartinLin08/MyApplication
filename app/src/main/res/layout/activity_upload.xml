@@ -741,7 +741,7 @@
             android:layout_gravity="end|bottom"
             android:layout_weight="0.33"
             android:clickable="true"
-            android:onClick="gotopbtn"
+            android:onClick="GoTopBtn"
             app:backgroundTint="#E0FFFF"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_gotop" />

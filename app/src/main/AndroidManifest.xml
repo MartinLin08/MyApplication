@@ -76,13 +76,34 @@
             android:label="上傳日報紀錄"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Day_Schedule" />
-        <activity android:name=".Week_Schedule" />
-        <activity android:name=".Missing_Date" />
-        <activity android:name=".MaintainActivity" />
-        <activity android:name=".Day_Work" />
-        <activity android:name=".Week_Work" />
-        <activity android:name=".Missing_Date_Record"></activity>
+        <activity
+            android:name=".Day_Schedule"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Week_Schedule"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Missing_Date"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".MaintainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Day_Work"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Week_Work"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Missing_Date_Record"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>

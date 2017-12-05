@@ -166,7 +166,7 @@ public class UploadActivity extends AppCompatActivity {
 
     private ScrollView scrollView;
 
-    public void gotopbtn(View view) {
+    public void GoTopBtn(View view) {
 
         Handler mHandler = new Handler();
 
