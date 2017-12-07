@@ -19,9 +19,9 @@ import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText accountEdit;
-    EditText passwordEdit;
-    Button login;
+    private EditText accountEdit;
+    private EditText passwordEdit;
+    private Button login;
     private CheckBox remember_checkBox;
 
     String IDEdT, PwdEdT;

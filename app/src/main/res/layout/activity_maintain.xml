@@ -155,6 +155,7 @@
                 tools:layout_editor_absoluteY="8dp">
 
                 <TextView
+                    android:id="@+id/textView4"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_column="0"
@@ -200,7 +201,8 @@
                     android:gravity="center_vertical"
                     android:text="收款"
                     android:textColor="@color/colorAccent"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:enabled="false"/>
 
             </TableRow>
 
@@ -243,6 +245,7 @@
                     android:layout_height="wrap_content"
                     android:layout_column="0"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center_vertical"
                     android:text="任務說明"
                     android:textColor="@color/colorAccent"
@@ -252,6 +255,7 @@
                     android:id="@+id/esvd_booking_remark_txt"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:layout_column="1"
                     android:gravity="center_vertical"
                     android:text=""
@@ -293,6 +297,7 @@
                     android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
                     android:text="已收款"
+                    android:onClick="onCheckboxClicked"
                     android:textColor="@color/colorAccent"
                     android:textSize="18dp" />
 
@@ -322,6 +327,7 @@
                     android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
                     android:text="未收款"
+                    android:onClick="onCheckboxClicked"
                     android:textColor="@color/colorAccent"
                     android:textSize="18dp" />
 
@@ -351,6 +357,7 @@
                     android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
                     android:text="未收齊"
+                    android:onClick="onCheckboxClicked"
                     android:textColor="@color/colorAccent"
                     android:textSize="18dp" />
 
@@ -491,7 +498,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="8dp">
 
@@ -505,13 +512,20 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="18dp" />
 
-                <EditText
-                    android:id="@+id/esvd_remark_txt"
+                <LinearLayout
                     android:layout_width="190dp"
-                    android:layout_height="40dp"
-                    android:layout_column="1"
-                    android:ems="10"
-                    android:inputType="textMultiLine" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/esvd_remark_txt"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:ems="10"
+                        android:inputType="textMultiLine" />
+
+                </LinearLayout>
 
             </TableRow>
 

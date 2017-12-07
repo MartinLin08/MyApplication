@@ -50,6 +50,7 @@ public class SearchActivity extends AppCompatActivity {
     private LinearLayout search_linearlayout;
     private ScrollView search_scrollView;
 
+
     //創建Menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -323,7 +324,7 @@ public class SearchActivity extends AppCompatActivity {
                         //dynamically_title.setGravity(Gravity.CENTER);
                         //dynamically_title.setWidth(50);
                         dynamically_title.setPadding(40,0,0,0);
-                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                         dynamically_title.setMaxWidth(350);
 
 
@@ -331,7 +332,7 @@ public class SearchActivity extends AppCompatActivity {
                         TextView dynamically_txt;
                         dynamically_txt = new TextView(SearchActivity.this);
                         dynamically_txt.setText(JArrayList.get(i));
-                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                         dynamically_txt.setMaxWidth(350);
 
                         TableRow tr1 = new TableRow(SearchActivity.this);
@@ -415,8 +416,12 @@ public class SearchActivity extends AppCompatActivity {
                     the_param2 = (TableRow.LayoutParams) dynamically_llt.getLayoutParams();
                     the_param2.span = 2;
                     dynamically_llt.setLayoutParams(the_param2);
-                    small_tb.addView(tr3);
-                    //search_tablelayout.addView(tr3);
+
+                    //刪去最後一筆TableLayout的分隔線
+                    if ( (dynamically_btn.length-1) != loc ) {
+                        small_tb.addView(tr3);
+                        //search_tablelayout.addView(tr3);
+                    }
 
                     big_tbr.addView(small_tb);
 

@@ -1,6 +1,5 @@
 package com.example.a10609516.myapplication;
 
-import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -15,11 +17,14 @@ import android.widget.TextView;
 
 public class MaintainActivity extends AppCompatActivity {
 
-    private Button cancel_button ,arrive_button;
-    private TextView work_type_name_txt ,svd_service_no_txt ,esv_note_txt ,time_period_name_txt, cp_name_txt, esvd_is_money_txt ,esvd_booking_remark_txt;
+    private Button cancel_button, arrive_button;
+    private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, cp_name_txt,
+            esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt;
     private TableLayout maintain_tablelayot;
-    private Spinner arrive_spinner ,leave_spinner ,useless_spinner;
-    private ArrayAdapter<String> time_listAdapter ,work_listAdapter;
+    private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox;
+    private EditText have_get_money_edt, not_get_money_edt, not_get_all_edt, not_get_all_reason_edt;
+    private Spinner arrive_spinner, leave_spinner, useless_spinner;
+    private ArrayAdapter<String> time_listAdapter, work_listAdapter;
     private String[] time = new String[]{"選擇", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"
             , "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"
             , "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30"
@@ -39,6 +44,10 @@ public class MaintainActivity extends AppCompatActivity {
         InItFunction();
         //取得SearchActivity傳遞過來的值
         GetResponseData();
+        //判斷SearchActivity的是否要收款傳遞過來的值為(是/否)
+        CheckYesOrNo();
+        /*//確認是否要收款的CheckBox勾選與否 決定是否以收款的顯示
+        IsGetMoneyCheckOrNot();*/
         //抵達時間與離開時間的Spinner
         TimeSpinner();
         //無效派工的Spinner
@@ -65,7 +74,16 @@ public class MaintainActivity extends AppCompatActivity {
         cp_name_txt = (TextView) findViewById(R.id.cp_name_txt);
         esvd_is_money_txt = (TextView) findViewById(R.id.esvd_is_money_txt);
         esvd_booking_remark_txt = (TextView) findViewById(R.id.esvd_booking_remark_txt);
+        have_get_money_txt = (TextView) findViewById(R.id.have_get_money_txt);
         arrive_button = (Button) findViewById(R.id.arrive_button);
+        is_get_money_checkBox = (CheckBox) findViewById(R.id.is_get_money_checkBox);
+        have_get_money_checkBox = (CheckBox) findViewById(R.id.have_get_money_checkBox);
+        not_get_money_checkBox = (CheckBox) findViewById(R.id.not_get_money_checkBox);
+        not_get_all_checkBox = (CheckBox) findViewById(R.id.not_get_all_checkBox);
+        have_get_money_edt = (EditText) findViewById(R.id.have_get_money_edt);
+        not_get_money_edt = (EditText) findViewById(R.id.not_get_money_edt);
+        not_get_all_edt = (EditText) findViewById(R.id.not_get_all_edt);
+        not_get_all_reason_edt = (EditText) findViewById(R.id.not_get_all_reason_edt);
         arrive_spinner = (Spinner) findViewById(R.id.arrive_spinner);
         leave_spinner = (Spinner) findViewById(R.id.leave_spinner);
         useless_spinner = (Spinner) findViewById(R.id.useless_spinner);
@@ -73,7 +91,7 @@ public class MaintainActivity extends AppCompatActivity {
     }
 
     //取得SearchActivity傳遞過來的值
-    private void GetResponseData(){
+    private void GetResponseData() {
 
         Bundle bundle = getIntent().getExtras();
         maintain_tablelayot.setStretchAllColumns(true);
@@ -93,20 +111,145 @@ public class MaintainActivity extends AppCompatActivity {
         esvd_booking_remark_txt.setText(ResponseText16);
         String ResponseText13 = bundle.getString("ResponseText" + 13);
         arrive_button.setText(ResponseText13);
-        /*String ResponseText14 = bundle.getString("ResponseText" + 14);
-        for( int i=0;i< time.length ; i++ )
-        {
-            if ( time[i].equals(ResponseText14) )
-            {
-                arrive_spinner.setSelection(i);
-                break;
-            }
+
+    }
+
+    //判斷SearchActivity的是否要收款傳遞過來的值為(是/否)
+    private void CheckYesOrNo(){
+        Bundle bundle = getIntent().getExtras();
+        String ResponseText9 = bundle.getString("ResponseText" + 9);
+        //如果傳遞過來的值為"是" 則預設is_get_money_checkBox為被勾選
+        if (ResponseText9.equals("是")){
+            is_get_money_checkBox.setChecked(true);
+            //如果is_get_money_checkBox被勾選 則是否已收款相關欄位能被修改
+            have_get_money_txt.setEnabled(true);
+            have_get_money_checkBox.setEnabled(true);
+            have_get_money_edt.setEnabled(true);
+            not_get_money_checkBox.setEnabled(true);
+            not_get_money_edt.setEnabled(true);
+            not_get_all_checkBox.setEnabled(true);
+            not_get_all_edt.setEnabled(true);
+            not_get_all_reason_edt.setEnabled(true);
         }
-        String ResponseText15 = bundle.getString("ResponseText" + 15);
-        leave_spinner.setPrompt(ResponseText15);*/
+        //如果傳遞過來的值為"否" 則預設is_get_money_checkBox為不被勾選
+        else{
+            is_get_money_checkBox.setChecked(false);
+            //如果is_get_money_checkBox不被勾選 則是否已收款相關欄位不能被修改
+            have_get_money_txt.setEnabled(false);
+            have_get_money_checkBox.setEnabled(false);
+            have_get_money_edt.setEnabled(false);
+            not_get_money_checkBox.setEnabled(false);
+            not_get_money_edt.setEnabled(false);
+            not_get_all_checkBox.setEnabled(false);
+            not_get_all_edt.setEnabled(false);
+            not_get_all_reason_edt.setEnabled(false);
+        }
+    }
 
+    /*//確認是否要收款的CheckBox勾選與否 決定是否以收款的顯示
+    private void IsGetMoneyCheckOrNot() {
+        is_get_money_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    //如果is_get_money_checkBox被勾選 則是否已收款相關欄位能被修改
+                    have_get_money_txt.setEnabled(true);
+                    have_get_money_checkBox.setEnabled(true);
+                    have_get_money_edt.setEnabled(true);
+                    not_get_money_checkBox.setEnabled(true);
+                    not_get_money_edt.setEnabled(true);
+                    not_get_all_checkBox.setEnabled(true);
+                    not_get_all_edt.setEnabled(true);
+                    not_get_all_reason_edt.setEnabled(true);
+                    //顯示是否已收款相關欄位
+                    *//*have_get_money_txt.setVisibility(View.VISIBLE);
+                    have_get_money_checkBox.setVisibility(View.VISIBLE);
+                    have_get_money_edt.setVisibility(View.VISIBLE);
+                    not_get_money_checkBox.setVisibility(View.VISIBLE);
+                    not_get_money_edt.setVisibility(View.VISIBLE);
+                    not_get_all_checkBox.setVisibility(View.VISIBLE);
+                    not_get_all_edt.setVisibility(View.VISIBLE);
+                    not_get_all_reason_edt.setVisibility(View.VISIBLE);*//*
+                }
+                if (!isChecked) {
+                    //如果is_get_money_checkBox不被勾選 則是否已收款相關欄位不能被修改
+                    have_get_money_txt.setEnabled(false);
+                    have_get_money_checkBox.setEnabled(false);
+                    have_get_money_edt.setEnabled(false);
+                    not_get_money_checkBox.setEnabled(false);
+                    not_get_money_edt.setEnabled(false);
+                    not_get_all_checkBox.setEnabled(false);
+                    not_get_all_edt.setEnabled(false);
+                    not_get_all_reason_edt.setEnabled(false);
+                    //隱藏是否已收款相關欄位
+                    *//*have_get_money_txt.setVisibility(View.INVISIBLE);
+                    have_get_money_checkBox.setVisibility(View.INVISIBLE);
+                    have_get_money_edt.setVisibility(View.INVISIBLE);
+                    not_get_money_checkBox.setVisibility(View.INVISIBLE);
+                    not_get_money_edt.setVisibility(View.INVISIBLE);
+                    not_get_all_checkBox.setVisibility(View.INVISIBLE);
+                    not_get_all_edt.setVisibility(View.INVISIBLE);
+                    not_get_all_reason_edt.setVisibility(View.INVISIBLE);*//*
+                }
+            }
+        });
+    }*/
 
+    //設置是否已收款的三個CheckBox只能一個被勾選
+    public void onCheckboxClicked(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        switch (view.getId()) {
+            case R.id.have_get_money_checkBox:
+                if (checked) {
+                    not_get_money_checkBox.setEnabled(false);
+                    not_get_money_edt.setEnabled(false);
+                    not_get_all_checkBox.setEnabled(false);
+                    not_get_all_edt.setEnabled(false);
+                    not_get_all_reason_edt.setEnabled(false);
+                } else {
+                    not_get_money_checkBox.setEnabled(true);
+                    not_get_money_edt.setEnabled(true);
+                    not_get_all_checkBox.setEnabled(true);
+                    not_get_all_edt.setEnabled(true);
+                    not_get_all_reason_edt.setEnabled(true);
+                }
+                break;
+
+            case R.id.not_get_money_checkBox:
+                if (checked) {
+                    have_get_money_checkBox.setEnabled(false);
+                    have_get_money_edt.setEnabled(false);
+                    not_get_all_checkBox.setEnabled(false);
+                    not_get_all_edt.setEnabled(false);
+                    not_get_all_reason_edt.setEnabled(false);
+                }else {
+                    have_get_money_checkBox.setEnabled(true);
+                    have_get_money_edt.setEnabled(true);
+                    not_get_all_checkBox.setEnabled(true);
+                    not_get_all_edt.setEnabled(true);
+                    not_get_all_reason_edt.setEnabled(true);
+                }
+                break;
+
+            case R.id.not_get_all_checkBox:
+                if (checked) {
+                    have_get_money_checkBox.setEnabled(false);
+                    have_get_money_edt.setEnabled(false);
+                    not_get_money_checkBox.setEnabled(false);
+                    not_get_money_edt.setEnabled(false);
+                }else{
+                    have_get_money_checkBox.setEnabled(true);
+                    have_get_money_edt.setEnabled(true);
+                    not_get_money_checkBox.setEnabled(true);
+                    not_get_money_edt.setEnabled(true);
+                }
+                break;
+
+        }
     }
 
     //日期挑選器
@@ -136,20 +279,16 @@ public class MaintainActivity extends AppCompatActivity {
         time_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         arrive_spinner.setAdapter(time_listAdapter);
         //當迴圈與ResponseText內容一致時跳出迴圈 並顯示該ResponseText的Spinner位置
-        for( int i = 0 ;i< time.length ;i++ )
-        {
-            if ( time[i].equals(ResponseText14) )
-            {
-                arrive_spinner.setSelection(i,true);
+        for (int i = 0; i < time.length; i++) {
+            if (time[i].equals(ResponseText14)) {
+                arrive_spinner.setSelection(i, true);
                 break;
             }
         }
         leave_spinner.setAdapter(time_listAdapter);
-        for( int i = 0 ;i< time.length ;i++ )
-        {
-            if ( time[i].equals(ResponseText15) )
-            {
-                leave_spinner.setSelection(i,true);
+        for (int i = 0; i < time.length; i++) {
+            if (time[i].equals(ResponseText15)) {
+                leave_spinner.setSelection(i, true);
                 break;
             }
         }
