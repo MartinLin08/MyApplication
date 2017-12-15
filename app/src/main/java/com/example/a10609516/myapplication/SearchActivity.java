@@ -2,6 +2,7 @@ package com.example.a10609516.myapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,16 +39,12 @@ import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private Button search_button;
-    private Button time_start_button;
-    private Button time_end_button;
-    private Button clean_start_button;
-    private Button clean_end_button;
+    private Button search_button ,time_start_button ,time_end_button ,clean_start_button ,clean_end_button;
     private Button[] dynamically_btn;
     private Spinner SelectList;
     private EditText customer_editText;
-    private TableLayout search_tablelayout;
-    private LinearLayout search_linearlayout;
+    private TableLayout search_TableLayout;
+    private LinearLayout search_LinearLayout;
     private ScrollView search_scrollView;
 
 
@@ -134,8 +131,8 @@ public class SearchActivity extends AppCompatActivity {
     //動態取得 View 物件
     private void InItFunction() {
         search_scrollView = (ScrollView)findViewById(R.id.search_scrollView);
-        search_tablelayout = (TableLayout) findViewById(R.id.search_tablelayot);
-        search_linearlayout = (LinearLayout) findViewById(R.id.search_linearlayout);
+        search_TableLayout = (TableLayout) findViewById(R.id.search_TableLayout);
+        search_LinearLayout = (LinearLayout) findViewById(R.id.search_LinearLayout);
         SelectList = (Spinner) findViewById(R.id.selectList);
         time_start_button = (Button) findViewById(R.id.start2);
         time_end_button = (Button) findViewById(R.id.end2);
@@ -150,11 +147,11 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             //讓search_tablelayout資料清空
-            search_tablelayout.removeAllViews();
+            search_TableLayout.removeAllViews();
             //按search_button顯示物件search_linearlayout、search_tablelayout
-            search_linearlayout.setVisibility(View.VISIBLE);
-            search_tablelayout.setVisibility(View.VISIBLE);
-            //與OKHttp連線
+            search_LinearLayout.setVisibility(View.VISIBLE);
+            search_TableLayout.setVisibility(View.VISIBLE);
+            //建立SearchData.php OKHttp連線
             sendRequestWithOkHttp();
         }
     };//end setOnItemClickListener
@@ -220,7 +217,7 @@ public class SearchActivity extends AppCompatActivity {
 
     //獲得JSON字串並解析成String字串
     private void parseJSONWithJSONObject(String jsonData) {
-        search_tablelayout.setStretchAllColumns(true);
+
         try {
 
             JSONArray jsonArray = new JSONArray(jsonData);
@@ -301,21 +298,24 @@ public class SearchActivity extends AppCompatActivity {
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
-                    search_tablelayout.setStretchAllColumns(true);
+                    search_TableLayout.setStretchAllColumns(true);
 
                     //設置大TableLayout的TableRow
                     TableRow big_tbr = new TableRow(SearchActivity.this);
                     //設置每筆資料的小TableLayout
                     TableLayout small_tb = new TableLayout(SearchActivity.this);
+                    //全部列自動填充空白處
                     small_tb.setStretchAllColumns(true);
                     small_tb.setBackgroundResource(R.drawable.titleline);
+                    //設定TableRow的寬高
+                    //TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.WRAP_CONTENT);
 
-                    Bundle b = msg.getData();
+                    Bundle jb = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
                     //int i = b.getStringArrayList("JSON_data").size();
-                    JArrayList = b.getStringArrayList("JSON_data");
+                    JArrayList = jb.getStringArrayList("JSON_data");
 
-                    for (int i = 0; i < b.getStringArrayList("JSON_data").size(); i++) {
+                    for (int i = 0; i < jb.getStringArrayList("JSON_data").size(); i++) {
 
                         //顯示每筆TableLayout的Title
                         TextView dynamically_title;
@@ -338,7 +338,7 @@ public class SearchActivity extends AppCompatActivity {
                         TableRow tr1 = new TableRow(SearchActivity.this);
                         tr1.addView(dynamically_title);
                         tr1.addView(dynamically_txt);
-                        //search_tablelayout.addView(tr1);
+                        //search_TableLayout.addView(tr1);
                         small_tb.addView(tr1);
                     }
 
@@ -355,7 +355,7 @@ public class SearchActivity extends AppCompatActivity {
                     dynamically_btn[loc].setBackgroundResource(R.drawable.button);
                     dynamically_btn[loc].setText("修改");
                     dynamically_btn[loc].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                    dynamically_btn[loc].setTextColor(0xff0000ff);
+                    dynamically_btn[loc].setTextColor(Color.rgb(6,102,219));
                     dynamically_btn[loc].setId(loc);
 
                     dynamically_btn[loc].setOnClickListener(new View.OnClickListener() {
@@ -367,7 +367,7 @@ public class SearchActivity extends AppCompatActivity {
 
                                     Intent intent_maintain = new Intent(SearchActivity.this, MaintainActivity.class);
                                     //取得大TableLayout中的大TableRow位置
-                                    TableRow tb_tbr = (TableRow) search_tablelayout.getChildAt(a);
+                                    TableRow tb_tbr = (TableRow) search_TableLayout.getChildAt(a);
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout)tb_tbr. getChildAt(0);
                                     //派工資料的迴圈
@@ -375,12 +375,9 @@ public class SearchActivity extends AppCompatActivity {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置
-                                        //TextView FirstTextView = (TextView) tb_tbr_tb_tbr.getChildAt(0);
                                         TextView SecondTextView = (TextView) tb_tbr_tb_tbr.getChildAt(1);
-
-                                        //String TitleText = FirstTextView.getText().toString();
                                         String ResponseText = SecondTextView.getText().toString();
-
+                                        //將SQL裡的資料傳到MaintainActivity
                                         Bundle bundle = new Bundle();
                                         bundle.putString("ResponseText" + x, ResponseText);
 
@@ -403,7 +400,7 @@ public class SearchActivity extends AppCompatActivity {
                     the_param.span = 2;
                     dynamically_btn[loc].setLayoutParams(the_param);
                     small_tb.addView(tr2);
-                    //search_tablelayout.addView(tr2);
+                    //search_TableLayout.addView(tr2);
 
 
                     //設置每筆TableLayout的分隔線
@@ -420,7 +417,7 @@ public class SearchActivity extends AppCompatActivity {
                     //刪去最後一筆TableLayout的分隔線
                     if ( (dynamically_btn.length-1) != loc ) {
                         small_tb.addView(tr3);
-                        //search_tablelayout.addView(tr3);
+                        //search_TableLayout.addView(tr3);
                     }
 
                     big_tbr.addView(small_tb);
@@ -431,7 +428,7 @@ public class SearchActivity extends AppCompatActivity {
                     the_param3.width=TableRow.LayoutParams.MATCH_PARENT;
                     small_tb.setLayoutParams(the_param3);
 
-                    search_tablelayout.addView(big_tbr);
+                    search_TableLayout.addView(big_tbr);
 
                     break;
                 default:

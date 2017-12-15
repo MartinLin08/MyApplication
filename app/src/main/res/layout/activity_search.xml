@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="560dp"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.a10609516.myapplication.SearchActivity">
 
@@ -235,7 +235,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/search_linearlayout"
+                android:id="@+id/search_LinearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -246,7 +246,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
                 <TableLayout
-                    android:id="@+id/search_tablelayot"
+                    android:id="@+id/search_TableLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"

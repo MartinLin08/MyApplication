@@ -101,7 +101,7 @@ public class MenuActivity extends BackKeyActivity {
         InItFunction();
         //ListView監聽器
         ListViewOnClick();
-        //與OKHttp建立連線
+        //與MenuUserName.php 建立OKHttp連線
         sendRequestWithOkHttp();
         //公告區的各部門下拉選單
         AnnouncementSpinner();
@@ -166,7 +166,7 @@ public class MenuActivity extends BackKeyActivity {
         }).start();
     }
 
-    //在TextView上SHOW出回傳值
+    //在TextView上SHOW出回傳的員工姓名
     private void showResponse(final String response){
         runOnUiThread(new Runnable() {
             @Override

@@ -1,408 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
+    android:layout_height="match_parent">
 
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
 
-    <ImageView
-        android:id="@+id/about_imageView1"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/about" />
+        <LinearLayout
+            android:id="@+id/week_LinearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.043">
 
-    <TextView
-        android:id="@+id/time_textView1"
-        android:layout_width="110dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="派工日期時間:"
-        android:textSize="17dp"
-        app:layout_constraintLeft_toRightOf="@+id/about_imageView1"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TableLayout
+                android:id="@+id/week_TableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="64dp" />
 
-    <TextView
-        android:id="@+id/method_textView1"
-        android:layout_width="75dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="50dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="處理方式:"
-        android:textSize="17dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/time_textView1" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/sql_time_textView1"
-        android:layout_width="200dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:text="2017/09/27 11:00"
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/time_textView1"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/total_textView"
+            android:layout_width="108dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="一周件數:"
+            android:textColor="@color/colorAccent"
+            android:textSize="25dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/week_LinearLayout" />
 
-    <TextView
-        android:id="@+id/sql_method_textView1"
-        android:layout_width="115dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="38dp"
-        android:gravity="center_vertical"
-        android:text="換濾心"
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/method_textView1"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/week_sql_total_textView"
+            android:layout_width="80dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:gravity="left"
+            android:text="0"
+            android:textSize="25dp"
+            app:layout_constraintHorizontal_bias="0.057"
+            app:layout_constraintLeft_toRightOf="@+id/total_textView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/week_LinearLayout" />
 
-    <ImageView
-        android:id="@+id/about_imageView2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="12dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:srcCompat="@drawable/about"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/about_imageView1" />
+        <Button
+            android:id="@+id/more_button2"
+            android:layout_width="88dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="10dp"
+            android:onClick="get_day_more_Btn"
+            android:text="more..."
+            android:textAllCaps="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/total_textView" />
 
-    <TextView
-        android:id="@+id/time_textView2"
-        android:layout_width="110dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="派工日期時間:"
-        android:textSize="17dp"
-        app:layout_constraintLeft_toRightOf="@+id/about_imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/method_textView1" />
+    </android.support.constraint.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/method_textView2"
-        android:layout_width="75dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="處理方式:"
-        android:textSize="17dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_textView2" />
-
-    <TextView
-        android:id="@+id/sql_time_textView2"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/time_textView2"
-        app:layout_constraintTop_toBottomOf="@+id/sql_method_textView1" />
-
-    <TextView
-        android:id="@+id/sql_method_textView2"
-        android:layout_width="115dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/method_textView2"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/sql_time_textView2" />
-
-    <ImageView
-        android:id="@+id/about_imageView3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="12dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:srcCompat="@drawable/about"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/about_imageView2" />
-
-    <TextView
-        android:id="@+id/time_textView3"
-        android:layout_width="110dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="8dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="派工日期時間:"
-        android:textSize="17dp"
-        app:layout_constraintLeft_toRightOf="@+id/about_imageView3"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/method_textView2" />
-
-    <TextView
-        android:id="@+id/method_textView3"
-        android:layout_width="75dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="處理方式:"
-        android:textSize="17dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_textView3" />
-
-    <TextView
-        android:id="@+id/sql_time_textView3"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/time_textView3"
-        app:layout_constraintTop_toBottomOf="@+id/sql_method_textView2" />
-
-    <TextView
-        android:id="@+id/sql_method_textView3"
-        android:layout_width="115dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/sql_time_textView3"
-        app:layout_constraintLeft_toRightOf="@+id/method_textView3"
-        android:layout_marginLeft="0dp" />
-
-    <ImageView
-        android:id="@+id/about_imageView4"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="12dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:srcCompat="@drawable/about"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/about_imageView3" />
-
-    <TextView
-        android:id="@+id/time_textView4"
-        android:layout_width="110dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="派工日期時間:"
-        android:textSize="17dp"
-        app:layout_constraintLeft_toRightOf="@+id/about_imageView4"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/method_textView3" />
-
-    <TextView
-        android:id="@+id/method_textView4"
-        android:layout_width="75dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="處理方式:"
-        android:textSize="17dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_textView4" />
-
-    <TextView
-        android:id="@+id/sql_time_textView4"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/time_textView4"
-        app:layout_constraintTop_toBottomOf="@+id/sql_method_textView3" />
-
-    <TextView
-        android:id="@+id/sql_method_textView4"
-        android:layout_width="115dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/method_textView4"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/sql_time_textView4" />
-
-    <ImageView
-        android:id="@+id/about_imageView5"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="12dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:srcCompat="@drawable/about"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/about_imageView4" />
-
-    <TextView
-        android:id="@+id/time_textView5"
-        android:layout_width="110dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="派工日期時間:"
-        android:textSize="17dp"
-        android:layout_marginTop="-8dp"
-        app:layout_constraintTop_toBottomOf="@+id/method_textView4"
-        app:layout_constraintLeft_toRightOf="@+id/about_imageView5"
-        android:layout_marginLeft="8dp" />
-
-    <TextView
-        android:id="@+id/method_textView5"
-        android:layout_width="75dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="處理方式:"
-        android:textSize="17dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/time_textView5"
-        android:layout_marginLeft="50dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <TextView
-        android:id="@+id/sql_time_textView5"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/time_textView5"
-        app:layout_constraintTop_toBottomOf="@+id/sql_method_textView4" />
-
-    <TextView
-        android:id="@+id/sql_method_textView5"
-        android:layout_width="115dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/method_textView5"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/sql_time_textView5" />
-
-    <ImageView
-        android:id="@+id/about_imageView6"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:srcCompat="@drawable/about"
-        android:layout_marginLeft="12dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/about_imageView5" />
-
-    <TextView
-        android:id="@+id/time_textView6"
-        android:layout_width="110dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="派工日期時間:"
-        android:textSize="17dp"
-        app:layout_constraintLeft_toRightOf="@+id/about_imageView6"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/method_textView5" />
-
-    <TextView
-        android:id="@+id/method_textView6"
-        android:layout_width="75dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/colorAccent"
-        android:text="處理方式:"
-        android:textSize="17dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/time_textView6"
-        android:layout_marginLeft="50dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <TextView
-        android:id="@+id/sql_time_textView6"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        app:layout_constraintLeft_toRightOf="@+id/time_textView6"
-        app:layout_constraintTop_toBottomOf="@+id/sql_method_textView5" />
-
-    <TextView
-        android:id="@+id/sql_method_textView6"
-        android:layout_width="115dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:text=""
-        android:textSize="19dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/sql_time_textView6"
-        app:layout_constraintLeft_toRightOf="@+id/method_textView6"
-        android:layout_marginLeft="0dp" />
-
-    <TextView
-        android:id="@+id/total_textView"
-        android:layout_width="108dp"
-        android:layout_height="32dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/colorAccent"
-        android:text="一週件數:"
-        android:textSize="25dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/method_textView6" />
-
-    <TextView
-        android:id="@+id/sql_total_textView"
-        android:layout_width="50dp"
-        android:layout_height="32dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:text="20"
-        android:gravity="center"
-        android:textSize="25dp"
-        app:layout_constraintLeft_toRightOf="@+id/total_textView"
-        app:layout_constraintTop_toBottomOf="@+id/sql_method_textView6" />
-
-    <Button
-        android:onClick="get_week_more_Btn"
-        android:id="@+id/more_button2"
-        android:layout_width="80dp"
-        android:layout_height="35dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="12dp"
-        android:text="more..."
-        android:textAllCaps="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/total_textView" />
-
-
-</android.support.constraint.ConstraintLayout>
+</ScrollView>
