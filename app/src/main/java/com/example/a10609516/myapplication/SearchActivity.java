@@ -340,6 +340,12 @@ public class SearchActivity extends AppCompatActivity {
                         tr1.addView(dynamically_txt);
                         //search_TableLayout.addView(tr1);
                         small_tb.addView(tr1);
+
+                        //如果日期為0000-00-00,則把該TextView改為空值
+                        if (dynamically_txt.getText().toString().equals("0000-00-00")){
+                            dynamically_txt.setText("");
+                        }
+
                     }
 
 

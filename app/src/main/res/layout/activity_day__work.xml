@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.example.a10609516.myapplication.Day_Work">
 
-    <ScrollView
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/search_scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -50,17 +53,34 @@
                 app:layout_constraintTop_toBottomOf="@+id/title_textView" />
 
             <LinearLayout
-                android:id="@+id/linearLayout35"
-                android:layout_width="345dp"
-                android:layout_height="79dp"
+                android:id="@+id/date_work_linearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/underline"
                 android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintVertical_bias="0.043"
                 app:layout_constraintTop_toBottomOf="@+id/date_textView">
+
+                <TableLayout
+                    android:id="@+id/date_work_TableLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/titleline"
+                    app:layout_constraintVertical_bias="1.0"/>
 
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>
