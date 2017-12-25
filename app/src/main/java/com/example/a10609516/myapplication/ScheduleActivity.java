@@ -235,36 +235,8 @@ public class ScheduleActivity extends AppCompatActivity {
                         more_button1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
-
-                                for (int a = 0; a < today_about_ImageView.length; a++) {
-
                                     Intent intent1 = new Intent(ScheduleActivity.this, Day_Work.class);
-                                    //取得大TableLayout中的大TableRow位置
-                                    TableRow tb_tbr = (TableRow) today_TableLayout.getChildAt(a);
-                                    //取得大TableRow中的小TableLayout位置
-                                    TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(1);
-                                    //派工資料的迴圈
-                                    for (int x = 0; x < 19; x++) {
-                                        //取得小TableLayout中的小TableRow位置
-                                        TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
-                                        //小TableRow中的layout_column位置
-                                        TextView SecondTextView = (TextView) tb_tbr_tb_tbr.getChildAt(0);
-                                        TextView ThirdTextView = (TextView) tb_tbr_tb_tbr.getChildAt(1);
-                                        String ResponseTextSecond = SecondTextView.getText().toString();
-                                        String ResponseTextThird = ThirdTextView.getText().toString();
-
-                                        Log.i("ScheduleActivity",ResponseTextThird);
-                                        //將SQL裡的資料傳到MaintainActivity
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("ResponseTextSecond" + x, ResponseTextSecond);
-                                        bundle.putString("ResponseTextThird" + x, ResponseTextThird);
-
-                                        intent1.putExtras(bundle);//可放所有基本類別
-                                    }
                                     startActivity(intent1);
-                                }
-
                             }
                         });
                         break;
@@ -529,6 +501,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
                         small_tb.addView(tr1, layoutParams);
 
+                        //隱藏不需要的SQL資料
                         if (i < 19) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }

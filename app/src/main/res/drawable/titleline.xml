@@ -12,7 +12,7 @@
     <corners android:radius="5dip" />
     <!-- 外框，框線粗細，框線顏色 -->
     <stroke
-        android:width="2.0dip"
+        android:width="20.0dip"
         android:color="#CCEEFF" />
     <!-- 主體背景顏色值 -->
     <corners android:radius="5dip" />
