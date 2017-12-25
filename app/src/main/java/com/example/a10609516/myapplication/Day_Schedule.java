@@ -9,7 +9,7 @@ public class Day_Schedule extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_day__schedule);
+        setContentView(R.layout.activity_day_schedule);
     }
 
 }

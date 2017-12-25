@@ -112,6 +112,11 @@ public class MaintainActivity extends AppCompatActivity {
         String ResponseText13 = bundle.getString("ResponseText" + 13);
         arrive_button.setText(ResponseText13);
 
+        //如果日期為0000-00-00,則把該TextView改為空值
+        if (arrive_button.getText().toString().equals("0000-00-00")){
+            arrive_button.setText("");
+        }
+
     }
 
     //判斷SearchActivity的是否要收款傳遞過來的值為(是/否)

@@ -3,7 +3,6 @@ package com.example.a10609516.myapplication;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -15,7 +14,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -39,7 +37,7 @@ public class Day_Work extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_day__work);
+        setContentView(R.layout.activity_day_work);
 
         //動態取得 View 物件
         InItFunction();

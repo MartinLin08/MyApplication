@@ -8,6 +8,6 @@ public class Missing_Date extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_missing__date);
+        setContentView(R.layout.activity_missing_date);
     }
 }

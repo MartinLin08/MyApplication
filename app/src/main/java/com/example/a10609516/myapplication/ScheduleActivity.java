@@ -3,11 +3,9 @@ package com.example.a10609516.myapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -175,9 +172,9 @@ public class ScheduleActivity extends AppCompatActivity {
         pagerTitleStrip.getChildAt(2).setVisibility(View.GONE);
 
         LayoutInflater inflater = getLayoutInflater();
-        view1 = inflater.inflate(R.layout.activity_day__schedule, null);
-        view2 = inflater.inflate(R.layout.activity_week__schedule, null);
-        view3 = inflater.inflate(R.layout.activity_missing__date, null);
+        view1 = inflater.inflate(R.layout.activity_day_schedule, null);
+        view2 = inflater.inflate(R.layout.activity_week_schedule, null);
+        view3 = inflater.inflate(R.layout.activity_missing_date, null);
 
         viewList = new ArrayList<>();// 將要分頁顯示的View装入陣列中
         viewList.add(view1);
