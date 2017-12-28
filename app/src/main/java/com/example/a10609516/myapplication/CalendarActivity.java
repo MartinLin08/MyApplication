@@ -9,7 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
 public class CalendarActivity extends AppCompatActivity {
+
+    private TextView msg;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,7 +84,18 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = getIntent();
+        String msg = intent.getStringExtra("msg");
+        if (msg != null)
+            Log.d("FCM", "msg:" + msg);
+    }
+
 
     @Override
     protected void onDestroy() {
