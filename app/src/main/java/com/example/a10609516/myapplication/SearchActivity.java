@@ -201,7 +201,8 @@ public class SearchActivity extends AppCompatActivity {
                             .build();
                     Log.i("SearchActivity", spinner_select);
                     Request request = new Request.Builder()
-                            .url("http://192.168.0.172/Test1/SearchData.php")
+                            .url("http://220.133.80.146/wqp/SearchData.php")
+                            //.url("http://192.168.0.172/Test1/SearchData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

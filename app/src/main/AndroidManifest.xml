@@ -2,9 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.a10609516.myapplication">
 
+    <!-- 加入允許應用訪問網路上的信息權限 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 加入網路使用權限 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 加入手機震動權限 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 加入允許使用電源鎖定管理以使進程休眠或屏幕變暗 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 加入允許開機完成後發送ACTION_BOOT_COMPLETED的廣播信息 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 
     <application
@@ -20,7 +27,6 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -33,16 +39,19 @@
         <activity
             android:name=".CalendarActivity"
             android:label="派工行事曆"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SearchActivity"
             android:label="查詢派工資料"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".PendingActivity"
             android:label="待處理派工"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".BackKeyActivity" />
@@ -50,31 +59,37 @@
         <activity
             android:name=".PictureActivity"
             android:label="客戶訂單照片上傳"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CustomerActivity"
             android:label="客戶訂單查詢"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".UploadActivity"
             android:label="上傳日報"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CorrectActivity"
             android:label="日報修正"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ScheduleActivity"
             android:label="行程資訊"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".RecordActivity"
             android:label="上傳日報紀錄"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -119,9 +134,10 @@
             </intent-filter>
         </service>
 
+        <!-- 收到通知時, 到狀態列要顯示的 icon -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/about" />
+            android:resource="@drawable/dispatch" />
         <!-- 收到通知的背景色 -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"

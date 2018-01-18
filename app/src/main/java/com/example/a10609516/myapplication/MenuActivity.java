@@ -152,7 +152,8 @@ public class MenuActivity extends BackKeyActivity {
                             .add("User_id",user_id_data)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://192.168.0.172/Test1/MenuUserName.php")
+                            .url("http://220.133.80.146/wqp/MenuUserName.php")
+                            //.url("http://192.168.0.172/Test1/MenuUserName.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -180,7 +181,7 @@ public class MenuActivity extends BackKeyActivity {
     private void AnnouncementSpinner() {
         final String[] announcement = {"--- 全 部 分 類 ---", "--- 內 部 公 告 區 ---", "--- 管 理 部 ---", "--- 財 會 部 ---",
                 "--- 水 資 部 ---", "--- 管 財 部 ---", "--- 設 計/經 銷 部 ---", "--- 電 商 部 ---", "--- 技 術 部 ---",
-                "--- 行 銷 部 ---", "--- 建 設 部 ---", "--- D I Y 部 ---", "--- 百 貨 部 ---", "--- 客 服 工 程 師 ---"};
+                "--- 行 銷 部 ---", "--- 建 設 部 ---", "--- D I Y 部 ---", "--- 百 貨 部 ---", "--- 客 服 工 程 部 ---"};
         ArrayAdapter<String> announcementList = new ArrayAdapter<>(MenuActivity.this,
                 android.R.layout.simple_spinner_dropdown_item,
                 announcement);

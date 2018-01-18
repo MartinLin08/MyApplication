@@ -2,6 +2,8 @@ package com.example.a10609516.myapplication;
 
 import android.content.Intent;
 import android.icu.util.Calendar;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +17,7 @@ import android.widget.TextView;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    private TextView msg;
+    private TextView mesg;
 
 
     @Override
@@ -84,16 +86,37 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+        mesg = (TextView) findViewById(R.id.msg);
+
+        Message msg = mHandler.obtainMessage();
+        msg.what = 1;
+        msg.sendToTarget();
 
     }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            MyNotice.getInstance().setOnMessageReceivedListener(new MyNotice.OnMessageReceivedListener() {
+                @Override
+                public void onMessageReceived(final String s) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mesg.setText(s);
+                            Log.i("WQP_FCM",s);
+                        }
+                    });
+                }
+            });
+
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = getIntent();
-        String msg = intent.getStringExtra("msg");
-        if (msg != null)
-            Log.d("FCM", "msg:" + msg);
     }
 
 

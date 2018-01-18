@@ -26,7 +26,8 @@ public class LoginActivity extends AppCompatActivity {
 
     String IDEdT, PwdEdT;
     String finalResult;
-    String HttpURL = "http://192.168.0.172/Test1/UserLogin.php";
+    String HttpURL = "http://220.133.80.146/wqp/UserLogin.php";
+    //String HttpURL = "http://192.168.0.172/Test1/UserLogin.php";
     Boolean CheckEditText;
     ProgressDialog progressDialog;
     HashMap<String, String> hashMap = new HashMap<>();

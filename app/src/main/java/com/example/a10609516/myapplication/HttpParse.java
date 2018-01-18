@@ -67,7 +67,7 @@ public class HttpParse {
                 FinalHttpData = bufferedReader.readLine();
 
             } else {
-                FinalHttpData = "伺服端無法提供";
+                FinalHttpData = "伺服端無法連線";
             }
         } catch (Exception e) {
             e.printStackTrace();

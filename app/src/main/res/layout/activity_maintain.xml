@@ -329,36 +329,6 @@
                 tools:layout_editor_absoluteY="8dp">
 
                 <CheckBox
-                    android:id="@+id/not_get_money_checkBox"
-                    android:layout_width="130dp"
-                    android:layout_height="40dp"
-                    android:layout_column="0"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center_vertical"
-                    android:onClick="onCheckboxClicked"
-                    android:text="未收款"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="18dp" />
-
-                <EditText
-                    android:id="@+id/not_get_money_edt"
-                    android:layout_width="190dp"
-                    android:layout_height="40dp"
-                    android:layout_column="1"
-                    android:gravity="center_vertical"
-                    android:hint="原因"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="16dp" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="8dp">
-
-                <CheckBox
                     android:id="@+id/not_get_all_checkBox"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
@@ -376,7 +346,7 @@
                     android:layout_height="40dp"
                     android:layout_column="1"
                     android:gravity="center_vertical"
-                    android:hint="金額"
+                    android:hint="已收金額"
                     android:textColor="@color/colorAccent"
                     android:textSize="16dp" />
 
@@ -384,19 +354,21 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="8dp">
 
-                <EditText
-                    android:id="@+id/not_get_all_reason_edt"
-                    android:layout_width="190dp"
+                <CheckBox
+                    android:id="@+id/not_get_money_checkBox"
+                    android:layout_width="130dp"
                     android:layout_height="40dp"
-                    android:layout_column="1"
+                    android:layout_column="0"
+                    android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
-                    android:hint="原因"
+                    android:onClick="onCheckboxClicked"
+                    android:text="未收款"
                     android:textColor="@color/colorAccent"
-                    android:textSize="16dp" />
+                    android:textSize="18dp" />
 
             </TableRow>
 

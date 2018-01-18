@@ -21,7 +21,7 @@
                 android:title="待處理派工" />
         </menu>
     </item>
-    <item android:title="百貨通路">
+    <item android:title="百貨/DIY通路">
         <menu>
             <item
                 android:id="@+id/record_item"

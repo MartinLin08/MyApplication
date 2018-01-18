@@ -69,7 +69,8 @@ public class Missing_Date_Record extends AppCompatActivity {
                             .build();
                     Log.i("Missing_Date_Record", user_id_data);
                     Request request = new Request.Builder()
-                            .url("http://192.168.0.172/Test1/MissingScheduleData.php")
+                            .url("http://220.133.80.146/wqp/MissingScheduleData.php")
+                            //.url("http://192.168.0.172/Test1/MissingScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

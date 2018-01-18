@@ -9,7 +9,15 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
+        super.onTokenRefresh();
         String token = FirebaseInstanceId.getInstance().getToken();
-        Log.d("FCM", "Token:"+token);
+        Log.i("FCM", "Token:"+token);
+
+        sendRegistrationToServer(token);
     }
+
+    private void sendRegistrationToServer(String token) {
+        // TODO: Implement this method to send token to your app server.
+    }
+
 }

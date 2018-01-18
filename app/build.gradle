@@ -30,10 +30,13 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
-    compile 'com.google.firebase:firebase-storage:10.0.1'
-    compile 'com.google.firebase:firebase-auth:10.0.1'
+    compile 'com.google.firebase:firebase-config:11.8.0'
+    compile 'com.google.firebase:firebase-database:11.8.0'
+    compile 'com.google.firebase:firebase-storage:11.8.0'
+    compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.google.firebase:firebase-core:11.8.0'
     compile 'com.google.firebase:firebase-messaging:11.8.0'
+    compile 'com.google.gms:google-services:3.1.0'
     testCompile 'junit:junit:4.12'
     compile files('libs/jar_files/firebase-jax-rs-api-1.0.0.jar')
 }

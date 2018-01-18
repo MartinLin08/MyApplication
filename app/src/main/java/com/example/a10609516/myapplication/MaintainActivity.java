@@ -48,6 +48,8 @@ public class MaintainActivity extends AppCompatActivity {
         CheckYesOrNo();
         /*//確認是否要收款的CheckBox勾選與否 決定是否以收款的顯示
         IsGetMoneyCheckOrNot();*/
+        //設置收款金額的代入與取消
+        HaveGetMoney();
         //抵達時間與離開時間的Spinner
         TimeSpinner();
         //無效派工的Spinner
@@ -81,9 +83,9 @@ public class MaintainActivity extends AppCompatActivity {
         not_get_money_checkBox = (CheckBox) findViewById(R.id.not_get_money_checkBox);
         not_get_all_checkBox = (CheckBox) findViewById(R.id.not_get_all_checkBox);
         have_get_money_edt = (EditText) findViewById(R.id.have_get_money_edt);
-        not_get_money_edt = (EditText) findViewById(R.id.not_get_money_edt);
+        //not_get_money_edt = (EditText) findViewById(R.id.not_get_money_edt);
         not_get_all_edt = (EditText) findViewById(R.id.not_get_all_edt);
-        not_get_all_reason_edt = (EditText) findViewById(R.id.not_get_all_reason_edt);
+        //not_get_all_reason_edt = (EditText) findViewById(R.id.not_get_all_reason_edt);
         arrive_spinner = (Spinner) findViewById(R.id.arrive_spinner);
         leave_spinner = (Spinner) findViewById(R.id.leave_spinner);
         useless_spinner = (Spinner) findViewById(R.id.useless_spinner);
@@ -117,6 +119,7 @@ public class MaintainActivity extends AppCompatActivity {
             arrive_button.setText("");
         }
 
+
     }
 
     //判斷SearchActivity的是否要收款傳遞過來的值為(是/否)
@@ -131,10 +134,10 @@ public class MaintainActivity extends AppCompatActivity {
             have_get_money_checkBox.setEnabled(true);
             have_get_money_edt.setEnabled(true);
             not_get_money_checkBox.setEnabled(true);
-            not_get_money_edt.setEnabled(true);
+            //not_get_money_edt.setEnabled(true);
             not_get_all_checkBox.setEnabled(true);
             not_get_all_edt.setEnabled(true);
-            not_get_all_reason_edt.setEnabled(true);
+            //not_get_all_reason_edt.setEnabled(true);
         }
         //如果傳遞過來的值為"否" 則預設is_get_money_checkBox為不被勾選
         else{
@@ -144,10 +147,10 @@ public class MaintainActivity extends AppCompatActivity {
             have_get_money_checkBox.setEnabled(false);
             have_get_money_edt.setEnabled(false);
             not_get_money_checkBox.setEnabled(false);
-            not_get_money_edt.setEnabled(false);
+            //not_get_money_edt.setEnabled(false);
             not_get_all_checkBox.setEnabled(false);
             not_get_all_edt.setEnabled(false);
-            not_get_all_reason_edt.setEnabled(false);
+            //not_get_all_reason_edt.setEnabled(false);
         }
     }
 
@@ -211,16 +214,16 @@ public class MaintainActivity extends AppCompatActivity {
             case R.id.have_get_money_checkBox:
                 if (checked) {
                     not_get_money_checkBox.setEnabled(false);
-                    not_get_money_edt.setEnabled(false);
+                    //not_get_money_edt.setEnabled(false);
                     not_get_all_checkBox.setEnabled(false);
                     not_get_all_edt.setEnabled(false);
-                    not_get_all_reason_edt.setEnabled(false);
+                    //not_get_all_reason_edt.setEnabled(false);
                 } else {
                     not_get_money_checkBox.setEnabled(true);
-                    not_get_money_edt.setEnabled(true);
+                    //not_get_money_edt.setEnabled(true);
                     not_get_all_checkBox.setEnabled(true);
                     not_get_all_edt.setEnabled(true);
-                    not_get_all_reason_edt.setEnabled(true);
+                    //not_get_all_reason_edt.setEnabled(true);
                 }
                 break;
 
@@ -230,13 +233,13 @@ public class MaintainActivity extends AppCompatActivity {
                     have_get_money_edt.setEnabled(false);
                     not_get_all_checkBox.setEnabled(false);
                     not_get_all_edt.setEnabled(false);
-                    not_get_all_reason_edt.setEnabled(false);
+                    //not_get_all_reason_edt.setEnabled(false);
                 }else {
                     have_get_money_checkBox.setEnabled(true);
-                    have_get_money_edt.setEnabled(true);
+                    //have_get_money_edt.setEnabled(true);
                     not_get_all_checkBox.setEnabled(true);
                     not_get_all_edt.setEnabled(true);
-                    not_get_all_reason_edt.setEnabled(true);
+                    //not_get_all_reason_edt.setEnabled(true);
                 }
                 break;
 
@@ -245,16 +248,44 @@ public class MaintainActivity extends AppCompatActivity {
                     have_get_money_checkBox.setEnabled(false);
                     have_get_money_edt.setEnabled(false);
                     not_get_money_checkBox.setEnabled(false);
-                    not_get_money_edt.setEnabled(false);
+                    //not_get_money_edt.setEnabled(false);
                 }else{
                     have_get_money_checkBox.setEnabled(true);
                     have_get_money_edt.setEnabled(true);
                     not_get_money_checkBox.setEnabled(true);
-                    not_get_money_edt.setEnabled(true);
+                    //not_get_money_edt.setEnabled(true);
                 }
                 break;
 
         }
+    }
+
+    //設置收款金額的代入與取消
+    private void HaveGetMoney(){
+        have_get_money_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    //如果have_get_money_checkBox被勾選 則收款金額直接帶入應收金額
+                    have_get_money_edt.setText(esvd_is_money_txt.getText().toString());
+                }
+                if (!isChecked) {
+                    //如果have_get_money_checkBox被取消勾選 則收款金額清空
+                    have_get_money_edt.setText("");
+                }
+            }
+        });
+
+        not_get_all_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    //如果not_get_all_checkBox被取消勾選 則收款金額清空
+                    not_get_all_edt.setText("");
+                }
+            }
+        });
     }
 
     //日期挑選器
