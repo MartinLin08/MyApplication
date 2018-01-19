@@ -303,8 +303,8 @@ public class ScheduleActivity extends AppCompatActivity {
                             .build();
                     Log.i("ScheduleActivity", user_id_data);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/wqp/TodayScheduleData.php")
-                            //.url("http://192.168.0.172/Test1/TodayScheduleData.php")
+                            //.url("http://220.133.80.146/wqp/TodayScheduleData.php")
+                            .url("http://192.168.0.172/Test1/TodayScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -561,8 +561,8 @@ public class ScheduleActivity extends AppCompatActivity {
                             .build();
                     Log.i("ScheduleActivity2", user_id_data);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/wqp/WeekScheduleData.php")
-                            //.url("http://192.168.0.172/Test1/WeekScheduleData.php")
+                            //.url("http://220.133.80.146/wqp/WeekScheduleData.php")
+                            .url("http://192.168.0.172/Test1/WeekScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -817,8 +817,8 @@ public class ScheduleActivity extends AppCompatActivity {
                             .build();
                     Log.i("ScheduleActivity2", user_id_data);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/wqp/MissingScheduleData.php")
-                            //.url("http://192.168.0.172/Test1/MissingScheduleData.php")
+                            //.url("http://220.133.80.146/wqp/MissingScheduleData.php")
+                            .url("http://192.168.0.172/Test1/MissingScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

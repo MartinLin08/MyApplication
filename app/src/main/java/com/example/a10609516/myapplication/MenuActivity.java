@@ -152,8 +152,8 @@ public class MenuActivity extends BackKeyActivity {
                             .add("User_id",user_id_data)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/wqp/MenuUserName.php")
-                            //.url("http://192.168.0.172/Test1/MenuUserName.php")
+                            //.url("http://220.133.80.146/wqp/MenuUserName.php")
+                            .url("http://192.168.0.172/Test1/MenuUserName.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
