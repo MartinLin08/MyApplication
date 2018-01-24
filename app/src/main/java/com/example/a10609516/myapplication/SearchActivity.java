@@ -199,7 +199,8 @@ public class SearchActivity extends AppCompatActivity {
                             .add("ESV_NOTE", customer_edt)
                             .add("WORK_TYPE_NAME", spinner_select)
                             .build();
-                    Log.i("SearchActivity", spinner_select);
+                    Log.i("SearchActivity", time_start);
+                    Log.i("SearchActivity", time_end);
                     Request request = new Request.Builder()
                             //.url("http://220.133.80.146/wqp/SearchData.php")
                             .url("http://192.168.0.172/Test1/SearchData.php")
@@ -229,7 +230,7 @@ public class SearchActivity extends AppCompatActivity {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String work_type_name = jsonObject.getString("派工類別");
-                String svd_service_no = jsonObject.getString("派工單號");
+                String esvd_service_no = jsonObject.getString("派工單號");
                 String esv_note = jsonObject.getString("送貨客戶");
                 String time_period_name = jsonObject.getString("預約日期時段");
                 String esv_contactor = jsonObject.getString("聯絡人");
@@ -247,12 +248,15 @@ public class SearchActivity extends AppCompatActivity {
                 String esvd_booking_remark = jsonObject.getString("任務說明");
                 String esv_item_remark = jsonObject.getString("料品說明");
                 String esvd_remark = jsonObject.getString("工作說明");
+                String esvd_seq_id = jsonObject.getString("派工資料識別碼");
+
+                Log.e("SearchActivity",esvd_seq_id);
 
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
                 JArrayList.add(work_type_name);
-                JArrayList.add(svd_service_no);
+                JArrayList.add(esvd_service_no);
                 JArrayList.add(esv_note);
                 JArrayList.add(time_period_name);
                 JArrayList.add(esv_contactor);
@@ -270,6 +274,7 @@ public class SearchActivity extends AppCompatActivity {
                 JArrayList.add(esvd_booking_remark);
                 JArrayList.add(esv_item_remark);
                 JArrayList.add(esvd_remark);
+                JArrayList.add(esvd_seq_id);
 
 
                 //HandlerMessage更新UI
@@ -294,7 +299,7 @@ public class SearchActivity extends AppCompatActivity {
 
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
                     "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
-                    "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明"};
+                    "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼"};
 
             switch (msg.what) {
                 case 1:
@@ -349,6 +354,7 @@ public class SearchActivity extends AppCompatActivity {
 
                     }
 
+                    small_tb.getChildAt(19).setVisibility(View.GONE);
 
                     //設置每筆TableLayout的Button監聽器、與動態新增Button的ID
                     int loc = 0;
@@ -360,7 +366,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
                     dynamically_btn[loc] = new Button(SearchActivity.this);
                     dynamically_btn[loc].setBackgroundResource(R.drawable.button);
-                    dynamically_btn[loc].setText("修改");
+                    dynamically_btn[loc].setText("回報");
                     dynamically_btn[loc].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                     dynamically_btn[loc].setTextColor(Color.rgb(6,102,219));
                     dynamically_btn[loc].setId(loc);
@@ -378,7 +384,7 @@ public class SearchActivity extends AppCompatActivity {
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout)tb_tbr. getChildAt(0);
                                     //派工資料的迴圈
-                                    for (int x = 0 ; x <19 ; x++){
+                                    for (int x = 0 ; x <20 ; x++){
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置

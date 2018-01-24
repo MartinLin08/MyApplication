@@ -1,5 +1,7 @@
 package com.example.a10609516.myapplication;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStream;
@@ -98,6 +100,8 @@ public class HttpParse {
         Result = stringBuilder.toString();
 
         Result = Result.substring(0, Result.length() - 1);
+
+        Log.e("LoginActivity",Result);
 
         return Result;
     }

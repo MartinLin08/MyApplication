@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -135,7 +136,6 @@ public class LoginActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(IDEdT) || TextUtils.isEmpty(PwdEdT)) {
             CheckEditText = false;
         } else {
-
             CheckEditText = true;
         }
     }
@@ -163,6 +163,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 progressDialog.dismiss();
 
+                //Log.e("LoginActivity",httpResponseMsg);
+
                 if (httpResponseMsg.equalsIgnoreCase("登入成功")) {
 
                     finish();
@@ -176,7 +178,6 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 } else {
-
                     Toast.makeText(LoginActivity.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                 }
 
@@ -189,6 +190,10 @@ public class LoginActivity extends AppCompatActivity {
                 hashMap.put("User_id", params[0]);
                 hashMap.put("User_password", params[1]);
                 finalResult = httpParse.postRequest(hashMap, HttpURL);
+
+                //Log.e("LoginActivity",params[0]);
+                //Log.e("LoginActivity",params[1]);
+                //Log.e("LoginActivity",finalResult);
 
                 return finalResult;
 

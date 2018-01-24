@@ -331,7 +331,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String work_type_name = jsonObject.getString("派工類別");
-                String svd_service_no = jsonObject.getString("派工單號");
+                String esvd_service_no = jsonObject.getString("派工單號");
                 String esv_note = jsonObject.getString("送貨客戶");
                 String time_period_name = jsonObject.getString("預約日期時段");
                 String esv_contactor = jsonObject.getString("聯絡人");
@@ -349,8 +349,10 @@ public class ScheduleActivity extends AppCompatActivity {
                 String esvd_booking_remark = jsonObject.getString("任務說明");
                 String esv_item_remark = jsonObject.getString("料品說明");
                 String esvd_remark = jsonObject.getString("工作說明");
+                String esvd_seq_id = jsonObject.getString("派工資料識別碼");
                 String reserve_time = jsonObject.getString("今日派工時段");
                 String work_type = jsonObject.getString("處理方式");
+
 
                 Log.i("ScheduleActivity", reserve_time);
                 Log.i("ScheduleActivity", work_type_name);
@@ -359,7 +361,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
                 JArrayList.add(work_type_name);
-                JArrayList.add(svd_service_no);
+                JArrayList.add(esvd_service_no);
                 JArrayList.add(esv_note);
                 JArrayList.add(time_period_name);
                 JArrayList.add(esv_contactor);
@@ -377,6 +379,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(esvd_booking_remark);
                 JArrayList.add(esv_item_remark);
                 JArrayList.add(esvd_remark);
+                JArrayList.add(esvd_seq_id);
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
 
@@ -401,8 +404,8 @@ public class ScheduleActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
 
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
-                    "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
-                    "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "今日派工時段 :", "處理方式 :"};
+                    "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額", "抵達日期",
+                    "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼", "今日派工時段 :", "處理方式 :"};
 
             switch (msg.what) {
                 case 1:
@@ -449,7 +452,7 @@ public class ScheduleActivity extends AppCompatActivity {
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(1);
                                     //派工資料的迴圈
-                                    for (int x = 0; x < 19; x++) {
+                                    for (int x = 0; x < 20; x++) {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置
@@ -500,7 +503,7 @@ public class ScheduleActivity extends AppCompatActivity {
                         small_tb.addView(tr1, layoutParams);
 
                         //隱藏不需要的SQL資料
-                        if (i < 19) {
+                        if (i < 20) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
 
@@ -589,7 +592,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String work_type_name = jsonObject.getString("派工類別");
-                String svd_service_no = jsonObject.getString("派工單號");
+                String esvd_service_no = jsonObject.getString("派工單號");
                 String esv_note = jsonObject.getString("送貨客戶");
                 String time_period_name = jsonObject.getString("預約日期時段");
                 String esv_contactor = jsonObject.getString("聯絡人");
@@ -607,6 +610,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 String esvd_booking_remark = jsonObject.getString("任務說明");
                 String esv_item_remark = jsonObject.getString("料品說明");
                 String esvd_remark = jsonObject.getString("工作說明");
+                String esvd_seq_id = jsonObject.getString("派工資料識別碼");
                 String reserve_time = jsonObject.getString("派工日期時間");
                 String work_type = jsonObject.getString("處理方式");
 
@@ -617,7 +621,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
                 JArrayList.add(work_type_name);
-                JArrayList.add(svd_service_no);
+                JArrayList.add(esvd_service_no);
                 JArrayList.add(esv_note);
                 JArrayList.add(time_period_name);
                 JArrayList.add(esv_contactor);
@@ -635,6 +639,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(esvd_booking_remark);
                 JArrayList.add(esv_item_remark);
                 JArrayList.add(esvd_remark);
+                JArrayList.add(esvd_seq_id);
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
 
@@ -659,8 +664,8 @@ public class ScheduleActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
 
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
-                    "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
-                    "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工日期時間 :", "處理方式 :"};
+                    "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額", "抵達日期",
+                    "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼", "派工日期時間 :", "處理方式 :"};
 
             switch (msg.what) {
                 case 1:
@@ -707,7 +712,7 @@ public class ScheduleActivity extends AppCompatActivity {
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(1);
                                     //派工資料的迴圈
-                                    for (int x = 0; x < 19; x++) {
+                                    for (int x = 0; x < 20; x++) {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置
@@ -757,7 +762,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
                         small_tb.addView(tr1, layoutParams);
 
-                        if (i < 19) {
+                        if (i < 20) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
 
@@ -845,7 +850,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String work_type_name = jsonObject.getString("派工類別");
-                String svd_service_no = jsonObject.getString("派工單號");
+                String esvd_service_no = jsonObject.getString("派工單號");
                 String esv_note = jsonObject.getString("送貨客戶");
                 String time_period_name = jsonObject.getString("預約日期時段");
                 String esv_contactor = jsonObject.getString("聯絡人");
@@ -863,6 +868,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 String esvd_booking_remark = jsonObject.getString("任務說明");
                 String esv_item_remark = jsonObject.getString("料品說明");
                 String esvd_remark = jsonObject.getString("工作說明");
+                String esvd_seq_id = jsonObject.getString("派工資料識別碼");
                 String reserve_time = jsonObject.getString("派工日期時間");
                 String work_type = jsonObject.getString("處理方式");
 
@@ -873,7 +879,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
                 JArrayList.add(work_type_name);
-                JArrayList.add(svd_service_no);
+                JArrayList.add(esvd_service_no);
                 JArrayList.add(esv_note);
                 JArrayList.add(time_period_name);
                 JArrayList.add(esv_contactor);
@@ -891,6 +897,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(esvd_booking_remark);
                 JArrayList.add(esv_item_remark);
                 JArrayList.add(esvd_remark);
+                JArrayList.add(esvd_seq_id);
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
 
@@ -915,8 +922,8 @@ public class ScheduleActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
 
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
-                    "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
-                    "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工日期時間 :", "處理方式 :"};
+                    "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額", "抵達日期",
+                    "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼", "派工日期時間 :", "處理方式 :"};
 
             switch (msg.what) {
                 case 1:
@@ -963,7 +970,7 @@ public class ScheduleActivity extends AppCompatActivity {
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(1);
                                     //派工資料的迴圈
-                                    for (int x = 0; x < 19; x++) {
+                                    for (int x = 0; x < 20; x++) {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置
@@ -1013,7 +1020,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
                         small_tb.addView(tr1, layoutParams);
 
-                        if (i < 19) {
+                        if (i < 20) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
 
@@ -1042,7 +1049,6 @@ public class ScheduleActivity extends AppCompatActivity {
                     //顯示一周件數的總數
                     int total = missing_TableLayout.getChildCount();
                     missing_sql_total_textView.setText(String.valueOf(total));
-
 
                     break;
                 default:

@@ -96,7 +96,7 @@ public class Week_Work extends AppCompatActivity {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String work_type_name = jsonObject.getString("派工類別");
-                String svd_service_no = jsonObject.getString("派工單號");
+                String esvd_service_no = jsonObject.getString("派工單號");
                 String esv_note = jsonObject.getString("送貨客戶");
                 String time_period_name = jsonObject.getString("預約日期時段");
                 String esv_contactor = jsonObject.getString("聯絡人");
@@ -124,7 +124,7 @@ public class Week_Work extends AppCompatActivity {
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
                 JArrayList.add(work_type_name);
-                JArrayList.add(svd_service_no);
+                JArrayList.add(esvd_service_no);
                 JArrayList.add(esv_note);
                 JArrayList.add(time_period_name);
                 JArrayList.add(esv_contactor);
