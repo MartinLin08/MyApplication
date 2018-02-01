@@ -22,14 +22,24 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
         sendRegistrationToServer(token);
 
-        sendRequestWithOkHttp();
+        SendTokenID();
+
+        //sendRequestWithOkHttp();
     }
 
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
     }
 
-    //與OkHttp建立連線
+    //傳遞TokenID到LoginActivity做儲存
+    private void SendTokenID(){
+        String token = FirebaseInstanceId.getInstance().getToken();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("app_token_id", MODE_PRIVATE);
+        sharedPreferences.edit().putString("token_id", token).apply();
+    }
+
+    /*//與OkHttp建立連線
     private void sendRequestWithOkHttp() {
         new Thread(new Runnable() {
             @Override
@@ -63,6 +73,7 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
                 }
             }
         }).start();
-    }
+    }*/
 
 }
+

@@ -18,6 +18,12 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText accountEdit;
@@ -67,6 +73,8 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View view) {
 
             CheckEditTextIsEmptyOrNot();
+
+            sendRequestWithOkHttpOfTokenID();
 
             if (CheckEditText) {
 
@@ -206,7 +214,43 @@ public class LoginActivity extends AppCompatActivity {
         userLoginClass.execute(User_id, User_password);
     }
 
+    //與OkHttp建立連線
+    private void sendRequestWithOkHttpOfTokenID() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("app_token_id", MODE_PRIVATE);
+                String app_token_id = user_id.getString("token_id", "");
+                Log.e("FCM", app_token_id);
+
+
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", IDEdT)
+                            .add("Token_ID", app_token_id)
+                            .build();
+                    Log.e("FCM", IDEdT);
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/wqp/TokenID.php")
+                            .url("http://192.168.0.172/Test1/TokenID.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.i("FCM", responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
 }
+
 
 
 

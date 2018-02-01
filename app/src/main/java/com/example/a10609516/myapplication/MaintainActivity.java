@@ -26,7 +26,7 @@ public class MaintainActivity extends AppCompatActivity {
 
     private Button arrive_button, check_button, cancel_button;
     private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, cp_name_txt,
-            esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt, reason_txt;
+            esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt, reason_txt, esvd_is_eng_money_txt;
     private TableLayout maintain_tablelayot;
     private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox;
     private EditText have_get_money_edt, not_get_money_edt, not_get_all_edt, not_get_all_reason_edt;
@@ -86,6 +86,7 @@ public class MaintainActivity extends AppCompatActivity {
         have_get_money_txt = (TextView) findViewById(R.id.have_get_money_txt);
         esvd_remark_txt = (TextView) findViewById(R.id.esvd_remark_txt);
         reason_txt = (TextView) findViewById(R.id.reason_txt);
+        esvd_is_eng_money_txt = (TextView) findViewById(R.id.esvd_is_eng_money_txt);
         arrive_button = (Button) findViewById(R.id.arrive_button);
         is_get_money_checkBox = (CheckBox) findViewById(R.id.is_get_money_checkBox);
         have_get_money_checkBox = (CheckBox) findViewById(R.id.have_get_money_checkBox);
@@ -123,6 +124,8 @@ public class MaintainActivity extends AppCompatActivity {
         esvd_booking_remark_txt.setText(ResponseText16);
         String ResponseText13 = bundle.getString("ResponseText" + 13);
         arrive_button.setText(ResponseText13);
+        String ResponseText18 = bundle.getString("ResponseText" + 18);
+        esvd_remark_txt.setText(ResponseText18);
 
         //如果日期為0000-00-00,則把該TextView改為空值
         if (arrive_button.getText().toString().equals("0000-00-00")) {
@@ -159,6 +162,7 @@ public class MaintainActivity extends AppCompatActivity {
             not_get_all_checkBox.setEnabled(false);
             not_get_all_edt.setEnabled(false);
             //not_get_all_reason_edt.setEnabled(false);
+            //have_get_money_edt.setText("0");//如果is_get_money_checkBox不被勾選 have_get_money_edt設置顯示0
         }
     }
 
@@ -225,25 +229,10 @@ public class MaintainActivity extends AppCompatActivity {
                     not_get_all_checkBox.setEnabled(false);
                     not_get_all_edt.setEnabled(false);
                     //not_get_all_reason_edt.setEnabled(false);
+                    esvd_is_eng_money_txt.setText("1");
                 } else {
                     not_get_money_checkBox.setEnabled(true);
                     //not_get_money_edt.setEnabled(true);
-                    not_get_all_checkBox.setEnabled(true);
-                    not_get_all_edt.setEnabled(true);
-                    //not_get_all_reason_edt.setEnabled(true);
-                }
-                break;
-
-            case R.id.not_get_money_checkBox:
-                if (checked) {
-                    have_get_money_checkBox.setEnabled(false);
-                    have_get_money_edt.setEnabled(false);
-                    not_get_all_checkBox.setEnabled(false);
-                    not_get_all_edt.setEnabled(false);
-                    //not_get_all_reason_edt.setEnabled(false);
-                } else {
-                    have_get_money_checkBox.setEnabled(true);
-                    //have_get_money_edt.setEnabled(true);
                     not_get_all_checkBox.setEnabled(true);
                     not_get_all_edt.setEnabled(true);
                     //not_get_all_reason_edt.setEnabled(true);
@@ -256,11 +245,29 @@ public class MaintainActivity extends AppCompatActivity {
                     have_get_money_edt.setEnabled(false);
                     not_get_money_checkBox.setEnabled(false);
                     //not_get_money_edt.setEnabled(false);
+                    esvd_is_eng_money_txt.setText("1");
                 } else {
                     have_get_money_checkBox.setEnabled(true);
                     have_get_money_edt.setEnabled(true);
                     not_get_money_checkBox.setEnabled(true);
                     //not_get_money_edt.setEnabled(true);
+                }
+                break;
+
+            case R.id.not_get_money_checkBox:
+                if (checked) {
+                    have_get_money_checkBox.setEnabled(false);
+                    have_get_money_edt.setEnabled(false);
+                    not_get_all_checkBox.setEnabled(false);
+                    not_get_all_edt.setEnabled(false);
+                    //not_get_all_reason_edt.setEnabled(false);
+                    esvd_is_eng_money_txt.setText("");
+                } else {
+                    have_get_money_checkBox.setEnabled(true);
+                    //have_get_money_edt.setEnabled(true);
+                    not_get_all_checkBox.setEnabled(true);
+                    not_get_all_edt.setEnabled(true);
+                    //not_get_all_reason_edt.setEnabled(true);
                 }
                 break;
 
@@ -374,13 +381,22 @@ public class MaintainActivity extends AppCompatActivity {
     private Button.OnClickListener check_btnListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (have_get_money_checkBox.isChecked()){
-                //金額已收齊
-                sendRequestWithOkHttpOfAll();
-            }
-            if (not_get_all_checkBox.isChecked()){
-                //金額未收齊的OKHttp
-                sendRequestWithOkHttpOfNotAll();
+            if (is_get_money_checkBox.isChecked()) {
+                if (have_get_money_checkBox.isChecked()) {
+                    //金額已收齊的OKHttp(工務收錢)
+                    sendRequestWithOkHttpOfAll();
+                }
+                if (not_get_all_checkBox.isChecked()) {
+                    //金額未收齊的OKHttp(工務收錢)
+                    sendRequestWithOkHttpOfNotAll();
+                }
+                if (not_get_money_checkBox.isChecked()) {
+                    //金額未收的OKHttp(工務收錢)
+                    sendRequestWithOkHttpOfNotGet();
+                }
+            }else{
+                //金額已收齊的OKHttp(業務收錢)
+                sendRequestWithOkHttpOfIsGet();
             }
             finish();
         }
@@ -394,7 +410,7 @@ public class MaintainActivity extends AppCompatActivity {
         }
     };//end setOnItemClickListener
 
-    //與OkHttp建立連線
+    //與OkHttp建立連線(收齊)
     private void sendRequestWithOkHttpOfAll() {
         new Thread(new Runnable() {
             @Override
@@ -417,6 +433,7 @@ public class MaintainActivity extends AppCompatActivity {
                 String check_reason = String.valueOf(reason_spinner.getSelectedItem());
                 String useless_work = String.valueOf(useless_spinner.getSelectedItem());
                 String work_remark = esvd_remark_txt.getText().toString();
+                String get_money_type = esvd_is_eng_money_txt.getText().toString();
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -431,6 +448,7 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("CENSOR_NAME", check_reason)
                             .add("ESVD_USELESS_WORK", useless_work)
                             .add("ESVD_REMARK", work_remark)
+                            .add("ESVD_IS_ENG_MONEY", get_money_type)
                             .build();
                     Log.e("MaintainActivity", user_id_data);
                     Log.e("MaintainActivity", seq_id);
@@ -441,6 +459,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", check_reason);
                     Log.e("MaintainActivity", useless_work);
                     Log.e("MaintainActivity", work_remark);
+                    Log.e("MaintainActivity", get_money_type);
                     Request request = new Request.Builder()
                             //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
                             .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
@@ -456,7 +475,7 @@ public class MaintainActivity extends AppCompatActivity {
         }).start();
     }
 
-    //與OkHttp建立連線
+    //與OkHttp建立連線(未收齊)
     private void sendRequestWithOkHttpOfNotAll() {
         new Thread(new Runnable() {
             @Override
@@ -479,6 +498,7 @@ public class MaintainActivity extends AppCompatActivity {
                 String check_reason = String.valueOf(reason_spinner.getSelectedItem());
                 String useless_work = String.valueOf(useless_spinner.getSelectedItem());
                 String work_remark = esvd_remark_txt.getText().toString();
+                String get_money_type = esvd_is_eng_money_txt.getText().toString();
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -493,6 +513,7 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("CENSOR_NAME", check_reason)
                             .add("ESVD_USELESS_WORK", useless_work)
                             .add("ESVD_REMARK", work_remark)
+                            .add("ESVD_IS_ENG_MONEY", get_money_type)
                             .build();
                     Log.e("MaintainActivity", user_id_data);
                     Log.e("MaintainActivity", seq_id);
@@ -503,6 +524,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", check_reason);
                     Log.e("MaintainActivity", useless_work);
                     Log.e("MaintainActivity", work_remark);
+                    Log.e("MaintainActivity", get_money_type);
                     Request request = new Request.Builder()
                             //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
                             .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
@@ -518,6 +540,134 @@ public class MaintainActivity extends AppCompatActivity {
         }).start();
     }
 
+    //與OkHttp建立連線(未收)
+    private void sendRequestWithOkHttpOfNotGet() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.e("MaintainActivity", user_id_data);
+
+                Bundle bundle = getIntent().getExtras();
+                String seq_id = bundle.getString("ResponseText" + 19);
+                Log.e("MaintainActivity", seq_id);
+
+                //獲取出勤維護的數據
+                String arrive_date = arrive_button.getText().toString();
+                String get_money= not_get_all_edt.getText().toString();
+                String arrive_time = String.valueOf(arrive_spinner.getSelectedItem());
+                String leave_time = String.valueOf(leave_spinner.getSelectedItem());
+                String check_reason = String.valueOf(reason_spinner.getSelectedItem());
+                String useless_work = String.valueOf(useless_spinner.getSelectedItem());
+                String work_remark = esvd_remark_txt.getText().toString();
+                //String get_money_type = esvd_is_eng_money_txt.getText().toString();
+
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .add("ESVD_SEQ_ID", seq_id)
+                            .add("ESVD_GET_ENG_MONEY", get_money)
+                            .add("ESVD_BEGIN_DATE", arrive_date)
+                            .add("ESVD_BEGIN_TIME", arrive_time)
+                            .add("ESVD_END_TIME", leave_time)
+                            .add("CENSOR_NAME", check_reason)
+                            .add("ESVD_USELESS_WORK", useless_work)
+                            .add("ESVD_REMARK", work_remark)
+                            //.add("ESVD_IS_ENG_MONEY", get_money_type)
+                            .build();
+                    Log.e("MaintainActivity", user_id_data);
+                    Log.e("MaintainActivity", seq_id);
+                    Log.e("MaintainActivity", get_money);
+                    Log.e("MaintainActivity", arrive_date);
+                    Log.e("MaintainActivity", arrive_time);
+                    Log.e("MaintainActivity", leave_time);
+                    Log.e("MaintainActivity", check_reason);
+                    Log.e("MaintainActivity", useless_work);
+                    Log.e("MaintainActivity", work_remark);
+                    //Log.e("MaintainActivity", get_money_type);
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
+                            .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.i("MaintainActivity", responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //與OkHttp建立連線(不需收)
+    private void sendRequestWithOkHttpOfIsGet() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.e("MaintainActivity", user_id_data);
+
+                Bundle bundle = getIntent().getExtras();
+                String seq_id = bundle.getString("ResponseText" + 19);
+                Log.e("MaintainActivity", seq_id);
+
+                //獲取出勤維護的數據
+                String arrive_date = arrive_button.getText().toString();
+                String get_money= have_get_money_edt.getText().toString();
+                String arrive_time = String.valueOf(arrive_spinner.getSelectedItem());
+                String leave_time = String.valueOf(leave_spinner.getSelectedItem());
+                String check_reason = String.valueOf(reason_spinner.getSelectedItem());
+                String useless_work = String.valueOf(useless_spinner.getSelectedItem());
+                String work_remark = esvd_remark_txt.getText().toString();
+                //String get_money_type = esvd_is_eng_money_txt.getText().toString();
+
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .add("ESVD_SEQ_ID", seq_id)
+                            .add("ESVD_GET_ENG_MONEY", get_money)
+                            .add("ESVD_BEGIN_DATE", arrive_date)
+                            .add("ESVD_BEGIN_TIME", arrive_time)
+                            .add("ESVD_END_TIME", leave_time)
+                            .add("CENSOR_NAME", check_reason)
+                            .add("ESVD_USELESS_WORK", useless_work)
+                            .add("ESVD_REMARK", work_remark)
+                            //.add("ESVD_IS_ENG_MONEY", get_money_type)
+                            .build();
+                    Log.e("MaintainActivity", user_id_data);
+                    Log.e("MaintainActivity", seq_id);
+                    Log.e("MaintainActivity", get_money);
+                    Log.e("MaintainActivity", arrive_date);
+                    Log.e("MaintainActivity", arrive_time);
+                    Log.e("MaintainActivity", leave_time);
+                    Log.e("MaintainActivity", check_reason);
+                    Log.e("MaintainActivity", useless_work);
+                    Log.e("MaintainActivity", work_remark);
+                    //Log.e("MaintainActivity", get_money_type);
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
+                            .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.i("MaintainActivity", responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 
 }

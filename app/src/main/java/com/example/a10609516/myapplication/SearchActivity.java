@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private Button search_button ,time_start_button ,time_end_button ,clean_start_button ,clean_end_button;
+    private Button search_button, time_start_button, time_end_button, clean_start_button, clean_end_button;
     private Button[] dynamically_btn;
     private Spinner SelectList;
     private EditText customer_editText;
@@ -130,7 +130,7 @@ public class SearchActivity extends AppCompatActivity {
 
     //動態取得 View 物件
     private void InItFunction() {
-        search_scrollView = (ScrollView)findViewById(R.id.search_scrollView);
+        search_scrollView = (ScrollView) findViewById(R.id.search_scrollView);
         search_TableLayout = (TableLayout) findViewById(R.id.search_TableLayout);
         search_LinearLayout = (LinearLayout) findViewById(R.id.search_LinearLayout);
         SelectList = (Spinner) findViewById(R.id.selectList);
@@ -250,7 +250,7 @@ public class SearchActivity extends AppCompatActivity {
                 String esvd_remark = jsonObject.getString("工作說明");
                 String esvd_seq_id = jsonObject.getString("派工資料識別碼");
 
-                Log.e("SearchActivity",esvd_seq_id);
+                Log.e("SearchActivity", esvd_seq_id);
 
 
                 //JSONArray加入SearchData資料
@@ -329,7 +329,7 @@ public class SearchActivity extends AppCompatActivity {
                         dynamically_title.setText(title_array[i].toString());
                         //dynamically_title.setGravity(Gravity.CENTER);
                         //dynamically_title.setWidth(50);
-                        dynamically_title.setPadding(40,0,0,0);
+                        dynamically_title.setPadding(40, 0, 0, 0);
                         dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                         dynamically_title.setMaxWidth(350);
 
@@ -348,7 +348,7 @@ public class SearchActivity extends AppCompatActivity {
                         small_tb.addView(tr1);
 
                         //如果日期為0000-00-00,則把該TextView改為空值
-                        if (dynamically_txt.getText().toString().equals("0000-00-00")){
+                        if (dynamically_txt.getText().toString().equals("0000-00-00")) {
                             dynamically_txt.setText("");
                         }
 
@@ -368,23 +368,22 @@ public class SearchActivity extends AppCompatActivity {
                     dynamically_btn[loc].setBackgroundResource(R.drawable.button);
                     dynamically_btn[loc].setText("回報");
                     dynamically_btn[loc].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                    dynamically_btn[loc].setTextColor(Color.rgb(6,102,219));
+                    dynamically_btn[loc].setTextColor(Color.rgb(6, 102, 219));
                     dynamically_btn[loc].setId(loc);
 
                     dynamically_btn[loc].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            for( int a = 0;a<dynamically_btn.length ;a++)
-                            {
+                            for (int a = 0; a < dynamically_btn.length; a++) {
                                 if (v.getId() == dynamically_btn[a].getId()) {
 
                                     Intent intent_maintain = new Intent(SearchActivity.this, MaintainActivity.class);
                                     //取得大TableLayout中的大TableRow位置
                                     TableRow tb_tbr = (TableRow) search_TableLayout.getChildAt(a);
                                     //取得大TableRow中的小TableLayout位置
-                                    TableLayout tb_tbr_tb = (TableLayout)tb_tbr. getChildAt(0);
+                                    TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(0);
                                     //派工資料的迴圈
-                                    for (int x = 0 ; x <20 ; x++){
+                                    for (int x = 0; x < 20; x++) {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置
@@ -399,8 +398,10 @@ public class SearchActivity extends AppCompatActivity {
                                     }
 
                                     startActivity(intent_maintain);
-
+                                    //進入MaintainActivity後 清空search_TableLayout的資料
+                                    search_TableLayout.removeAllViews();
                                 }
+
                             }
                         }
                     });
@@ -428,7 +429,7 @@ public class SearchActivity extends AppCompatActivity {
                     dynamically_llt.setLayoutParams(the_param2);
 
                     //刪去最後一筆TableLayout的分隔線
-                    if ( (dynamically_btn.length-1) != loc ) {
+                    if ((dynamically_btn.length - 1) != loc) {
                         small_tb.addView(tr3);
                         //search_TableLayout.addView(tr3);
                     }
@@ -438,7 +439,7 @@ public class SearchActivity extends AppCompatActivity {
                     TableRow.LayoutParams the_param3;
                     the_param3 = (TableRow.LayoutParams) small_tb.getLayoutParams();
                     the_param3.span = 2;
-                    the_param3.width=TableRow.LayoutParams.MATCH_PARENT;
+                    the_param3.width = TableRow.LayoutParams.MATCH_PARENT;
                     small_tb.setLayoutParams(the_param3);
 
                     search_TableLayout.addView(big_tbr);
