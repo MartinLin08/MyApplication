@@ -24,7 +24,7 @@ import okhttp3.Response;
 public class MenuActivity extends BackKeyActivity {
 
     private ListView announcement_ListView;
-    private String[] show_text = {"Test1", "Test2", "Test3", "Test4", "Test5"};
+    private String[] show_text = {"","","","","","",""};
     private ArrayAdapter listAdapter;
     private Spinner announcement_spinner;
     private TextView name_textView;
@@ -86,6 +86,11 @@ public class MenuActivity extends BackKeyActivity {
                 startActivity(intent6);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面
+            case R.id.about_item:
+                Intent intent9 = new Intent(MenuActivity.this, VersionActivity.class);
+                startActivity(intent9);
+                Toast.makeText(this, "關於", Toast.LENGTH_SHORT).show();
+                break; //進入日報修正頁面
             default:
         }
         return true;
@@ -105,7 +110,6 @@ public class MenuActivity extends BackKeyActivity {
         sendRequestWithOkHttp();
         //公告區的各部門下拉選單
         AnnouncementSpinner();
-
     }
 
     //動態取得 View 物件
@@ -122,15 +126,15 @@ public class MenuActivity extends BackKeyActivity {
         listAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, show_text);
         announcement_ListView.setAdapter(listAdapter);
         //ListView監聽器
-        announcement_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*announcement_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(),
                         "點選的是" + show_text[position], //postition是指點選到的index
                         Toast.LENGTH_SHORT).show();
-                /*listview1.setVisibility(view.INVISIBLE); *///隱藏ListView
+                //listview1.setVisibility(view.INVISIBLE); //隱藏ListView
             } //end onItemClick
-        }); //end setOnItemClickListener
+        }); *///end setOnItemClickListener
     }
 
     //與資料庫連線 藉由登入輸入的員工ID取得員工姓名
@@ -179,9 +183,9 @@ public class MenuActivity extends BackKeyActivity {
 
     //公告區的各部門下拉選單
     private void AnnouncementSpinner() {
-        final String[] announcement = {"--- 全 部 分 類 ---", "--- 內 部 公 告 區 ---", "--- 管 理 部 ---", "--- 財 會 部 ---",
+        final String[] announcement = {"--- 全 部 分 類 ---"/*, "--- 內 部 公 告 區 ---", "--- 管 理 部 ---", "--- 財 會 部 ---",
                 "--- 水 資 部 ---", "--- 管 財 部 ---", "--- 設 計/經 銷 部 ---", "--- 電 商 部 ---", "--- 技 術 部 ---",
-                "--- 行 銷 部 ---", "--- 建 設 部 ---", "--- D I Y 部 ---", "--- 百 貨 部 ---", "--- 客 服 工 程 部 ---"};
+                "--- 行 銷 部 ---", "--- 建 設 部 ---", "--- D I Y 部 ---", "--- 百 貨 部 ---", "--- 客 服 工 程 部 ---"*/};
         ArrayAdapter<String> announcementList = new ArrayAdapter<>(MenuActivity.this,
                 android.R.layout.simple_spinner_dropdown_item,
                 announcement);
@@ -191,7 +195,7 @@ public class MenuActivity extends BackKeyActivity {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MenuActivity.this, "你選的是" + announcement[position], Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MenuActivity.this, "你選的是" + announcement[position], Toast.LENGTH_SHORT).show();
             }
 
             @Override

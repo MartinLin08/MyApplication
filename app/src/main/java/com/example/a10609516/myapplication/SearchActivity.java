@@ -249,6 +249,7 @@ public class SearchActivity extends AppCompatActivity {
                 String esv_item_remark = jsonObject.getString("料品說明");
                 String esvd_remark = jsonObject.getString("工作說明");
                 String esvd_seq_id = jsonObject.getString("派工資料識別碼");
+                String esvd_eng_points = jsonObject.getString("工務點數");
 
                 Log.e("SearchActivity", esvd_seq_id);
 
@@ -275,7 +276,7 @@ public class SearchActivity extends AppCompatActivity {
                 JArrayList.add(esv_item_remark);
                 JArrayList.add(esvd_remark);
                 JArrayList.add(esvd_seq_id);
-
+                JArrayList.add(esvd_eng_points);
 
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
@@ -299,7 +300,7 @@ public class SearchActivity extends AppCompatActivity {
 
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
                     "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
-                    "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼"};
+                    "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼", "工務點數"};
 
             switch (msg.what) {
                 case 1:
@@ -348,13 +349,14 @@ public class SearchActivity extends AppCompatActivity {
                         small_tb.addView(tr1);
 
                         //如果日期為0000-00-00,則把該TextView改為空值
-                        if (dynamically_txt.getText().toString().equals("0000-00-00")) {
+                        if (dynamically_txt.getText().toString().equals("1900-01-01")) {
                             dynamically_txt.setText("");
                         }
 
                     }
 
                     small_tb.getChildAt(19).setVisibility(View.GONE);
+                    small_tb.getChildAt(20).setVisibility(View.GONE);
 
                     //設置每筆TableLayout的Button監聽器、與動態新增Button的ID
                     int loc = 0;
@@ -383,7 +385,7 @@ public class SearchActivity extends AppCompatActivity {
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(0);
                                     //派工資料的迴圈
-                                    for (int x = 0; x < 20; x++) {
+                                    for (int x = 0; x < 21; x++) {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置
@@ -396,12 +398,10 @@ public class SearchActivity extends AppCompatActivity {
                                         //intent_maintain.putExtra("TitleText" + x, TitleText);//可放所有基本類別
                                         intent_maintain.putExtras(bundle);//可放所有基本類別
                                     }
-
                                     startActivity(intent_maintain);
                                     //進入MaintainActivity後 清空search_TableLayout的資料
                                     search_TableLayout.removeAllViews();
                                 }
-
                             }
                         }
                     });

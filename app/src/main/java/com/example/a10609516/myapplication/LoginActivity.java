@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,8 +15,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.FormBody;
@@ -26,11 +32,12 @@ import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText accountEdit;
-    private EditText passwordEdit;
+    private EditText accountEdit, passwordEdit;
     private Button login;
     private CheckBox remember_checkBox;
+    private TextView version_no_txt;
 
+    String ver_no;
     String IDEdT, PwdEdT;
     String finalResult;
     //String HttpURL = "http://220.133.80.146/wqp/UserLogin.php";
@@ -64,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEdit = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.loginBtn);
         remember_checkBox = (CheckBox) findViewById(R.id.remember_checkBox);
+        version_no_txt = (TextView) findViewById(R.id.version_no_txt);
 
     }
 
@@ -73,8 +81,10 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View view) {
 
             CheckEditTextIsEmptyOrNot();
-
+            //取得TokenID的OKHttp
             sendRequestWithOkHttpOfTokenID();
+            //取得版本號的OKHttp
+            sendRequestWithOkHttpOfVersion();
 
             if (CheckEditText) {
 
@@ -85,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "請輸入員工ID及密碼", Toast.LENGTH_LONG).show();
 
             }
+
 
             if (remember_checkBox.isChecked()) { //檢測使用者帳號密碼
                 SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
@@ -172,21 +183,24 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 //Log.e("LoginActivity",httpResponseMsg);
+                if (version_no_txt.getText().toString().equals(ver_no)) {
+                    if (httpResponseMsg.equalsIgnoreCase("登入成功")) {
 
-                if (httpResponseMsg.equalsIgnoreCase("登入成功")) {
+                        finish();
 
-                    finish();
+                        Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
 
-                    Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                        intent.putExtra(Userid, User_id);
 
-                    intent.putExtra(Userid, User_id);
+                        Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
 
-                    startActivity(intent);
-
-                } else {
-                    Toast.makeText(LoginActivity.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, httpResponseMsg, Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(LoginActivity.this, "檢測到最新版本，請前往更新!!!", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -225,7 +239,6 @@ public class LoginActivity extends AppCompatActivity {
                 String app_token_id = user_id.getString("token_id", "");
                 Log.e("FCM", app_token_id);
 
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -247,6 +260,49 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    //與OkHttp建立連線
+    private void sendRequestWithOkHttpOfVersion() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("version", "wqp-water")
+                            .build();
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/wqp/TokenID.php")
+                            .url("http://192.168.0.172/Test1/Version.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.i("FCM", responseData);
+                    parseJSONWithJSONObjectOfVersion(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //獲得JSON字串並解析成String字串
+    private void parseJSONWithJSONObjectOfVersion(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                ver_no = jsonObject.getString("版本");
+                Log.e("LoginActivity", ver_no);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

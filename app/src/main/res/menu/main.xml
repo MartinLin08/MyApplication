@@ -40,6 +40,9 @@
                 android:title="日報修正" />
         </menu>
     </item>
+    <item
+        android:id="@+id/about_item"
+        android:title="版本資訊"/>
 
 
 </menu>

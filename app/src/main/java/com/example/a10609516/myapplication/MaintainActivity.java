@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -25,7 +26,7 @@ import okhttp3.Response;
 public class MaintainActivity extends AppCompatActivity {
 
     private Button arrive_button, check_button, cancel_button;
-    private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, cp_name_txt,
+    private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, cp_name_txt, esvd_eng_points_txt,
             esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt, reason_txt, esvd_is_eng_money_txt;
     private TableLayout maintain_tablelayot;
     private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox;
@@ -40,7 +41,7 @@ public class MaintainActivity extends AppCompatActivity {
             , "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"
             , "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30"
             , "23:00", "23:30", "00:00"};*/
-    private String[] reason_spinnerprivate = new String[]{" ", "產品瑕疵", "安裝不當", "使用不良", "安裝收尾", "零件老化", "其他", "現場勘查"};
+    private String[] reason_spinnerprivate = new String[]{"請選擇", "產品瑕疵", "安裝不當", "使用不良", "安裝收尾", "零件老化", "其他", "現場勘查"};
     private String[] useless_work = new String[]{"無", "客人不在場", "現場無法施工", "材料有異", "其他", "業務取消"};
 
     @Override
@@ -87,6 +88,7 @@ public class MaintainActivity extends AppCompatActivity {
         esvd_remark_txt = (TextView) findViewById(R.id.esvd_remark_txt);
         reason_txt = (TextView) findViewById(R.id.reason_txt);
         esvd_is_eng_money_txt = (TextView) findViewById(R.id.esvd_is_eng_money_txt);
+        esvd_eng_points_txt = (TextView) findViewById(R.id.esvd_eng_points_txt);
         arrive_button = (Button) findViewById(R.id.arrive_button);
         is_get_money_checkBox = (CheckBox) findViewById(R.id.is_get_money_checkBox);
         have_get_money_checkBox = (CheckBox) findViewById(R.id.have_get_money_checkBox);
@@ -126,9 +128,11 @@ public class MaintainActivity extends AppCompatActivity {
         arrive_button.setText(ResponseText13);
         String ResponseText18 = bundle.getString("ResponseText" + 18);
         esvd_remark_txt.setText(ResponseText18);
+        String ResponseText20 = bundle.getString("ResponseText" + 20);
+        esvd_eng_points_txt.setText(ResponseText20);
 
         //如果日期為0000-00-00,則把該TextView改為空值
-        if (arrive_button.getText().toString().equals("0000-00-00")) {
+        if (arrive_button.getText().toString().equals("1900-01-01")) {
             arrive_button.setText("");
         }
     }
@@ -357,11 +361,11 @@ public class MaintainActivity extends AppCompatActivity {
         reason_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         reason_spinner.setAdapter(reason_listAdapter);
 
-        if (work_type_name_txt.getText().equals("檢修(一)")){
+        if (work_type_name_txt.getText().equals("檢修(一)")) {
             reason_txt.setVisibility(View.VISIBLE);
             reason_spinner.setVisibility(View.VISIBLE);
         }
-        if (work_type_name_txt.getText().equals("檢修(二)")){
+        if (work_type_name_txt.getText().equals("檢修(二)")) {
             reason_txt.setVisibility(View.VISIBLE);
             reason_spinner.setVisibility(View.VISIBLE);
         }
@@ -381,24 +385,77 @@ public class MaintainActivity extends AppCompatActivity {
     private Button.OnClickListener check_btnListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (is_get_money_checkBox.isChecked()) {
-                if (have_get_money_checkBox.isChecked()) {
-                    //金額已收齊的OKHttp(工務收錢)
-                    sendRequestWithOkHttpOfAll();
+            if (arrive_button.getText().toString().equals("") || arrive_spinner.getSelectedItem().equals("選擇") || leave_spinner.getSelectedItem().equals("選擇")) {
+
+                if (arrive_button.getText().toString().equals("")) {
+                    Toast.makeText(MaintainActivity.this, "【請選擇抵達日期!!!】", Toast.LENGTH_SHORT).show();
                 }
-                if (not_get_all_checkBox.isChecked()) {
-                    //金額未收齊的OKHttp(工務收錢)
-                    sendRequestWithOkHttpOfNotAll();
+                if (arrive_spinner.getSelectedItem().equals("選擇")) {
+                    Toast.makeText(MaintainActivity.this, "【請選擇抵達時間!!!】", Toast.LENGTH_SHORT).show();
                 }
-                if (not_get_money_checkBox.isChecked()) {
-                    //金額未收的OKHttp(工務收錢)
-                    sendRequestWithOkHttpOfNotGet();
+                if (leave_spinner.getSelectedItem().equals("選擇")) {
+                    Toast.makeText(MaintainActivity.this, "【請選擇離開時間!!!】", Toast.LENGTH_SHORT).show();
                 }
-            }else{
-                //金額已收齊的OKHttp(業務收錢)
-                sendRequestWithOkHttpOfIsGet();
+
+            } else {
+                String arrive_txt = String.valueOf(arrive_spinner.getSelectedItem());
+                String leave_txt = String.valueOf(leave_spinner.getSelectedItem());
+                String start_txt = arrive_txt.replace(":", "");
+                String end_txt = leave_txt.replace(":", "");
+                int time1 = Integer.parseInt(start_txt);
+                int time2 = Integer.parseInt(end_txt);
+                int result = time1 - time2;
+                if (result > 0) {
+                    Toast.makeText(MaintainActivity.this, "【離開時間不能小於抵達時間!!!】", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (is_get_money_checkBox.isChecked()) {
+                        if (have_get_money_checkBox.isChecked()) {
+                            if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //金額已收齊的OKHttp(工務收錢)
+                                sendRequestWithOkHttpOfAll();
+                                finish();
+                            }
+                        }
+                        if (not_get_all_checkBox.isChecked()) {
+                            if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (not_get_all_edt.getText().toString().equals("")) {
+                                    Toast.makeText(MaintainActivity.this, "【請輸入收款金額!!!】", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    //金額未收齊的OKHttp(工務收錢)
+                                    sendRequestWithOkHttpOfNotAll();
+                                    finish();
+                                }
+                            }
+                        }
+                        if (not_get_money_checkBox.isChecked()) {
+                            if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //金額未收的OKHttp(工務收錢)
+                                sendRequestWithOkHttpOfNotGet();
+                                finish();
+                            }
+                        }
+                        if (have_get_money_checkBox.isChecked() || not_get_all_checkBox.isChecked() || not_get_money_checkBox.isChecked()) {
+                        } else {
+                            Toast.makeText(MaintainActivity.this, "【請勾選是否已收款!!!】", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                            Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //金額已收齊的OKHttp(業務收錢)
+                            sendRequestWithOkHttpOfIsGet();
+                            finish();
+                        }
+                    }
+                }
+
             }
-            finish();
         }
     };//end setOnItemClickListener
 
@@ -427,13 +484,31 @@ public class MaintainActivity extends AppCompatActivity {
 
                 //獲取出勤維護的數據
                 String arrive_date = arrive_button.getText().toString();
-                String get_money= have_get_money_edt.getText().toString();
+                String get_money = have_get_money_edt.getText().toString();
                 String arrive_time = String.valueOf(arrive_spinner.getSelectedItem());
                 String leave_time = String.valueOf(leave_spinner.getSelectedItem());
                 String check_reason = String.valueOf(reason_spinner.getSelectedItem());
                 String useless_work = String.valueOf(useless_spinner.getSelectedItem());
                 String work_remark = esvd_remark_txt.getText().toString();
                 String get_money_type = esvd_is_eng_money_txt.getText().toString();
+                String work_points = esvd_eng_points_txt.getText().toString();
+
+                /*if(arrive_date.toString().equals("") ){
+                    arrive_date = "1900-01-01";
+                }
+                if(arrive_time.toString().equals("選擇")){
+                    arrive_time = "";
+                }
+                if(leave_time.toString().equals("選擇")){
+                    leave_time = "";
+                }*/
+                if (check_reason.toString().equals("請選擇")) {
+                    check_reason = "";
+                }
+                if (useless_work.toString() != "無") {
+                    work_points = "0.5";
+                }
+
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -445,10 +520,11 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("ESVD_BEGIN_DATE", arrive_date)
                             .add("ESVD_BEGIN_TIME", arrive_time)
                             .add("ESVD_END_TIME", leave_time)
-                            .add("CENSOR_NAME", check_reason)
-                            .add("ESVD_USELESS_WORK", useless_work)
+                            .add("ESVD_CENSON_TYPE", check_reason)
+                            .add("ESVD_INVALID_FLAG", useless_work)
                             .add("ESVD_REMARK", work_remark)
                             .add("ESVD_IS_ENG_MONEY", get_money_type)
+                            .add("ESVD_ENG_POINTS", work_points)
                             .build();
                     Log.e("MaintainActivity", user_id_data);
                     Log.e("MaintainActivity", seq_id);
@@ -460,6 +536,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", useless_work);
                     Log.e("MaintainActivity", work_remark);
                     Log.e("MaintainActivity", get_money_type);
+                    Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
                             //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
                             .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
@@ -492,13 +569,30 @@ public class MaintainActivity extends AppCompatActivity {
 
                 //獲取出勤維護的數據
                 String arrive_date = arrive_button.getText().toString();
-                String get_money= not_get_all_edt.getText().toString();
+                String get_money = not_get_all_edt.getText().toString();
                 String arrive_time = String.valueOf(arrive_spinner.getSelectedItem());
                 String leave_time = String.valueOf(leave_spinner.getSelectedItem());
                 String check_reason = String.valueOf(reason_spinner.getSelectedItem());
                 String useless_work = String.valueOf(useless_spinner.getSelectedItem());
                 String work_remark = esvd_remark_txt.getText().toString();
                 String get_money_type = esvd_is_eng_money_txt.getText().toString();
+                String work_points = esvd_eng_points_txt.getText().toString();
+
+                /*if(arrive_date.toString().equals("") ){
+                    arrive_date = "1900-01-01";
+                }
+                if(arrive_time.toString().equals("選擇")){
+                    arrive_time = "";
+                }
+                if(leave_time.toString().equals("選擇")){
+                    leave_time = "";
+                }*/
+                if (check_reason.toString().equals("請選擇")) {
+                    check_reason = "";
+                }
+                if (useless_work.toString() != "無") {
+                    work_points = "0.5";
+                }
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -510,10 +604,11 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("ESVD_BEGIN_DATE", arrive_date)
                             .add("ESVD_BEGIN_TIME", arrive_time)
                             .add("ESVD_END_TIME", leave_time)
-                            .add("CENSOR_NAME", check_reason)
-                            .add("ESVD_USELESS_WORK", useless_work)
+                            .add("ESVD_CENSON_TYPE", check_reason)
+                            .add("ESVD_INVALID_FLAG", useless_work)
                             .add("ESVD_REMARK", work_remark)
                             .add("ESVD_IS_ENG_MONEY", get_money_type)
+                            .add("ESVD_ENG_POINTS", work_points)
                             .build();
                     Log.e("MaintainActivity", user_id_data);
                     Log.e("MaintainActivity", seq_id);
@@ -525,6 +620,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", useless_work);
                     Log.e("MaintainActivity", work_remark);
                     Log.e("MaintainActivity", get_money_type);
+                    Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
                             //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
                             .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
@@ -557,13 +653,30 @@ public class MaintainActivity extends AppCompatActivity {
 
                 //獲取出勤維護的數據
                 String arrive_date = arrive_button.getText().toString();
-                String get_money= not_get_all_edt.getText().toString();
+                String get_money = not_get_all_edt.getText().toString();
                 String arrive_time = String.valueOf(arrive_spinner.getSelectedItem());
                 String leave_time = String.valueOf(leave_spinner.getSelectedItem());
                 String check_reason = String.valueOf(reason_spinner.getSelectedItem());
                 String useless_work = String.valueOf(useless_spinner.getSelectedItem());
                 String work_remark = esvd_remark_txt.getText().toString();
                 //String get_money_type = esvd_is_eng_money_txt.getText().toString();
+                String work_points = esvd_eng_points_txt.getText().toString();
+
+                /*if(arrive_date.toString().equals("") ){
+                    arrive_date = "1900-01-01";
+                }
+                if(arrive_time.toString().equals("選擇")){
+                    arrive_time = "";
+                }
+                if(leave_time.toString().equals("選擇")){
+                    leave_time = "";
+                }*/
+                if (check_reason.toString().equals("請選擇")) {
+                    check_reason = "";
+                }
+                if (useless_work.toString() != "無") {
+                    work_points = "0.5";
+                }
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -575,10 +688,11 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("ESVD_BEGIN_DATE", arrive_date)
                             .add("ESVD_BEGIN_TIME", arrive_time)
                             .add("ESVD_END_TIME", leave_time)
-                            .add("CENSOR_NAME", check_reason)
-                            .add("ESVD_USELESS_WORK", useless_work)
+                            .add("ESVD_CENSON_TYPE", check_reason)
+                            .add("ESVD_INVALID_FLAG", useless_work)
                             .add("ESVD_REMARK", work_remark)
                             //.add("ESVD_IS_ENG_MONEY", get_money_type)
+                            .add("ESVD_ENG_POINTS", work_points)
                             .build();
                     Log.e("MaintainActivity", user_id_data);
                     Log.e("MaintainActivity", seq_id);
@@ -590,6 +704,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", useless_work);
                     Log.e("MaintainActivity", work_remark);
                     //Log.e("MaintainActivity", get_money_type);
+                    Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
                             //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
                             .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
@@ -622,13 +737,30 @@ public class MaintainActivity extends AppCompatActivity {
 
                 //獲取出勤維護的數據
                 String arrive_date = arrive_button.getText().toString();
-                String get_money= have_get_money_edt.getText().toString();
+                String get_money = have_get_money_edt.getText().toString();
                 String arrive_time = String.valueOf(arrive_spinner.getSelectedItem());
                 String leave_time = String.valueOf(leave_spinner.getSelectedItem());
                 String check_reason = String.valueOf(reason_spinner.getSelectedItem());
                 String useless_work = String.valueOf(useless_spinner.getSelectedItem());
                 String work_remark = esvd_remark_txt.getText().toString();
                 //String get_money_type = esvd_is_eng_money_txt.getText().toString();
+                String work_points = esvd_eng_points_txt.getText().toString();
+
+                /*if(arrive_date.toString().equals("") ){
+                    arrive_date = "1900-01-01";
+                }
+                if(arrive_time.toString().equals("選擇")){
+                    arrive_time = "";
+                }
+                if(leave_time.toString().equals("選擇")){
+                    leave_time = "";
+                }*/
+                if (check_reason.toString().equals("請選擇")) {
+                    check_reason = "";
+                }
+                if (useless_work.toString() != "無") {
+                    work_points = "0.5";
+                }
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -640,10 +772,11 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("ESVD_BEGIN_DATE", arrive_date)
                             .add("ESVD_BEGIN_TIME", arrive_time)
                             .add("ESVD_END_TIME", leave_time)
-                            .add("CENSOR_NAME", check_reason)
-                            .add("ESVD_USELESS_WORK", useless_work)
+                            .add("ESVD_CENSON_TYPE", check_reason)
+                            .add("ESVD_INVALID_FLAG", useless_work)
                             .add("ESVD_REMARK", work_remark)
                             //.add("ESVD_IS_ENG_MONEY", get_money_type)
+                            .add("ESVD_ENG_POINTS", work_points)
                             .build();
                     Log.e("MaintainActivity", user_id_data);
                     Log.e("MaintainActivity", seq_id);
@@ -655,6 +788,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", useless_work);
                     Log.e("MaintainActivity", work_remark);
                     //Log.e("MaintainActivity", get_money_type);
+                    Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
                             //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
                             .url("http://192.168.0.172/Test1/UpdateMaintainData.php")

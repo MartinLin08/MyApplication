@@ -69,7 +69,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.dispatch)
+                .setSmallIcon(R.drawable.bwt_icon)
                 .setContentTitle("拓霖企業")
                 .setContentText(messageBody)
                 .setVibrate(new long[] {2000 , 1000})
