@@ -27,20 +27,29 @@ public class VersionActivity extends AppCompatActivity {
         CheckWhatDetail();
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 View 物件
+     */
     private void InItFunction(){
         detail_txt1 = (TextView)findViewById(R.id.detail_txt1);
         detail_llt1 = (LinearLayout)findViewById(R.id.detail_llt1);
         version_btn1 = (Button)findViewById(R.id.version_btn1);
         version_up_btn1 = (Button)findViewById(R.id.version_up_btn1);
     }
-    //版本詳細資訊
+
+    /**
+     * 版本詳細資訊
+     */
     private void DetailOfVersion(){
         detail_txt1.setText("1.新增工務 - 行程資訊、查詢派工資料 \n" +
                             "2.新增工務 - 出勤維護回報功能 \n" +
-                            "3.新增推播功能(新派工、更新派工、取消派工)");
+                            "3.新增推播功能(新派工、更新派工、取消派工) \n" +
+                            "4.新增客戶電子簽名功能");
     }
-    //查看版本
+
+    /**
+     * 查看版本
+     */
     private void CheckWhatDetail() {
         version_btn1.setOnClickListener(new View.OnClickListener() {
             @Override

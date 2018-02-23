@@ -43,14 +43,18 @@ public class Missing_Date_Record extends AppCompatActivity {
 
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 View 物件
+     */
     private void InItFunction() {
 
         missing_work_TableLayout = (TableLayout) findViewById(R.id.missing_work_TableLayout);
 
     }
 
-    //與OkHttp建立連線
+    /**
+     * 與OkHttp建立連線
+     */
     private void sendRequestWithOkHttpOfMissing() {
         new Thread(new Runnable() {
             @Override
@@ -84,7 +88,10 @@ public class Missing_Date_Record extends AppCompatActivity {
         }).start();
     }
 
-    //獲得JSON字串並解析成String字串
+    /**
+     * 獲得JSON字串並解析成String字串
+     * @param jsonData
+     */
     private void parseJSONWithJSONObjectOfMissing(String jsonData) {
 
         try {
@@ -160,7 +167,9 @@ public class Missing_Date_Record extends AppCompatActivity {
         }
     }
 
-    //更新UI
+    /**
+     * 更新UI
+     */
     Handler missing_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -281,7 +290,5 @@ public class Missing_Date_Record extends AppCompatActivity {
             super.handleMessage(msg);
         }
     };
-
-
 
 }

@@ -48,13 +48,22 @@ public class SearchActivity extends AppCompatActivity {
     private ScrollView search_scrollView;
 
 
-    //創建Menu
+    /**
+     * 創建Menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * 進入Menu各個頁面
+     * @param item
+     * @return
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home_item:
@@ -76,11 +85,11 @@ public class SearchActivity extends AppCompatActivity {
             case R.id.work_item:
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //顯示查詢派工資料
-            case R.id.pending_item:
-                Intent intent2 = new Intent(SearchActivity.this, PendingActivity.class);
+            /*case R.id.signature_item:
+                Intent intent2 = new Intent(SearchActivity.this, SignatureActivity.class);
                 startActivity(intent2);
-                Toast.makeText(this, "待處理派工", Toast.LENGTH_SHORT).show();
-                break; //進入待處理派工頁面
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //進入客戶電子簽名頁面*/
             case R.id.record_item:
                 Intent intent8 = new Intent(SearchActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -106,6 +115,11 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent6);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面
+            case R.id.about_item:
+                Intent intent9 = new Intent(SearchActivity.this, VersionActivity.class);
+                startActivity(intent9);
+                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
+                break; //進入版本資訊頁面
             default:
         }
         return true;
@@ -121,14 +135,12 @@ public class SearchActivity extends AppCompatActivity {
         InItFunction();
         //派工類別的Spinner下拉選單
         WorkTypeSpinner();
-        //Button.setOnClickListener監聽器
-        search_button.setOnClickListener(search_btnListener);//傳遞JSON字串與動態新增TableLayout
-        clean_start_button.setOnClickListener(CS_btnListener);//清空time_start_button內的文字
-        clean_end_button.setOnClickListener(CE_btnListener);//清空time_end_button內的文字
 
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 View 物件
+     */
     private void InItFunction() {
         search_scrollView = (ScrollView) findViewById(R.id.search_scrollView);
         search_TableLayout = (TableLayout) findViewById(R.id.search_TableLayout);
@@ -140,39 +152,39 @@ public class SearchActivity extends AppCompatActivity {
         clean_end_button = (Button) findViewById(R.id.clean_button2);
         customer_editText = (EditText) findViewById(R.id.customer_editText);
         search_button = (Button) findViewById(R.id.search_button);
+
+        //Search_Button.setOnClickListener監聽器  //傳遞JSON字串與動態新增TableLayout
+        search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //讓search_tablelayout資料清空
+                search_TableLayout.removeAllViews();
+                //按search_button顯示物件search_linearlayout、search_tablelayout
+                search_LinearLayout.setVisibility(View.VISIBLE);
+                search_TableLayout.setVisibility(View.VISIBLE);
+                //建立SearchData.php OKHttp連線
+                sendRequestWithOkHttp();
+            }
+        });//end setOnItemClickListener
+        //Clean_Start_Button.setOnClickListener監聽器  //清空time_start_button內的文字
+        clean_start_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                time_start_button.setText("");
+            }
+        });//end setOnItemClickListener
+        //Clean_End_Button.setOnClickListener監聽器  //清空time_end_button內的文字
+        clean_end_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                time_end_button.setText("");
+            }
+        });//end setOnItemClickListener
     }
 
-    //Search_Button.setOnClickListener監聽器
-    private Button.OnClickListener search_btnListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            //讓search_tablelayout資料清空
-            search_TableLayout.removeAllViews();
-            //按search_button顯示物件search_linearlayout、search_tablelayout
-            search_LinearLayout.setVisibility(View.VISIBLE);
-            search_TableLayout.setVisibility(View.VISIBLE);
-            //建立SearchData.php OKHttp連線
-            sendRequestWithOkHttp();
-        }
-    };//end setOnItemClickListener
-
-    //Clean_Start_Button.setOnClickListener監聽器
-    private Button.OnClickListener CS_btnListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            time_start_button.setText("");
-        }
-    };//end setOnItemClickListener
-
-    //Clean_End_Button.setOnClickListener監聽器
-    private Button.OnClickListener CE_btnListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            time_end_button.setText("");
-        }
-    };//end setOnItemClickListener
-
-    //與OkHttp建立連線
+    /**
+     * 與OkHttp建立連線
+     */
     private void sendRequestWithOkHttp() {
         new Thread(new Runnable() {
             @Override
@@ -217,7 +229,10 @@ public class SearchActivity extends AppCompatActivity {
         }).start();
     }
 
-    //獲得JSON字串並解析成String字串
+    /**
+     * 獲得JSON字串並解析成String字串
+     * @param jsonData
+     */
     private void parseJSONWithJSONObject(String jsonData) {
 
         try {
@@ -292,8 +307,9 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-
-    //更新UI
+    /**
+     * 更新UI
+     */
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -453,8 +469,10 @@ public class SearchActivity extends AppCompatActivity {
         }
     };
 
-
-    //日期挑選器
+    /**
+     * 日期挑選器
+     * @param v
+     */
     public void showDatePickerDialog(View v) {
         //日期挑選器
         DialogFragment newFragment = new DatePickerFragment();
@@ -466,7 +484,9 @@ public class SearchActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "日期挑選器");
     }
 
-    //派工類別的Spinner下拉選單
+    /**
+     * 派工類別的Spinner下拉選單
+     */
     private void WorkTypeSpinner() {
         //Spinner下拉選單
         final String[] select = {"選擇", "臨時取消", "換濾心", "換濾料", "加鹽", "末端", "小前置", "全屋", "社區保養", "檢修(一)", "檢修(二)"};
@@ -476,7 +496,10 @@ public class SearchActivity extends AppCompatActivity {
         SelectList.setAdapter(selectList);
     }
 
-    //實現畫面置頂按鈕
+    /**
+     * 實現畫面置頂按鈕
+     * @param view
+     */
     public void GoTopBtn(View view) {
 
         Handler mHandler = new Handler();

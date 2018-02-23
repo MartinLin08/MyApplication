@@ -47,11 +47,11 @@ public class PictureActivity extends AppCompatActivity {
                 startActivity(intent2);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            case R.id.pending_item:
-                Intent intent3 = new Intent(PictureActivity.this, PendingActivity.class);
+            /*case R.id.signature_item:
+                Intent intent3 = new Intent(PictureActivity.this, SignatureActivity.class);
                 startActivity(intent3);
-                Toast.makeText(this, "待處理派工", Toast.LENGTH_SHORT).show();
-                break; //進入待處理派工頁面
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //進入客戶電子簽名頁面*/
             case R.id.record_item:
                 Intent intent8 = new Intent(PictureActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -75,6 +75,11 @@ public class PictureActivity extends AppCompatActivity {
                 startActivity(intent6);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面
+            case R.id.about_item:
+                Intent intent9 = new Intent(PictureActivity.this, VersionActivity.class);
+                startActivity(intent9);
+                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
+                break; //進入版本資訊頁面
             default:
         }
         return true;

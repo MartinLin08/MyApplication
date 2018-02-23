@@ -1,5 +1,6 @@
 package com.example.a10609516.myapplication;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -65,13 +66,12 @@ public class MaintainActivity extends AppCompatActivity {
         ReasonSpinner();
         //無效派工的Spinner
         UselessWorkSpinner();
-        //Button.setOnClickListener監聽器
-        check_button.setOnClickListener(check_btnListener);
-        cancel_button.setOnClickListener(cancel_btnListener);
 
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 View 物件
+     */
     private void InItFunction() {
 
         maintain_tablelayot = (TableLayout) findViewById(R.id.maintain_tablelayot);
@@ -103,9 +103,148 @@ public class MaintainActivity extends AppCompatActivity {
         reason_spinner = (Spinner) findViewById(R.id.reason_spinner);
         useless_spinner = (Spinner) findViewById(R.id.useless_spinner);
 
+        //check_button.setOnClickListener監聽器
+        check_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (arrive_button.getText().toString().equals("") || arrive_spinner.getSelectedItem().equals("選擇") || leave_spinner.getSelectedItem().equals("選擇")) {
+                    if (arrive_button.getText().toString().equals("")) {
+                        Toast.makeText(MaintainActivity.this, "【請選擇抵達日期!!!】", Toast.LENGTH_SHORT).show();
+                    }
+                    if (arrive_spinner.getSelectedItem().equals("選擇")) {
+                        Toast.makeText(MaintainActivity.this, "【請選擇抵達時間!!!】", Toast.LENGTH_SHORT).show();
+                    }
+                    if (leave_spinner.getSelectedItem().equals("選擇")) {
+                        Toast.makeText(MaintainActivity.this, "【請選擇離開時間!!!】", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    String arrive_txt = String.valueOf(arrive_spinner.getSelectedItem());
+                    String leave_txt = String.valueOf(leave_spinner.getSelectedItem());
+                    String start_txt = arrive_txt.replace(":", "");
+                    String end_txt = leave_txt.replace(":", "");
+                    int time1 = Integer.parseInt(start_txt);
+                    int time2 = Integer.parseInt(end_txt);
+                    int result = time1 - time2;
+                    if (result > 0) {
+                        Toast.makeText(MaintainActivity.this, "【離開時間不能小於抵達時間!!!】", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (is_get_money_checkBox.isChecked()) {
+                            if (have_get_money_checkBox.isChecked()) {
+                                if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                    Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    //金額已收齊的OKHttp(工務收錢)
+                                    sendRequestWithOkHttpOfAll();
+                                    //是否進入客戶電子簽名頁面
+                                    if((useless_spinner.getSelectedItem().equals("客人不在場"))||(useless_spinner.getSelectedItem().equals("業務取消"))){
+                                        finish();
+                                    }else {
+                                        String SN_txt = svd_service_no_txt.getText().toString();
+                                        Bundle bundle1 = getIntent().getExtras();
+                                        String SEQ_txt = bundle1.getString("ResponseText" + 19);
+                                        Intent intent = new Intent(MaintainActivity.this, SignatureActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("ResponseText1", SN_txt);
+                                        bundle.putString("ResponseText2", SEQ_txt);
+                                        intent.putExtras(bundle);//可放所有基本類別
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            }
+                            if (not_get_all_checkBox.isChecked()) {
+                                if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                    Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    if (not_get_all_edt.getText().toString().equals("")) {
+                                        Toast.makeText(MaintainActivity.this, "【請輸入收款金額!!!】", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        //金額未收齊的OKHttp(工務收錢)
+                                        sendRequestWithOkHttpOfNotAll();
+                                        //是否進入客戶電子簽名頁面
+                                        if((useless_spinner.getSelectedItem().equals("客人不在場"))||(useless_spinner.getSelectedItem().equals("業務取消"))){
+                                            finish();
+                                        }else {
+                                            String SN_txt = svd_service_no_txt.getText().toString();
+                                            Bundle bundle1 = getIntent().getExtras();
+                                            String SEQ_txt = bundle1.getString("ResponseText" + 19);
+                                            Intent intent = new Intent(MaintainActivity.this, SignatureActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("ResponseText1", SN_txt);
+                                            bundle.putString("ResponseText2", SEQ_txt);
+                                            intent.putExtras(bundle);//可放所有基本類別
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    }
+                                }
+                            }
+                            if (not_get_money_checkBox.isChecked()) {
+                                if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                    Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    //金額未收的OKHttp(工務收錢)
+                                    sendRequestWithOkHttpOfNotGet();
+                                    //是否進入客戶電子簽名頁面
+                                    if((useless_spinner.getSelectedItem().equals("客人不在場"))||(useless_spinner.getSelectedItem().equals("業務取消"))){
+                                        finish();
+                                    }else {
+                                        String SN_txt = svd_service_no_txt.getText().toString();
+                                        Bundle bundle1 = getIntent().getExtras();
+                                        String SEQ_txt = bundle1.getString("ResponseText" + 19);
+                                        Intent intent = new Intent(MaintainActivity.this, SignatureActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("ResponseText1", SN_txt);
+                                        bundle.putString("ResponseText2", SEQ_txt);
+                                        intent.putExtras(bundle);//可放所有基本類別
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            }
+                            if (have_get_money_checkBox.isChecked() || not_get_all_checkBox.isChecked() || not_get_money_checkBox.isChecked()) {
+                            } else {
+                                Toast.makeText(MaintainActivity.this, "【請勾選是否已收款!!!】", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //金額已收齊的OKHttp(業務收錢)
+                                sendRequestWithOkHttpOfIsGet();
+                                //是否進入客戶電子簽名頁面
+                                if((useless_spinner.getSelectedItem().equals("客人不在場"))||(useless_spinner.getSelectedItem().equals("業務取消"))){
+                                    finish();
+                                }else {
+                                    String SN_txt = svd_service_no_txt.getText().toString();
+                                    Bundle bundle1 = getIntent().getExtras();
+                                    String SEQ_txt = bundle1.getString("ResponseText" + 19);
+                                    Intent intent = new Intent(MaintainActivity.this, SignatureActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("ResponseText1", SN_txt);
+                                    bundle.putString("ResponseText2", SEQ_txt);
+                                    intent.putExtras(bundle);//可放所有基本類別
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });//end setOnItemClickListener
+        //cancel_button.setOnClickListener監聽器
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });//end setOnItemClickListener
     }
 
-    //取得SearchActivity傳遞過來的值
+    /**
+     * 取得SearchActivity傳遞過來的值
+     */
     private void GetResponseData() {
 
         Bundle bundle = getIntent().getExtras();
@@ -137,7 +276,9 @@ public class MaintainActivity extends AppCompatActivity {
         }
     }
 
-    //判斷SearchActivity的是否要收款傳遞過來的值為(是/否)
+    /**
+     * 判斷SearchActivity的是否要收款傳遞過來的值為(是/否)
+     */
     private void CheckYesOrNo() {
         Bundle bundle = getIntent().getExtras();
         String ResponseText9 = bundle.getString("ResponseText" + 9);
@@ -220,7 +361,10 @@ public class MaintainActivity extends AppCompatActivity {
         });
     }*/
 
-    //設置是否已收款的三個CheckBox只能一個被勾選
+    /**
+     * 設置是否已收款的三個CheckBox只能一個被勾選
+     * @param view
+     */
     public void onCheckboxClicked(View view) {
         // Is the view now checked?
         boolean checked = ((CheckBox) view).isChecked();
@@ -278,7 +422,9 @@ public class MaintainActivity extends AppCompatActivity {
         }
     }
 
-    //設置收款金額的代入與取消
+    /**
+     * 設置收款金額的代入與取消
+     */
     private void HaveGetMoney() {
         have_get_money_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -306,7 +452,10 @@ public class MaintainActivity extends AppCompatActivity {
         });
     }
 
-    //日期挑選器
+    /**
+     * 日期挑選器
+     * @param v
+     */
     public void showDatePickerDialog(View v) {
         //日期挑選器
         DialogFragment newFragment = new DatePickerFragment();
@@ -318,7 +467,9 @@ public class MaintainActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "日期挑選器");
     }
 
-    //抵達時間與離開時間的Spinner
+    /**
+     * 抵達時間與離開時間的Spinner
+     */
     private void TimeSpinner() {
 
         Bundle bundle = getIntent().getExtras();
@@ -354,7 +505,9 @@ public class MaintainActivity extends AppCompatActivity {
 
     }
 
-    ////檢修(一)(二)的主因Spinner
+    /**
+     * 檢修(一)(二)的主因Spinner
+     */
     private void ReasonSpinner() {
 
         reason_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, reason_spinnerprivate);
@@ -372,7 +525,9 @@ public class MaintainActivity extends AppCompatActivity {
 
     }
 
-    //無效派工的Spinner
+    /**
+     * 無效派工的Spinner
+     */
     private void UselessWorkSpinner() {
 
         work_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, useless_work);
@@ -381,93 +536,9 @@ public class MaintainActivity extends AppCompatActivity {
 
     }
 
-    //check_button.setOnClickListener監聽器
-    private Button.OnClickListener check_btnListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (arrive_button.getText().toString().equals("") || arrive_spinner.getSelectedItem().equals("選擇") || leave_spinner.getSelectedItem().equals("選擇")) {
-
-                if (arrive_button.getText().toString().equals("")) {
-                    Toast.makeText(MaintainActivity.this, "【請選擇抵達日期!!!】", Toast.LENGTH_SHORT).show();
-                }
-                if (arrive_spinner.getSelectedItem().equals("選擇")) {
-                    Toast.makeText(MaintainActivity.this, "【請選擇抵達時間!!!】", Toast.LENGTH_SHORT).show();
-                }
-                if (leave_spinner.getSelectedItem().equals("選擇")) {
-                    Toast.makeText(MaintainActivity.this, "【請選擇離開時間!!!】", Toast.LENGTH_SHORT).show();
-                }
-
-            } else {
-                String arrive_txt = String.valueOf(arrive_spinner.getSelectedItem());
-                String leave_txt = String.valueOf(leave_spinner.getSelectedItem());
-                String start_txt = arrive_txt.replace(":", "");
-                String end_txt = leave_txt.replace(":", "");
-                int time1 = Integer.parseInt(start_txt);
-                int time2 = Integer.parseInt(end_txt);
-                int result = time1 - time2;
-                if (result > 0) {
-                    Toast.makeText(MaintainActivity.this, "【離開時間不能小於抵達時間!!!】", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (is_get_money_checkBox.isChecked()) {
-                        if (have_get_money_checkBox.isChecked()) {
-                            if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
-                                Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
-                            } else {
-                                //金額已收齊的OKHttp(工務收錢)
-                                sendRequestWithOkHttpOfAll();
-                                finish();
-                            }
-                        }
-                        if (not_get_all_checkBox.isChecked()) {
-                            if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
-                                Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
-                            } else {
-                                if (not_get_all_edt.getText().toString().equals("")) {
-                                    Toast.makeText(MaintainActivity.this, "【請輸入收款金額!!!】", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    //金額未收齊的OKHttp(工務收錢)
-                                    sendRequestWithOkHttpOfNotAll();
-                                    finish();
-                                }
-                            }
-                        }
-                        if (not_get_money_checkBox.isChecked()) {
-                            if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
-                                Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
-                            } else {
-                                //金額未收的OKHttp(工務收錢)
-                                sendRequestWithOkHttpOfNotGet();
-                                finish();
-                            }
-                        }
-                        if (have_get_money_checkBox.isChecked() || not_get_all_checkBox.isChecked() || not_get_money_checkBox.isChecked()) {
-                        } else {
-                            Toast.makeText(MaintainActivity.this, "【請勾選是否已收款!!!】", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
-                            Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //金額已收齊的OKHttp(業務收錢)
-                            sendRequestWithOkHttpOfIsGet();
-                            finish();
-                        }
-                    }
-                }
-
-            }
-        }
-    };//end setOnItemClickListener
-
-    //cancel_button.setOnClickListener監聽器
-    private Button.OnClickListener cancel_btnListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    };//end setOnItemClickListener
-
-    //與OkHttp建立連線(收齊)
+    /**
+     * 與OkHttp建立連線(收齊)
+     */
     private void sendRequestWithOkHttpOfAll() {
         new Thread(new Runnable() {
             @Override
@@ -552,7 +623,9 @@ public class MaintainActivity extends AppCompatActivity {
         }).start();
     }
 
-    //與OkHttp建立連線(未收齊)
+    /**
+     * 與OkHttp建立連線(未收齊)
+     */
     private void sendRequestWithOkHttpOfNotAll() {
         new Thread(new Runnable() {
             @Override
@@ -636,7 +709,9 @@ public class MaintainActivity extends AppCompatActivity {
         }).start();
     }
 
-    //與OkHttp建立連線(未收)
+    /**
+     * 與OkHttp建立連線(未收)
+     */
     private void sendRequestWithOkHttpOfNotGet() {
         new Thread(new Runnable() {
             @Override
@@ -720,7 +795,9 @@ public class MaintainActivity extends AppCompatActivity {
         }).start();
     }
 
-    //與OkHttp建立連線(不需收)
+    /**
+     * 與OkHttp建立連線(不需收)
+     */
     private void sendRequestWithOkHttpOfIsGet() {
         new Thread(new Runnable() {
             @Override

@@ -1,7 +1,6 @@
 package com.example.a10609516.myapplication;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,10 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -47,11 +43,11 @@ public class CorrectActivity extends AppCompatActivity {
                 startActivity(intent2);
                 Toast.makeText(this, "查詢派工資料",Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            case R.id.pending_item:
-                Intent intent3 = new Intent(CorrectActivity.this, PendingActivity.class);
+            /*case R.id.signature_item:
+                Intent intent3 = new Intent(CorrectActivity.this, SignatureActivity.class);
                 startActivity(intent3);
-                Toast.makeText(this, "待處理派工", Toast.LENGTH_SHORT).show();
-                break; //進入待處理派工頁面
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //進入客戶電子簽名頁面*/
             case R.id.record_item:
                 Intent intent8 = new Intent(CorrectActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -75,6 +71,11 @@ public class CorrectActivity extends AppCompatActivity {
             case R.id.correct_item:
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //顯示日報修正
+            case R.id.about_item:
+                Intent intent9 = new Intent(CorrectActivity.this, VersionActivity.class);
+                startActivity(intent9);
+                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
+                break; //進入版本資訊頁面
             default:
         }
         return true;

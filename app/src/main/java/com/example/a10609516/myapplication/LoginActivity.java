@@ -2,10 +2,12 @@ package com.example.a10609516.myapplication;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -58,13 +60,12 @@ public class LoginActivity extends AppCompatActivity {
         InItFunction();
         //記住帳密功能
         SharedPreferencesWithLogin();
-        //Button.setOnClickListener監聽器
-        login.setOnClickListener(login_btnListener);
-
 
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 View 物件
+     */
     private void InItFunction() {
 
         accountEdit = (EditText) findViewById(R.id.account);
@@ -72,47 +73,46 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.loginBtn);
         remember_checkBox = (CheckBox) findViewById(R.id.remember_checkBox);
         version_no_txt = (TextView) findViewById(R.id.version_no_txt);
+        //Button.setOnClickListener監聽器
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                CheckEditTextIsEmptyOrNot();
+                //取得TokenID的OKHttp
+                sendRequestWithOkHttpOfTokenID();
+                //取得版本號的OKHttp
+                sendRequestWithOkHttpOfVersion();
+
+                if (CheckEditText) {
+
+                    UserLoginFunction(IDEdT, PwdEdT);
+
+                } else {
+
+                    Toast.makeText(LoginActivity.this, "請輸入員工ID及密碼", Toast.LENGTH_LONG).show();
+
+                }
+
+
+                if (remember_checkBox.isChecked()) { //檢測使用者帳號密碼
+                    SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor edit = remdname.edit();
+                    edit.putString("account", accountEdit.getText().toString());
+                    edit.putString("password", passwordEdit.getText().toString());
+                    edit.commit();
+                }
+
+                SharedPreferences sharedPreferences = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                sharedPreferences.edit().putString("ID", accountEdit.getText().toString()).apply();
+
+            }
+        });//end setOnItemClickListener
     }
 
-    //Button.setOnClickListener監聽器
-    private Button.OnClickListener login_btnListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-
-            CheckEditTextIsEmptyOrNot();
-            //取得TokenID的OKHttp
-            sendRequestWithOkHttpOfTokenID();
-            //取得版本號的OKHttp
-            sendRequestWithOkHttpOfVersion();
-
-            if (CheckEditText) {
-
-                UserLoginFunction(IDEdT, PwdEdT);
-
-            } else {
-
-                Toast.makeText(LoginActivity.this, "請輸入員工ID及密碼", Toast.LENGTH_LONG).show();
-
-            }
-
-
-            if (remember_checkBox.isChecked()) { //檢測使用者帳號密碼
-                SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
-                SharedPreferences.Editor edit = remdname.edit();
-                edit.putString("account", accountEdit.getText().toString());
-                edit.putString("password", passwordEdit.getText().toString());
-                edit.commit();
-            }
-
-            SharedPreferences sharedPreferences = getSharedPreferences("user_id_data", MODE_PRIVATE);
-            sharedPreferences.edit().putString("ID", accountEdit.getText().toString()).apply();
-
-        }
-    };//end setOnItemClickListener
-
-
-    //記住帳密功能
+    /**
+     * 記住帳密功能
+     */
     private void SharedPreferencesWithLogin() {
 
         SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
@@ -144,9 +144,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-
-    //確認accountEdit、passwordEdit是否為空值
+    /**
+     *確認accountEdit、passwordEdit是否為空值
+     */
     public void CheckEditTextIsEmptyOrNot() {
 
         IDEdT = accountEdit.getText().toString();
@@ -158,9 +158,9 @@ public class LoginActivity extends AppCompatActivity {
             CheckEditText = true;
         }
     }
-
-
-    //AsyncTask非同步任務
+    /**
+     *AsyncTask非同步任務
+     */
     public void UserLoginFunction(final String User_id, final String User_password) {
 
         class Login extends AsyncTask<String, Void, String> {
@@ -200,7 +200,19 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(LoginActivity.this, "檢測到最新版本，請前往更新!!!", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(LoginActivity.this)
+                            .setTitle("更新通知")
+                            .setMessage("檢測到軟體重大更新，請前往更新為最新版本")
+                            .setIcon(R.drawable.bwt_icon)
+                            .setNegativeButton("確定",
+                                    new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialog,
+                                                            int which) {
+                                        }
+                                    }).show();
+                    //Toast.makeText(LoginActivity.this, "檢測到最新版本，請前往更新!!!", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -228,7 +240,9 @@ public class LoginActivity extends AppCompatActivity {
         userLoginClass.execute(User_id, User_password);
     }
 
-    //與OkHttp建立連線
+    /**
+     * 與OkHttp建立連線(TokenID)
+     */
     private void sendRequestWithOkHttpOfTokenID() {
         new Thread(new Runnable() {
             @Override
@@ -262,7 +276,9 @@ public class LoginActivity extends AppCompatActivity {
         }).start();
     }
 
-    //與OkHttp建立連線
+    /**
+     * 與OkHttp建立連線(版本)
+     */
     private void sendRequestWithOkHttpOfVersion() {
         new Thread(new Runnable() {
             @Override
@@ -290,7 +306,10 @@ public class LoginActivity extends AppCompatActivity {
         }).start();
     }
 
-    //獲得JSON字串並解析成String字串
+    /**
+     * 獲得JSON字串並解析成String字串
+     * @param jsonData
+     */
     private void parseJSONWithJSONObjectOfVersion(String jsonData) {
         try {
             JSONArray jsonArray = new JSONArray(jsonData);

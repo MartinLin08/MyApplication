@@ -54,13 +54,22 @@ public class ScheduleActivity extends AppCompatActivity {
     private Button more_button1, more_button2, more_button3;
     private TextView today_sql_total_textView, week_sql_total_textView, missing_sql_total_textView;
 
-
+    /**
+     * 創建Menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * 進入Menu各個頁面
+     * @param item
+     * @return
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home_item:
@@ -82,11 +91,11 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(intent2);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; // 進入查詢派工資料頁面
-            case R.id.pending_item:
-                Intent intent3 = new Intent(ScheduleActivity.this, PendingActivity.class);
+            /*case R.id.signature_item:
+                Intent intent3 = new Intent(ScheduleActivity.this, SignatureActivity.class);
                 startActivity(intent3);
-                Toast.makeText(this, "待處理派工", Toast.LENGTH_SHORT).show();
-                break; //進入待處理派工頁面
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //進入客戶電子簽名頁面*/
             case R.id.record_item:
                 Intent intent4 = new Intent(ScheduleActivity.this, RecordActivity.class);
                 startActivity(intent4);
@@ -112,6 +121,11 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(intent8);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面
+            case R.id.about_item:
+                Intent intent9 = new Intent(ScheduleActivity.this, VersionActivity.class);
+                startActivity(intent9);
+                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
+                break; //進入版本資訊頁面
             default:
         }
         return true;
@@ -131,7 +145,9 @@ public class ScheduleActivity extends AppCompatActivity {
 
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 View 物件
+     */
     private void InItFunction() {
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -139,7 +155,9 @@ public class ScheduleActivity extends AppCompatActivity {
 
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 ViewPager 物件
+     */
     private void InViewGroupFunction() {
 
         today_TableLayout = (TableLayout) findViewById(R.id.today_TableLayout);
@@ -156,7 +174,9 @@ public class ScheduleActivity extends AppCompatActivity {
 
     }
 
-    //設置ViewPager的每個頁面Title
+    /**
+     * 設置ViewPager的每個頁面Title
+     */
     private void PagerTitle() {
 
         //為標題設置字體大小
@@ -188,7 +208,9 @@ public class ScheduleActivity extends AppCompatActivity {
 
     }
 
-    //ViewPager的各項設置
+    /**
+     * ViewPager的各項設置
+     */
     private void ViewPagerAdapter() {
 
         PagerAdapter pagerAdapter = new PagerAdapter() {
@@ -284,7 +306,9 @@ public class ScheduleActivity extends AppCompatActivity {
 
     }
 
-    //與OkHttp建立連線
+    /**
+     * 與OkHttp(Today)建立連線
+     */
     private void sendRequestWithOkHttpOfToday() {
         new Thread(new Runnable() {
             @Override
@@ -318,7 +342,10 @@ public class ScheduleActivity extends AppCompatActivity {
         }).start();
     }
 
-    //獲得JSON字串並解析成String字串
+    /**
+     * 獲得JSON字串並解析成String字串
+     * @param jsonData
+     */
     private void parseJSONWithJSONObjectOfToday(String jsonData) {
 
         try {
@@ -400,7 +427,9 @@ public class ScheduleActivity extends AppCompatActivity {
         }
     }
 
-    //更新UI
+    /**
+     * 更新UI(Today)
+     */
     Handler today_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -548,7 +577,9 @@ public class ScheduleActivity extends AppCompatActivity {
     };
 
 
-    //與OkHttp建立連線
+    /**
+     * 與OkHttp(Week)建立連線
+     */
     private void sendRequestWithOkHttpOfWeek() {
         new Thread(new Runnable() {
             @Override
@@ -582,7 +613,10 @@ public class ScheduleActivity extends AppCompatActivity {
         }).start();
     }
 
-    //獲得JSON字串並解析成String字串
+    /**
+     * 獲得JSON字串並解析成String字串
+     * @param jsonData
+     */
     private void parseJSONWithJSONObjectOfWeek(String jsonData) {
 
         try {
@@ -663,7 +697,9 @@ public class ScheduleActivity extends AppCompatActivity {
         }
     }
 
-    //更新UI
+    /**
+     * 更新UI(Week)
+     */
     Handler week_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -809,7 +845,9 @@ public class ScheduleActivity extends AppCompatActivity {
     };
 
 
-    //與OkHttp建立連線
+    /**
+     * 與OkHttp(Missing)建立連線
+     */
     private void sendRequestWithOkHttpOfMissing() {
         new Thread(new Runnable() {
             @Override
@@ -843,7 +881,10 @@ public class ScheduleActivity extends AppCompatActivity {
         }).start();
     }
 
-    //獲得JSON字串並解析成String字串
+    /**
+     * 獲得JSON字串並解析成String字串
+     * @param jsonData
+     */
     private void parseJSONWithJSONObjectOfMissing(String jsonData) {
 
         try {
@@ -924,7 +965,9 @@ public class ScheduleActivity extends AppCompatActivity {
         }
     }
 
-    //更新UI
+    /**
+     * 更新UI(Missing)
+     */
     Handler missing_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

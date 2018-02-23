@@ -1,7 +1,6 @@
 package com.example.a10609516.myapplication;
 
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -11,21 +10,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 public class CalendarActivity extends AppCompatActivity {
 
     private TextView mesg;
 
-
+    /**
+     * 創建Menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * 進入Menu各個頁面
+     * @param item
+     * @return
+     */
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.home_item:
@@ -47,11 +53,11 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(intent1);
                 Toast.makeText(this, "查詢派工資料",Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            case R.id.pending_item:
-                Intent intent2 = new Intent(CalendarActivity.this, PendingActivity.class);
+            /*case R.id.signature_item:
+                Intent intent2 = new Intent(CalendarActivity.this, SignatureActivity.class);
                 startActivity(intent2);
-                Toast.makeText(this, "待處理派工", Toast.LENGTH_SHORT).show();
-                break; //進入待處理派工頁面
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //進入客戶電子簽名頁面*/
             case R.id.record_item:
                 Intent intent8 = new Intent(CalendarActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -77,6 +83,11 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(intent6);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面
+            case R.id.about_item:
+                Intent intent9 = new Intent(CalendarActivity.this, VersionActivity.class);
+                startActivity(intent9);
+                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
+                break; //進入版本資訊頁面
             default:
         }
         return true;

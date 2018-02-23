@@ -29,13 +29,22 @@ public class MenuActivity extends BackKeyActivity {
     private Spinner announcement_spinner;
     private TextView name_textView;
 
-    //創建Menu
+    /**
+     * 創建Menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * 進入Menu各個頁面
+     * @param item
+     * @return
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home_item:
@@ -56,11 +65,11 @@ public class MenuActivity extends BackKeyActivity {
                 startActivity(intent1);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            case R.id.pending_item:
-                Intent intent2 = new Intent(MenuActivity.this, PendingActivity.class);
+            case R.id.signature_item:
+                Intent intent2 = new Intent(MenuActivity.this, SignatureActivity.class);
                 startActivity(intent2);
-                Toast.makeText(this, "待處理派工", Toast.LENGTH_SHORT).show();
-                break; //進入待處理派工頁面
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //進入客戶電子簽名頁面
             case R.id.record_item:
                 Intent intent8 = new Intent(MenuActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -89,8 +98,8 @@ public class MenuActivity extends BackKeyActivity {
             case R.id.about_item:
                 Intent intent9 = new Intent(MenuActivity.this, VersionActivity.class);
                 startActivity(intent9);
-                Toast.makeText(this, "關於", Toast.LENGTH_SHORT).show();
-                break; //進入日報修正頁面
+                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
+                break; //進入版本資訊頁面
             default:
         }
         return true;
@@ -112,7 +121,9 @@ public class MenuActivity extends BackKeyActivity {
         AnnouncementSpinner();
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 View 物件
+     */
     private void InItFunction() {
 
         name_textView = (TextView) findViewById(R.id.name_textView);
@@ -121,7 +132,9 @@ public class MenuActivity extends BackKeyActivity {
 
     }
 
-    //ListView監聽器
+    /**
+     * ListView監聽器
+     */
     private void ListViewOnClick() {
         listAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, show_text);
         announcement_ListView.setAdapter(listAdapter);
@@ -137,7 +150,9 @@ public class MenuActivity extends BackKeyActivity {
         }); *///end setOnItemClickListener
     }
 
-    //與資料庫連線 藉由登入輸入的員工ID取得員工姓名
+    /**
+     * 與資料庫連線 藉由登入輸入的員工ID取得員工姓名
+     */
     private void sendRequestWithOkHttp(){
 
         new Thread(new Runnable() {
@@ -171,7 +186,10 @@ public class MenuActivity extends BackKeyActivity {
         }).start();
     }
 
-    //在TextView上SHOW出回傳的員工姓名
+    /**
+     * 在TextView上SHOW出回傳的員工姓名
+     * @param response
+     */
     private void showResponse(final String response){
         runOnUiThread(new Runnable() {
             @Override
@@ -181,7 +199,9 @@ public class MenuActivity extends BackKeyActivity {
         });
     }
 
-    //公告區的各部門下拉選單
+    /**
+     * 公告區的各部門下拉選單
+     */
     private void AnnouncementSpinner() {
         final String[] announcement = {"--- 全 部 分 類 ---"/*, "--- 內 部 公 告 區 ---", "--- 管 理 部 ---", "--- 財 會 部 ---",
                 "--- 水 資 部 ---", "--- 管 財 部 ---", "--- 設 計/經 銷 部 ---", "--- 電 商 部 ---", "--- 技 術 部 ---",
@@ -204,7 +224,6 @@ public class MenuActivity extends BackKeyActivity {
             }
         });
     }
-
 
     @Override
     protected void onStop() {

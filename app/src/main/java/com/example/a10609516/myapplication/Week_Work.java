@@ -31,7 +31,6 @@ public class Week_Work extends AppCompatActivity {
 
     private TableLayout week_work_TableLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,14 +42,18 @@ public class Week_Work extends AppCompatActivity {
         sendRequestWithOkHttpOfWeek();
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 View 物件
+     */
     private void InItFunction() {
 
         week_work_TableLayout = (TableLayout) findViewById(R.id.week_work_TableLayout);
 
     }
 
-    //與OkHttp建立連線
+    /**
+     * 與OkHttp建立連線
+     */
     private void sendRequestWithOkHttpOfWeek() {
         new Thread(new Runnable() {
             @Override
@@ -84,7 +87,10 @@ public class Week_Work extends AppCompatActivity {
         }).start();
     }
 
-    //獲得JSON字串並解析成String字串
+    /**
+     * 獲得JSON字串並解析成String字串
+     * @param jsonData
+     */
     private void parseJSONWithJSONObjectOfWeek(String jsonData) {
 
         try {
@@ -160,7 +166,9 @@ public class Week_Work extends AppCompatActivity {
         }
     }
 
-    //更新UI
+    /**
+     * 更新UI
+     */
     Handler week_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

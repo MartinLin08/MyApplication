@@ -17,8 +17,8 @@
                 android:id="@+id/work_item"
                 android:title="查詢派工資料" />
             <item
-                android:id="@+id/pending_item"
-                android:title="待處理派工" />
+                android:id="@+id/signature_item"
+                android:title="客戶電子簽名" />
         </menu>
     </item>
     <item android:title="百貨/DIY通路">

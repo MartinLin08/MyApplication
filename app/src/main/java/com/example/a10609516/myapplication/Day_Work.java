@@ -48,7 +48,9 @@ public class Day_Work extends AppCompatActivity {
 
     }
 
-    //動態取得 View 物件
+    /**
+     * 動態取得 View 物件
+     */
     private void InItFunction() {
 
         date_textView = (TextView) findViewById(R.id.date_textView);
@@ -56,7 +58,9 @@ public class Day_Work extends AppCompatActivity {
 
     }
 
-    //獲取當前年月日
+    /**
+     * 獲取當前年月日
+     */
     private void DateToday() {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -66,7 +70,9 @@ public class Day_Work extends AppCompatActivity {
 
     }
 
-    //與OkHttp建立連線
+    /**
+     * 與OkHttp建立連線
+     */
     private void sendRequestWithOkHttpOfToday() {
         new Thread(new Runnable() {
             @Override
@@ -100,7 +106,10 @@ public class Day_Work extends AppCompatActivity {
         }).start();
     }
 
-    //獲得JSON字串並解析成String字串
+    /**
+     * 獲得JSON字串並解析成String字串
+     * @param jsonData
+     */
     private void parseJSONWithJSONObjectOfToday(String jsonData) {
 
         try {
@@ -176,7 +185,9 @@ public class Day_Work extends AppCompatActivity {
         }
     }
 
-    //更新UI
+    /**
+     * 更新UI
+     */
     Handler today_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

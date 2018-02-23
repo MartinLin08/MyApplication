@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,11 +45,11 @@ public class CustomerActivity extends AppCompatActivity {
                 startActivity(intent2);
                 Toast.makeText(this, "查詢派工資料",Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            case R.id.pending_item:
-                Intent intent3 = new Intent(CustomerActivity.this, PendingActivity.class);
+            /*case R.id.signature_item:
+                Intent intent3 = new Intent(CustomerActivity.this, SignatureActivity.class);
                 startActivity(intent3);
-                Toast.makeText(this, "待處理派工", Toast.LENGTH_SHORT).show();
-                break; //進入待處理派工頁面
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //進入客戶電子簽名頁面*/
             case R.id.record_item:
                 Intent intent8 = new Intent(CustomerActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -74,6 +73,11 @@ public class CustomerActivity extends AppCompatActivity {
                 startActivity(intent6);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面
+            case R.id.about_item:
+                Intent intent9 = new Intent(CustomerActivity.this, VersionActivity.class);
+                startActivity(intent9);
+                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
+                break; //進入版本資訊頁面
             default:
         }
         return true;
@@ -84,7 +88,7 @@ public class CustomerActivity extends AppCompatActivity {
     private ListViewForScrollView datalistview;
 
     private ListViewForScrollView listview1;
-    private String[] show_text = {"Test1", "Test2", "Test3", "Test4","Test1", "Test2", "Test3", "Test4","Test1", "Test2", "Test3", "Test4","Test1", "Test2", "Test3", "Test4"};
+    private String[] show_text = {"Test1", "Test2", "Test3", "Test4","Test5", "Test6", "Test7", "Test8","Test9", "Test10", "Test11", "Test12","Test13", "Test14", "Test15", "Test16"};
     private ArrayAdapter listAdapter;
 
     @Override

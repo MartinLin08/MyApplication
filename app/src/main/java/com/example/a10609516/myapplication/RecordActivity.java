@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,11 +47,11 @@ public class RecordActivity extends AppCompatActivity {
                 startActivity(intent2);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; // 進入查詢派工資料頁面
-            case R.id.pending_item:
-                Intent intent3 = new Intent(RecordActivity.this, PendingActivity.class);
+            /*case R.id.signature_item:
+                Intent intent3 = new Intent(RecordActivity.this, SignatureActivity.class);
                 startActivity(intent3);
-                Toast.makeText(this, "待處理派工", Toast.LENGTH_SHORT).show();
-                break; //進入待處理派工頁面
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //進入客戶電子簽名頁面*/
             case R.id.record_item:
                 Toast.makeText(this, "上傳日報紀錄", Toast.LENGTH_SHORT).show();
                 break; // 顯示上傳日報紀錄
@@ -77,6 +75,11 @@ public class RecordActivity extends AppCompatActivity {
                 startActivity(intent8);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面
+            case R.id.about_item:
+                Intent intent9 = new Intent(RecordActivity.this, VersionActivity.class);
+                startActivity(intent9);
+                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
+                break; //進入版本資訊頁面
             default:
         }
         return true;
