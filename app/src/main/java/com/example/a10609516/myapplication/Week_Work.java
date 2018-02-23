@@ -31,7 +31,6 @@ public class Week_Work extends AppCompatActivity {
 
     private TableLayout week_work_TableLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
