@@ -1,11 +1,15 @@
 package com.example.a10609516.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class VersionActivity extends AppCompatActivity {
 
@@ -13,6 +17,85 @@ public class VersionActivity extends AppCompatActivity {
     private LinearLayout detail_llt1;
     private Button version_btn1;
     private Button version_up_btn1;
+
+    /**
+     * 創建Menu
+     * @param menu
+     * @return
+     */
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    /**
+     * 進入Menu各個頁面
+     * @param item
+     * @return
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.home_item:
+                Intent intent = new Intent(VersionActivity.this, MenuActivity.class);
+                startActivity(intent);
+                Toast.makeText(this, "HOME", Toast.LENGTH_SHORT).show();
+                finish();
+                break; //返回首頁
+            case R.id.schedule_item:
+                Intent intent7 = new Intent(VersionActivity.this, ScheduleActivity.class);
+                startActivity(intent7);
+                Toast.makeText(this, "行程資訊",Toast.LENGTH_SHORT).show();
+                break; //進入行程資訊頁面
+            case R.id.calendar_item:
+                Intent intent1 = new Intent(VersionActivity.this, CalendarActivity.class);
+                startActivity(intent1);
+                Toast.makeText(this, "派工行事曆", Toast.LENGTH_SHORT).show();
+                break; //進入派工行事曆頁面
+            case R.id.work_item:
+                Intent intent2 = new Intent(VersionActivity.this, SearchActivity.class);
+                startActivity(intent2);
+                Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
+                break; //進入查詢派工資料頁面
+            /*case R.id.signature_item:
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //顯示客戶電子簽名*/
+            case R.id.record_item:
+                Intent intent8 = new Intent(VersionActivity.this, RecordActivity.class);
+                startActivity(intent8);
+                Toast.makeText(this, "上傳日報紀錄",Toast.LENGTH_SHORT).show();
+                break; //進入上傳日報紀錄頁面
+            case R.id.picture_item:
+                Intent intent3 = new Intent(VersionActivity.this, PictureActivity.class);
+                startActivity(intent3);
+                Toast.makeText(this, "客戶訂單照片上傳", Toast.LENGTH_SHORT).show();
+                break; //進入客戶訂單照片上傳頁面
+            case R.id.customer_item:
+                Intent intent4 = new Intent(VersionActivity.this, CustomerActivity.class);
+                startActivity(intent4);
+                Toast.makeText(this, "客戶訂單查詢", Toast.LENGTH_SHORT).show();
+                break; //進入客戶訂單查詢頁面
+            case R.id.upload_item:
+                Intent intent5 = new Intent(VersionActivity.this, UploadActivity.class);
+                startActivity(intent5);
+                Toast.makeText(this, "上傳日報", Toast.LENGTH_SHORT).show();
+                break; //進入上傳日報頁面
+            case R.id.correct_item:
+                Intent intent6 = new Intent(VersionActivity.this, CorrectActivity.class);
+                startActivity(intent6);
+                Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
+                break; //進入日報修正頁面
+            case R.id.about_item:
+                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
+                break; //顯示版本資訊
+            case R.id.QRCode_item:
+                Intent intent10 = new Intent(VersionActivity.this, QRCodeActivity.class);
+                startActivity(intent10);
+                Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
+                break; //進入QRCode頁面
+            default:
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +124,10 @@ public class VersionActivity extends AppCompatActivity {
      * 版本詳細資訊
      */
     private void DetailOfVersion(){
-        detail_txt1.setText("1.新增工務 - 行程資訊、查詢派工資料 \n" +
+        detail_txt1.setText("1.新增工務 - 行程資訊、派工行事曆、查詢派工資料 \n" +
                             "2.新增工務 - 出勤維護回報功能 \n" +
-                            "3.新增推播功能(新派工、更新派工、取消派工) \n" +
-                            "4.新增客戶電子簽名功能");
+                            "3.新增推播功能-工務(新派工、更新派工、取消派工) \n" +
+                            "4.新增客戶電子簽名、QRCode功能");
     }
 
     /**

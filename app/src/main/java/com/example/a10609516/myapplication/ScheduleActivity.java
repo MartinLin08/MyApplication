@@ -1,6 +1,5 @@
 package com.example.a10609516.myapplication;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -38,7 +37,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
 
 public class ScheduleActivity extends AppCompatActivity {
 
@@ -126,6 +124,11 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(intent9);
                 Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
                 break; //進入版本資訊頁面
+            case R.id.QRCode_item:
+                Intent intent10 = new Intent(ScheduleActivity.this, QRCodeActivity.class);
+                startActivity(intent10);
+                Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
+                break; //進入QRCode頁面
             default:
         }
         return true;

@@ -115,7 +115,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="8"
             android:gravity="end"
-            android:text="ver."
+            android:text="拓霖企業 2018 @ ver."
             android:textColor="#0000ff"
             android:textSize="15sp" />
 

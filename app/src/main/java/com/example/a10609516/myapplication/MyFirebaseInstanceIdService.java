@@ -12,7 +12,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
 public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
@@ -31,7 +30,9 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
         // TODO: Implement this method to send token to your app server.
     }
 
-    //傳遞TokenID到LoginActivity做儲存
+    /**
+     * 傳遞TokenID到LoginActivity做儲存
+     */
     private void SendTokenID(){
         String token = FirebaseInstanceId.getInstance().getToken();
 

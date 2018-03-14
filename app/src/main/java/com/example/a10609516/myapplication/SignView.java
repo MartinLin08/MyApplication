@@ -89,7 +89,7 @@ public class SignView extends View {
             paint.setAntiAlias(true);
             paint.setStrokeWidth(10);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(Color.rgb(220,220,220));
+            paint.setColor(Color.rgb(0,71,171));
             invalidate();
         }
     }

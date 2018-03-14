@@ -37,7 +37,6 @@ public class SignatureActivity extends AppCompatActivity {
     String signPath;
     String sign_name;
 
-
     private OkHttpClient client;
 
     /**
@@ -79,8 +78,8 @@ public class SignatureActivity extends AppCompatActivity {
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
             /*case R.id.signature_item:
-                Toast.makeText(this, "待處理派工", Toast.LENGTH_SHORT).show();
-                break; //顯示待處理派工*/
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //顯示客戶電子簽名*/
             case R.id.record_item:
                 Intent intent8 = new Intent(SignatureActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -106,6 +105,11 @@ public class SignatureActivity extends AppCompatActivity {
                 startActivity(intent6);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面
+            case R.id.QRCode_item:
+                Intent intent10 = new Intent(SignatureActivity.this, QRCodeActivity.class);
+                startActivity(intent10);
+                Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
+                break; //進入QRCode頁面
             default:
         }
         return true;
@@ -172,8 +176,8 @@ public class SignatureActivity extends AppCompatActivity {
             Bundle bundle = getIntent().getExtras();
             String SN_NO = bundle.getString("ResponseText1");
             String sign_dir = Environment.getExternalStorageDirectory().getPath() + "/Pictures/";
-            _path = sign_dir + user_id_data + "Sign" + date +".png";
-            sign_name = SN_NO + "_" +user_id_data + "_Sign_" + date;
+            _path = sign_dir + "Sign_"  + SN_NO + "_" +user_id_data + "_" + date+".png";
+            sign_name = "Sign_" + SN_NO + "_" +user_id_data + "_" + date;
             Log.e("TAG",_path);
             byteArrayOutputStream = new ByteArrayOutputStream();
             mSignBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -192,12 +196,12 @@ public class SignatureActivity extends AppCompatActivity {
                 client.newCall(bi).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        Log.i("TAG","onFailure : 失敗");
+                        Log.i("SignatureActivity","onFailure : 失敗");
                     }
 
                     @Override
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                        Log.i("TAG","onResponse : "+response.body().string());
+                        Log.i("SignatureActivity","onResponse : "+response.body().string());
                         //提交成功處理結果
                     }
                 });

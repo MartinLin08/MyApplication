@@ -36,7 +36,6 @@ import android.os.Message;
 
 import java.util.ArrayList;
 
-
 public class SearchActivity extends AppCompatActivity {
 
     private Button search_button, time_start_button, time_end_button, clean_start_button, clean_end_button;
@@ -120,6 +119,11 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent9);
                 Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
                 break; //進入版本資訊頁面
+            case R.id.QRCode_item:
+                Intent intent10 = new Intent(SearchActivity.this, QRCodeActivity.class);
+                startActivity(intent10);
+                Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
+                break; //進入QRCode頁面
             default:
         }
         return true;
@@ -321,6 +325,7 @@ public class SearchActivity extends AppCompatActivity {
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
+                    //平均分配列的寬度
                     search_TableLayout.setStretchAllColumns(true);
 
                     //設置大TableLayout的TableRow

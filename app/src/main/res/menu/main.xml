@@ -19,6 +19,9 @@
             <item
                 android:id="@+id/signature_item"
                 android:title="客戶電子簽名" />
+            <item
+                android:id="@+id/QRCode_item"
+                android:title="QRCode" />
         </menu>
     </item>
     <item android:title="百貨/DIY通路">
@@ -43,6 +46,5 @@
     <item
         android:id="@+id/about_item"
         android:title="版本資訊"/>
-
 
 </menu>

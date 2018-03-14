@@ -76,6 +76,11 @@ public class CorrectActivity extends AppCompatActivity {
                 startActivity(intent9);
                 Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
                 break; //進入版本資訊頁面
+            case R.id.QRCode_item:
+                Intent intent10 = new Intent(CorrectActivity.this, QRCodeActivity.class);
+                startActivity(intent10);
+                Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
+                break; //進入QRCode頁面
             default:
         }
         return true;

@@ -20,7 +20,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
 public class MenuActivity extends BackKeyActivity {
 
     private ListView announcement_ListView;
@@ -100,6 +99,11 @@ public class MenuActivity extends BackKeyActivity {
                 startActivity(intent9);
                 Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
                 break; //進入版本資訊頁面
+            case R.id.QRCode_item:
+                Intent intent10 = new Intent(MenuActivity.this, QRCodeActivity.class);
+                startActivity(intent10);
+                Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
+                break; //進入QRCode頁面
             default:
         }
         return true;

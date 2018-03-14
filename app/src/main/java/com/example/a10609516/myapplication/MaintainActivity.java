@@ -2,18 +2,25 @@ package com.example.a10609516.myapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +30,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
 public class MaintainActivity extends AppCompatActivity {
 
+    //private QRCodeActivity mQRCode;
+    private ImageView add_qrcode;
     private Button arrive_button, check_button, cancel_button;
     private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, cp_name_txt, esvd_eng_points_txt,
-            esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt, reason_txt, esvd_is_eng_money_txt;
-    private TableLayout maintain_tablelayot;
+            esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt, reason_txt, esvd_is_eng_money_txt, maintain_textView;
+    private TableLayout maintain_tablelayot, qrcode_tablelayot;
     private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox;
     private EditText have_get_money_edt, not_get_money_edt, not_get_all_edt, not_get_all_reason_edt;
     private Spinner arrive_spinner, leave_spinner, reason_spinner, useless_spinner;
@@ -75,6 +83,7 @@ public class MaintainActivity extends AppCompatActivity {
     private void InItFunction() {
 
         maintain_tablelayot = (TableLayout) findViewById(R.id.maintain_tablelayot);
+        qrcode_tablelayot = (TableLayout) findViewById(R.id.qrcode_tablelayot);
         check_button = (Button) findViewById(R.id.check_button);
         cancel_button = (Button) findViewById(R.id.cancel_button);
         work_type_name_txt = (TextView) findViewById(R.id.work_type_name_txt);
@@ -89,6 +98,7 @@ public class MaintainActivity extends AppCompatActivity {
         reason_txt = (TextView) findViewById(R.id.reason_txt);
         esvd_is_eng_money_txt = (TextView) findViewById(R.id.esvd_is_eng_money_txt);
         esvd_eng_points_txt = (TextView) findViewById(R.id.esvd_eng_points_txt);
+        maintain_textView = (TextView) findViewById(R.id.maintain_textView);
         arrive_button = (Button) findViewById(R.id.arrive_button);
         is_get_money_checkBox = (CheckBox) findViewById(R.id.is_get_money_checkBox);
         have_get_money_checkBox = (CheckBox) findViewById(R.id.have_get_money_checkBox);
@@ -102,6 +112,29 @@ public class MaintainActivity extends AppCompatActivity {
         leave_spinner = (Spinner) findViewById(R.id.leave_spinner);
         reason_spinner = (Spinner) findViewById(R.id.reason_spinner);
         useless_spinner = (Spinner) findViewById(R.id.useless_spinner);
+        add_qrcode = (ImageView) findViewById(R.id.add_qrcode);
+
+        //add_qrcode.setOnClickListener監聽器
+        add_qrcode.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                    if(getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size()==0)
+                    {
+                        //未安裝
+                        Toast.makeText(MaintainActivity.this, "請至 Play商店 安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
+                    }else{
+                        //SCAN_MODE, 可判別所有支援條碼
+                        //QR_CODE_MODE, 只判別QR_CODE
+                        //PRODUCT_MODE, UPC and EAN條碼
+                        //ONE_D_MODE, 1維條碼
+                        intent.putExtra("SCAN_MODE","SCAN_MODE");
+
+                        //呼叫ZXing Scanner,完成動作後回傳1給onActivityResult的requestCode參數
+                        startActivityForResult(intent,1);
+                    }
+                }
+            });
 
         //check_button.setOnClickListener監聽器
         check_button.setOnClickListener(new View.OnClickListener() {
@@ -879,6 +912,56 @@ public class MaintainActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    /**
+     * 取回掃描回傳值或取消掃描
+     * @param requestCode
+     * @param resultCode
+     * @param intent
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent intent){
+        if(requestCode==1){
+            if(resultCode==RESULT_OK){
+                //ZXing回傳的內容
+                String contents = intent.getStringExtra("SCAN_RESULT");
+
+                qrcode_tablelayot.setWeightSum(6);
+                TableRow tableRow = new TableRow(MaintainActivity.this);
+                LinearLayout linearLayout = new LinearLayout(MaintainActivity.this);
+                Button delete_btn = new Button(MaintainActivity.this);
+                TextView result_txt = new TextView(MaintainActivity.this);
+                linearLayout.setGravity(Gravity.CENTER_VERTICAL);
+
+                result_txt.setText(contents.toString());
+                result_txt.setPadding(10,3,5,3);
+                result_txt.setTextColor(Color.rgb(6, 102, 219));
+                result_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                result_txt.setGravity(Gravity.CENTER_VERTICAL);
+
+                delete_btn.setText("刪除");
+                delete_btn.setBackgroundResource(R.drawable.button);
+                delete_btn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                delete_btn.setTextColor(Color.rgb(6, 102, 219));
+                delete_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        TableRow tableRow = (TableRow) view.getParent();
+                        qrcode_tablelayot.removeView(tableRow);
+                    }
+                });
+
+                linearLayout.addView(result_txt);
+                tableRow.addView(linearLayout, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 5));
+                tableRow.addView(delete_btn, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
+                qrcode_tablelayot.addView(tableRow);
+            }else{
+                if(resultCode==RESULT_CANCELED){
+                    Toast.makeText(MaintainActivity.this, "取消掃描", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
 }
