@@ -249,7 +249,7 @@ public class CalendarActivity extends AppCompatActivity {
      * 分公司的Spinner下拉選單
      */
     private void WorkTypeSpinner() {
-        final String[] select = {"請選擇", "台北拓亞鈦,快撥28868", "桃園分公司,快撥31338", "新竹分公司,快撥37888", "台中分公司,快撥42088", "高雄分公司,快撥73568"};
+        final String[] select = {"請選擇  ", "台北拓亞鈦,快撥28868", "桃園分公司,快撥31338", "新竹分公司,快撥37888", "台中分公司,快撥42088", "高雄分公司,快撥73568"};
         ArrayAdapter<String> selectList = new ArrayAdapter<String>(CalendarActivity.this,
                 android.R.layout.simple_spinner_dropdown_item,
                 select);
