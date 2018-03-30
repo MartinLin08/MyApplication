@@ -2,9 +2,11 @@ package com.example.a10609516.myapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +41,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ScheduleActivity extends AppCompatActivity {
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private View view1, view2, view3;
     private List<View> viewList;//view陣列
@@ -138,50 +142,56 @@ public class ScheduleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
-
         //動態取得 View 物件
         InItFunction();
         //設置ViewPager的每個頁面Title
         PagerTitle();
         //ViewPager的各項設置
         ViewPagerAdapter();
-
     }
 
     /**
      * 動態取得 View 物件
      */
     private void InItFunction() {
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         pagerTitleStrip = (PagerTitleStrip) findViewById(R.id.pager_title);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
 
+        //UI介面下拉刷新
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                today_TableLayout.removeAllViews();
+                week_TableLayout.removeAllViews();
+                missing_TableLayout.removeAllViews();
+                sendRequestWithOkHttpOfToday();
+                sendRequestWithOkHttpOfWeek();
+                sendRequestWithOkHttpOfMissing();
+            }
+        });
     }
 
     /**
      * 動態取得 ViewPager 物件
      */
     private void InViewGroupFunction() {
-
         today_TableLayout = (TableLayout) findViewById(R.id.today_TableLayout);
         week_TableLayout = (TableLayout) findViewById(R.id.week_TableLayout);
         missing_TableLayout = (TableLayout) findViewById(R.id.missing_TableLayout);
-
         today_sql_total_textView = (TextView) findViewById(R.id.today_sql_total_textView);
         week_sql_total_textView = (TextView) findViewById(R.id.week_sql_total_textView);
         missing_sql_total_textView = (TextView) findViewById(R.id.missing_sql_total_textView);
-
         more_button1 = (Button) findViewById(R.id.more_button1);
         more_button2 = (Button) findViewById(R.id.more_button2);
         more_button3 = (Button) findViewById(R.id.more_button3);
-
     }
 
     /**
      * 設置ViewPager的每個頁面Title
      */
     private void PagerTitle() {
-
         //為標題設置字體大小
         pagerTitleStrip.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 35);
         //為標題設置字體顏色
@@ -189,8 +199,7 @@ public class ScheduleActivity extends AppCompatActivity {
         //為標題設置背景顏色
         pagerTitleStrip.setBackgroundColor(Color.BLUE);
         //設置標題位置
-        pagerTitleStrip.setGravity(17);
-
+        pagerTitleStrip.setGravity(15);
         pagerTitleStrip.getChildAt(0).setVisibility(View.GONE);
         pagerTitleStrip.getChildAt(2).setVisibility(View.GONE);
 
@@ -208,52 +217,42 @@ public class ScheduleActivity extends AppCompatActivity {
         titleList.add("今日行程資訊");
         titleList.add("一周行程資訊");
         titleList.add("派工未填抵達日期");
-
     }
 
     /**
      * ViewPager的各項設置
      */
     private void ViewPagerAdapter() {
-
         PagerAdapter pagerAdapter = new PagerAdapter() {
-
             @Override
             public boolean isViewFromObject(View arg0, Object arg1) {
                 // TODO Auto-generated method stub
                 //根據傳來的Key，找到view,判斷與傳來的參數View arg0是不是同一個layout
                 return arg0 == viewList.get(Integer.parseInt(arg1.toString()));
             }
-
             @Override
             public int getCount() {
                 // TODO Auto-generated method stub
                 return viewList.size();
             }
-
             @Override
             public void destroyItem(ViewGroup container, int position,
                                     Object object) {
                 // TODO Auto-generated method stub
                 container.removeView(viewList.get(position));
-
             }
-
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 // TODO Auto-generated method stub
                 container.addView(viewList.get(position));
-
                 //動態取得 View 物件
                 InViewGroupFunction();
-
                 switch (position) {
                     case 0:
                         //每次移動回來今日行程資訊先刪除之前的TableView再動態新增回來
                         today_TableLayout.removeAllViews();
                         //建立TodayScheduleData.php OKHttp連線
                         sendRequestWithOkHttpOfToday();
-
                         more_button1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -262,13 +261,11 @@ public class ScheduleActivity extends AppCompatActivity {
                             }
                         });
                         break;
-
                     case 1:
                         //每次移動回來一周行程資訊先刪除之前的TableView再動態新增回來
                         week_TableLayout.removeAllViews();
                         //建立WeekScheduleData.php OKHttp連線
                         sendRequestWithOkHttpOfWeek();
-
                         more_button2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -277,13 +274,11 @@ public class ScheduleActivity extends AppCompatActivity {
                             }
                         });
                         break;
-
                     case 2:
                         //每次移動回來派工未填抵達日期先刪除之前的TableView再動態新增回來
                         missing_TableLayout.removeAllViews();
                         //建立MissingScheduleData.php OKHttp連線
                         sendRequestWithOkHttpOfMissing();
-
                         more_button3.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -298,7 +293,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 //把當前新增layout的位置（position）做為Key傳過去
                 return position;
             }
-
             @Override
             public CharSequence getPageTitle(int position) {
                 // TODO Auto-generated method stub
@@ -306,7 +300,6 @@ public class ScheduleActivity extends AppCompatActivity {
             }
         };
         viewPager.setAdapter(pagerAdapter);
-
     }
 
     /**
@@ -316,12 +309,10 @@ public class ScheduleActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
                 Log.i("ScheduleActivity", user_id_data);
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -330,8 +321,8 @@ public class ScheduleActivity extends AppCompatActivity {
                             .build();
                     Log.i("ScheduleActivity", user_id_data);
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/wqp/TodayScheduleData.php")
-                            .url("http://192.168.0.172/Test1/TodayScheduleData.php")
+                            //.url("http://220.133.80.146/WQP/TodayScheduleData.php")
+                            .url("http://192.168.0.172/WQP/TodayScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -350,14 +341,10 @@ public class ScheduleActivity extends AppCompatActivity {
      * @param jsonData
      */
     private void parseJSONWithJSONObjectOfToday(String jsonData) {
-
         try {
-
             JSONArray jsonArray = new JSONArray(jsonData);
             today_about_ImageView = new ImageView[jsonArray.length()];
-
             for (int i = 0; i < jsonArray.length(); i++) {
-
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String work_type_name = jsonObject.getString("派工類別");
@@ -384,10 +371,8 @@ public class ScheduleActivity extends AppCompatActivity {
                 String reserve_time = jsonObject.getString("今日派工時段");
                 String work_type = jsonObject.getString("處理方式");
 
-
                 Log.i("ScheduleActivity", reserve_time);
                 Log.i("ScheduleActivity", work_type_name);
-
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -415,7 +400,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
 
-
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
                 b.putStringArrayList("JSON_data", JArrayList);
@@ -424,7 +408,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 msg.what = 1;
                 msg.sendToTarget();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -436,21 +419,21 @@ public class ScheduleActivity extends AppCompatActivity {
     Handler today_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
                     "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
                     "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
                     "工務點數", "今日派工時段 :", "處理方式 :"};
-
             switch (msg.what) {
                 case 1:
+                    Resources resources = getResources();
+                    float type_Dip = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, resources.getDisplayMetrics());
+                    int type_dip = Math.round(type_Dip);
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
                     today_TableLayout.setStretchAllColumns(true);
-
                     //設置大TableLayout的TableRow
                     TableRow big_tbr = new TableRow(ScheduleActivity.this);
                     //設定big_tbr的Weight權重
-                    big_tbr.setWeightSum(4);
+                    big_tbr.setWeightSum(3);
                     //設置每筆資料的小TableLayout
                     TableLayout small_tb = new TableLayout(ScheduleActivity.this);
                     //全部列自動填充空白處
@@ -461,7 +444,6 @@ public class ScheduleActivity extends AppCompatActivity {
                     Bundle jb = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
                     JArrayList = jb.getStringArrayList("JSON_data");
-
                     //設置每筆TableLayout的Button監聽器、與動態新增Button的ID
                     int loc = 0;
                     for (int j = 0; j < today_about_ImageView.length; j++) {
@@ -474,13 +456,11 @@ public class ScheduleActivity extends AppCompatActivity {
                     today_about_ImageView[loc].setImageResource(R.drawable.about);
                     today_about_ImageView[loc].setScaleType(ImageView.ScaleType.CENTER);
                     today_about_ImageView[loc].setId(loc);
-
                     today_about_ImageView[loc].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             for (int a = 0; a < today_about_ImageView.length; a++) {
                                 if (v.getId() == today_about_ImageView[a].getId()) {
-
                                     Intent intent_maintain = new Intent(ScheduleActivity.this, MaintainActivity.class);
                                     //取得大TableLayout中的大TableRow位置
                                     TableRow tb_tbr = (TableRow) today_TableLayout.getChildAt(a);
@@ -499,56 +479,46 @@ public class ScheduleActivity extends AppCompatActivity {
 
                                         intent_maintain.putExtras(bundle);//可放所有基本類別
                                     }
-
                                     startActivity(intent_maintain);
-
                                 }
                             }
                         }
                     });
 
-
                     for (int i = 0; i < jb.getStringArrayList("JSON_data").size(); i++) {
-
                         //顯示每筆TableLayout的Title
                         TextView dynamically_title;
                         dynamically_title = new TextView(ScheduleActivity.this);
                         dynamically_title.setText(title_array[i].toString());
-                        dynamically_title.setPadding(30, 5, 0, 0);
+                        dynamically_title.setPadding(10, 2, 0, 0);
                         dynamically_title.setGravity(Gravity.LEFT);
                         dynamically_title.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-
+                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 
                         //顯示每筆TableLayout的SQL資料
                         TextView dynamically_txt;
                         dynamically_txt = new TextView(ScheduleActivity.this);
                         dynamically_txt.setText(JArrayList.get(i));
-                        dynamically_txt.setPadding(0, 5, 0, 0);
+                        dynamically_txt.setPadding(0, 2, 0, 0);
                         dynamically_txt.setGravity(Gravity.LEFT);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-
+                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 
                         TableRow tr1 = new TableRow(ScheduleActivity.this);
                         tr1.setGravity(Gravity.CENTER_HORIZONTAL);
                         tr1.addView(dynamically_title, layoutParams);
-                        tr1.addView(dynamically_txt, layoutParams);
+                        tr1.addView(dynamically_txt, new TableRow.LayoutParams(type_dip, TableRow.LayoutParams.WRAP_CONTENT));
 
                         small_tb.addView(tr1, layoutParams);
-
                         //隱藏不需要的SQL資料
                         if (i < 21) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
-
                     }
-
                     //about_ImageView寬為0,高為WRAP_CONTENT,權重比為1
                     big_tbr.addView(today_about_ImageView[loc], new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
                     //small_tb寬為0,高為WRAP_CONTENT,權重比為3
-                    big_tbr.addView(small_tb, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3));
-
+                    big_tbr.addView(small_tb, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
 
                     TableRow.LayoutParams the_param3;
                     the_param3 = (TableRow.LayoutParams) small_tb.getLayoutParams();
@@ -556,25 +526,18 @@ public class ScheduleActivity extends AppCompatActivity {
                     the_param3.width = TableRow.LayoutParams.MATCH_PARENT;
                     small_tb.setLayoutParams(the_param3);
 
-
                     today_TableLayout.addView(big_tbr);
-
                     //如果MySQL傳回的資料超過6筆,從第7筆資料開始隱藏
                     if (loc > 5) {
                         today_TableLayout.getChildAt(loc).setVisibility(View.GONE);
                     }
-
-
                     //顯示今日件數的總數
                     int total = today_TableLayout.getChildCount();
                     today_sql_total_textView.setText(String.valueOf(total));
-
-
                     break;
                 default:
                     break;
             }
-
             super.handleMessage(msg);
         }
     };
@@ -587,12 +550,10 @@ public class ScheduleActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
                 Log.i("ScheduleActivity2", user_id_data);
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -601,8 +562,8 @@ public class ScheduleActivity extends AppCompatActivity {
                             .build();
                     Log.i("ScheduleActivity2", user_id_data);
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/wqp/WeekScheduleData.php")
-                            .url("http://192.168.0.172/Test1/WeekScheduleData.php")
+                            //.url("http://220.133.80.146/WQP/WeekScheduleData.php")
+                            .url("http://192.168.0.172/WQP/WeekScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -621,14 +582,10 @@ public class ScheduleActivity extends AppCompatActivity {
      * @param jsonData
      */
     private void parseJSONWithJSONObjectOfWeek(String jsonData) {
-
         try {
-
             JSONArray jsonArray = new JSONArray(jsonData);
             week_about_ImageView = new ImageView[jsonArray.length()];
-
             for (int i = 0; i < jsonArray.length(); i++) {
-
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String work_type_name = jsonObject.getString("派工類別");
@@ -658,7 +615,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 Log.i("ScheduleActivity", reserve_time);
                 Log.i("ScheduleActivity", work_type_name);
 
-
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
                 JArrayList.add(work_type_name);
@@ -685,7 +641,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
 
-
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
                 b.putStringArrayList("JSON_data", JArrayList);
@@ -694,7 +649,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 msg.what = 1;
                 msg.sendToTarget();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -706,12 +660,10 @@ public class ScheduleActivity extends AppCompatActivity {
     Handler week_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
                     "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
                     "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
                     "工務點數", "派工日期時間 :", "處理方式 :"};
-
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
@@ -731,7 +683,6 @@ public class ScheduleActivity extends AppCompatActivity {
                     Bundle jb = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
                     JArrayList = jb.getStringArrayList("JSON_data");
-
                     //設置每筆TableLayout的Button監聽器、與動態新增Button的ID
                     int loc = 0;
                     for (int j = 0; j < week_about_ImageView.length; j++) {
@@ -744,7 +695,6 @@ public class ScheduleActivity extends AppCompatActivity {
                     week_about_ImageView[loc].setImageResource(R.drawable.about);
                     week_about_ImageView[loc].setScaleType(ImageView.ScaleType.CENTER);
                     week_about_ImageView[loc].setId(loc);
-
                     week_about_ImageView[loc].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -769,36 +719,30 @@ public class ScheduleActivity extends AppCompatActivity {
 
                                         intent_maintain.putExtras(bundle);//可放所有基本類別
                                     }
-
                                     startActivity(intent_maintain);
-
                                 }
                             }
                         }
                     });
 
-
                     for (int i = 0; i < jb.getStringArrayList("JSON_data").size(); i++) {
-
                         //顯示每筆TableLayout的Title
                         TextView dynamically_title;
                         dynamically_title = new TextView(ScheduleActivity.this);
                         dynamically_title.setText(title_array[i].toString());
-                        dynamically_title.setPadding(10, 5, 0, 0);
+                        dynamically_title.setPadding(10, 2, 0, 0);
                         dynamically_title.setGravity(Gravity.LEFT);
                         dynamically_title.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-
+                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 
                         //顯示每筆TableLayout的SQL資料
                         TextView dynamically_txt;
                         dynamically_txt = new TextView(ScheduleActivity.this);
                         dynamically_txt.setText(JArrayList.get(i));
-                        dynamically_txt.setPadding(0, 5, 0, 0);
+                        dynamically_txt.setPadding(0, 2, 0, 0);
                         dynamically_txt.setGravity(Gravity.LEFT);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-
+                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 
                         TableRow tr1 = new TableRow(ScheduleActivity.this);
                         tr1.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -806,18 +750,14 @@ public class ScheduleActivity extends AppCompatActivity {
                         tr1.addView(dynamically_txt, layoutParams);
 
                         small_tb.addView(tr1, layoutParams);
-
                         if (i < 21) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
-
                     }
-
                     //about_ImageView寬為0,高為WRAP_CONTENT,權重比為1
                     big_tbr.addView(week_about_ImageView[loc], new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
                     //small_tb寬為0,高為WRAP_CONTENT,權重比為3
                     big_tbr.addView(small_tb, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3));
-
 
                     TableRow.LayoutParams the_param3;
                     the_param3 = (TableRow.LayoutParams) small_tb.getLayoutParams();
@@ -825,24 +765,18 @@ public class ScheduleActivity extends AppCompatActivity {
                     the_param3.width = TableRow.LayoutParams.MATCH_PARENT;
                     small_tb.setLayoutParams(the_param3);
 
-
                     week_TableLayout.addView(big_tbr);
-
                     //如果MySQL傳回的資料超過6筆,從第7筆資料開始隱藏
                     if (loc > 5) {
                         week_TableLayout.getChildAt(loc).setVisibility(View.GONE);
                     }
-
                     //顯示一周件數的總數
                     int total = week_TableLayout.getChildCount();
                     week_sql_total_textView.setText(String.valueOf(total));
-
-
                     break;
                 default:
                     break;
             }
-
             super.handleMessage(msg);
         }
     };
@@ -855,12 +789,10 @@ public class ScheduleActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
                 Log.i("ScheduleActivity2", user_id_data);
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -869,8 +801,8 @@ public class ScheduleActivity extends AppCompatActivity {
                             .build();
                     Log.i("ScheduleActivity2", user_id_data);
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/wqp/MissingScheduleData.php")
-                            .url("http://192.168.0.172/Test1/MissingScheduleData.php")
+                            //.url("http://220.133.80.146/WQP/MissingScheduleData.php")
+                            .url("http://192.168.0.172/WQP/MissingScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -889,14 +821,10 @@ public class ScheduleActivity extends AppCompatActivity {
      * @param jsonData
      */
     private void parseJSONWithJSONObjectOfMissing(String jsonData) {
-
         try {
-
             JSONArray jsonArray = new JSONArray(jsonData);
             missing_about_ImageView = new ImageView[jsonArray.length()];
-
             for (int i = 0; i < jsonArray.length(); i++) {
-
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String work_type_name = jsonObject.getString("派工類別");
@@ -926,7 +854,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 Log.i("ScheduleActivity", reserve_time);
                 Log.i("ScheduleActivity", work_type_name);
 
-
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
                 JArrayList.add(work_type_name);
@@ -953,7 +880,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
 
-
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
                 b.putStringArrayList("JSON_data", JArrayList);
@@ -962,7 +888,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 msg.what = 1;
                 msg.sendToTarget();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -974,17 +899,14 @@ public class ScheduleActivity extends AppCompatActivity {
     Handler missing_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
                     "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
                     "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
                     "工務點數", "派工日期時間 :", "處理方式 :"};
-
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
                     missing_TableLayout.setStretchAllColumns(true);
-
                     //設置大TableLayout的TableRow
                     TableRow big_tbr = new TableRow(ScheduleActivity.this);
                     //設定big_tbr的Weight權重
@@ -999,7 +921,6 @@ public class ScheduleActivity extends AppCompatActivity {
                     Bundle jb = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
                     JArrayList = jb.getStringArrayList("JSON_data");
-
                     //設置每筆TableLayout的Button監聽器、與動態新增Button的ID
                     int loc = 0;
                     for (int j = 0; j < missing_about_ImageView.length; j++) {
@@ -1012,13 +933,11 @@ public class ScheduleActivity extends AppCompatActivity {
                     missing_about_ImageView[loc].setImageResource(R.drawable.about);
                     missing_about_ImageView[loc].setScaleType(ImageView.ScaleType.CENTER);
                     missing_about_ImageView[loc].setId(loc);
-
                     missing_about_ImageView[loc].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             for (int a = 0; a < missing_about_ImageView.length; a++) {
                                 if (v.getId() == missing_about_ImageView[a].getId()) {
-
                                     Intent intent_maintain = new Intent(ScheduleActivity.this, MaintainActivity.class);
                                     //取得大TableLayout中的大TableRow位置
                                     TableRow tb_tbr = (TableRow) missing_TableLayout.getChildAt(a);
@@ -1037,36 +956,30 @@ public class ScheduleActivity extends AppCompatActivity {
 
                                         intent_maintain.putExtras(bundle);//可放所有基本類別
                                     }
-
                                     startActivity(intent_maintain);
-
                                 }
                             }
                         }
                     });
 
-
                     for (int i = 0; i < jb.getStringArrayList("JSON_data").size(); i++) {
-
                         //顯示每筆TableLayout的Title
                         TextView dynamically_title;
                         dynamically_title = new TextView(ScheduleActivity.this);
                         dynamically_title.setText(title_array[i].toString());
-                        dynamically_title.setPadding(10, 5, 0, 0);
+                        dynamically_title.setPadding(10, 2, 0, 0);
                         dynamically_title.setGravity(Gravity.LEFT);
                         dynamically_title.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-
+                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 
                         //顯示每筆TableLayout的SQL資料
                         TextView dynamically_txt;
                         dynamically_txt = new TextView(ScheduleActivity.this);
                         dynamically_txt.setText(JArrayList.get(i));
-                        dynamically_txt.setPadding(0, 5, 0, 0);
+                        dynamically_txt.setPadding(0, 2, 0, 0);
                         dynamically_txt.setGravity(Gravity.LEFT);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-
+                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 
                         TableRow tr1 = new TableRow(ScheduleActivity.this);
                         tr1.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -1074,18 +987,14 @@ public class ScheduleActivity extends AppCompatActivity {
                         tr1.addView(dynamically_txt, layoutParams);
 
                         small_tb.addView(tr1, layoutParams);
-
                         if (i < 21) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
-
                     }
-
                     //about_ImageView寬為0,高為WRAP_CONTENT,權重比為1
                     big_tbr.addView(missing_about_ImageView[loc], new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
                     //small_tb寬為0,高為WRAP_CONTENT,權重比為3
                     big_tbr.addView(small_tb, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3));
-
 
                     TableRow.LayoutParams the_param3;
                     the_param3 = (TableRow.LayoutParams) small_tb.getLayoutParams();
@@ -1093,23 +1002,18 @@ public class ScheduleActivity extends AppCompatActivity {
                     the_param3.width = TableRow.LayoutParams.MATCH_PARENT;
                     small_tb.setLayoutParams(the_param3);
 
-
                     missing_TableLayout.addView(big_tbr);
-
                     //如果MySQL傳回的資料超過6筆,從第7筆資料開始隱藏
                     if (loc > 5) {
                         missing_TableLayout.getChildAt(loc).setVisibility(View.GONE);
                     }
-
                     //顯示一周件數的總數
                     int total = missing_TableLayout.getChildCount();
                     missing_sql_total_textView.setText(String.valueOf(total));
-
                     break;
                 default:
                     break;
             }
-
             super.handleMessage(msg);
         }
     };

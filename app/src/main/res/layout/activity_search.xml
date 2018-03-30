@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.a10609516.myapplication.SearchActivity">
@@ -24,24 +24,26 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="0dp"
-                android:layout_height="295dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="28dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/searchline"
                 android:orientation="vertical"
                 android:weightSum="1"
                 app:layout_constraintHorizontal_bias="0.518"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
 
                 <TextView
                     android:id="@+id/label"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
@@ -53,26 +55,30 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:weightSum="4">
 
                     <TextView
                         android:id="@+id/start1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.001"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="8dp"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_gravity="center"
                         android:text="預約開始日期:"
                         android:textColor="@color/colorAccent"
-                        android:textSize="18dp" />
+                        android:textSize="20dp" />
 
                     <Button
                         android:id="@+id/start2"
-                        android:layout_width="190dp"
-                        android:layout_height="45dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
                         android:layout_alignParentTop="true"
                         android:layout_gravity="center"
                         android:layout_toEndOf="@+id/sql_total_textView"
@@ -84,11 +90,12 @@
 
                     <Button
                         android:id="@+id/clean_button1"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="10dp"
                         android:layout_toEndOf="@+id/start2"
                         android:layout_toRightOf="@+id/start2"
                         android:background="#F5F5F5"
@@ -100,25 +107,30 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:weightSum="4">
 
                     <TextView
                         android:id="@+id/end1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.001"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="8dp"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_gravity="center"
                         android:text="預約結束日期:"
                         android:textColor="@color/colorAccent"
-                        android:textSize="18dp" />
+                        android:textSize="20dp" />
 
                     <Button
                         android:id="@+id/end2"
-                        android:layout_width="190dp"
-                        android:layout_height="45dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
                         android:layout_alignParentTop="true"
                         android:layout_gravity="center"
                         android:layout_toEndOf="@+id/sql_total_textView"
@@ -130,11 +142,12 @@
 
                     <Button
                         android:id="@+id/clean_button2"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="10dp"
                         android:layout_toEndOf="@+id/end2"
                         android:layout_toRightOf="@+id/end2"
                         android:background="#F5F5F5"
@@ -154,23 +167,28 @@
                         android:id="@+id/client"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_gravity="center"
                         android:text="送貨客戶:"
                         android:textColor="@color/colorAccent"
-                        android:textSize="18dp" />
+                        android:textSize="20dp" />
 
                     <EditText
                         android:id="@+id/customer_editText"
                         android:layout_width="match_parent"
-                        android:layout_height="51dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="20dp"
                         android:ems="10"
                         android:inputType="textPersonName"
                         android:maxLines="1"
                         android:text="" />
-
 
                 </LinearLayout>
 
@@ -185,75 +203,84 @@
                         android:id="@+id/category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_gravity="center"
                         android:text="派工類別:"
                         android:textColor="@color/colorAccent"
-                        android:textSize="18dp" />
+                        android:textSize="20dp" />
 
                     <Spinner
                         android:id="@+id/selectList"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center" />
-
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_gravity="center"/>
 
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/search_button"
-                    android:layout_width="111dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="0.05"
                     android:background="@drawable/button"
                     android:text="查詢"
-                    android:textColor="#0000ff"
+                    android:textColor="@color/colorAccent"
                     android:textSize="20dp"
                     android:textStyle="bold" />
-
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="398dp"
+                android:id="@+id/separate_linearLayout"
+                android:layout_width="0dp"
                 android:layout_height="7dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:background="#CCEEFF"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="#082567"
                 android:orientation="horizontal"
+                android:visibility="invisible"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp">
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/search_LinearLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:orientation="horizontal"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+                app:layout_constraintTop_toBottomOf="@+id/separate_linearLayout"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
 
                 <TableLayout
                     android:id="@+id/search_TableLayout"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/titleline"
                     android:divider="@drawable/table_h_divider"
@@ -274,11 +301,15 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="end|bottom"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="0.33"
             android:clickable="true"
             android:onClick="GoTopBtn"
             app:backgroundTint="#E0FFFF"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_gotop" />
+
     </android.support.design.widget.CoordinatorLayout>
+
 </FrameLayout>

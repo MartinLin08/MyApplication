@@ -35,7 +35,6 @@ public class Week_Work extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week_work);
-
         //動態取得 View 物件
         InItFunction();
         //建立WeekScheduleData.php OKHttp連線
@@ -46,9 +45,7 @@ public class Week_Work extends AppCompatActivity {
      * 動態取得 View 物件
      */
     private void InItFunction() {
-
         week_work_TableLayout = (TableLayout) findViewById(R.id.week_work_TableLayout);
-
     }
 
     /**
@@ -58,12 +55,10 @@ public class Week_Work extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
                 Log.i("Week_Work", user_id_data);
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -72,8 +67,8 @@ public class Week_Work extends AppCompatActivity {
                             .build();
                     Log.i("Week_Work", user_id_data);
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/wqp/WeekScheduleData.php")
-                            .url("http://192.168.0.172/Test1/WeekScheduleData.php")
+                            //.url("http://220.133.80.146/WQP/WeekScheduleData.php")
+                            .url("http://192.168.0.172/WQP/WeekScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -92,13 +87,9 @@ public class Week_Work extends AppCompatActivity {
      * @param jsonData
      */
     private void parseJSONWithJSONObjectOfWeek(String jsonData) {
-
         try {
-
             JSONArray jsonArray = new JSONArray(jsonData);
-
             for (int i = 0; i < jsonArray.length(); i++) {
-
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String work_type_name = jsonObject.getString("派工類別");
@@ -126,7 +117,6 @@ public class Week_Work extends AppCompatActivity {
                 Log.i("Week_Work", reserve_time);
                 Log.i("Week_Work", work_type_name);
 
-
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
                 JArrayList.add(work_type_name);
@@ -151,7 +141,6 @@ public class Week_Work extends AppCompatActivity {
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
 
-
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
                 b.putStringArrayList("JSON_data", JArrayList);
@@ -160,7 +149,6 @@ public class Week_Work extends AppCompatActivity {
                 msg.what = 1;
                 msg.sendToTarget();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -172,16 +160,13 @@ public class Week_Work extends AppCompatActivity {
     Handler week_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "派工日期時段", "聯絡人", "主要電話",
                     "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
                     "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "今日派工時段 :", "處理方式 :"};
-
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
                     week_work_TableLayout.setStretchAllColumns(true);
-
                     //設置大TableLayout的TableRow
                     TableRow big_tbr = new TableRow(Week_Work.this);
                     //設置每筆資料的小TableLayout
@@ -195,22 +180,19 @@ public class Week_Work extends AppCompatActivity {
                     Bundle jb = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
                     JArrayList = jb.getStringArrayList("JSON_data");
-
-
                     //設置每筆派工的派工單號、送貨客戶
                     LinearLayout dynamically_llt = new LinearLayout(Week_Work.this);
                     TextView dynamically_title2;
                     dynamically_title2 = new TextView(Week_Work.this);
                     dynamically_title2.setText(title_array[1].toString() + " : " + JArrayList.get(1));
                     dynamically_title2.setPadding(40, 10, 0, 10);
-                    dynamically_title2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                    dynamically_title2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
                     dynamically_title2.setTextColor(Color.rgb(6, 102, 219));
                     dynamically_title2.setTypeface(Typeface.SANS_SERIF,Typeface.BOLD);
 
                     dynamically_llt.addView(dynamically_title2);
                     TableRow tr1 = new TableRow(Week_Work.this);
                     tr1.addView(dynamically_llt);
-
                     //將動態新增TableRow合併 讓分隔線延伸
                     TableRow.LayoutParams the_param1;
                     the_param1 = (TableRow.LayoutParams) dynamically_llt.getLayoutParams();
@@ -222,7 +204,7 @@ public class Week_Work extends AppCompatActivity {
                     dynamically_title3 = new TextView(Week_Work.this);
                     dynamically_title3.setText(title_array[2].toString() + " : " + JArrayList.get(2));
                     dynamically_title3.setPadding(40, 10, 0, 10);
-                    dynamically_title3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                    dynamically_title3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
                     dynamically_title3.setTextColor(Color.rgb(6, 102, 219));
                     dynamically_title3.setTypeface(Typeface.SANS_SERIF,Typeface.BOLD);
 
@@ -236,29 +218,25 @@ public class Week_Work extends AppCompatActivity {
                     the_param2.span = 2;
                     dynamically_llt2.setLayoutParams(the_param2);
 
-
                     for (int i = 0; i < jb.getStringArrayList("JSON_data").size(); i++) {
-
                         //顯示每筆TableLayout的Title
                         TextView dynamically_title;
                         dynamically_title = new TextView(Week_Work.this);
                         dynamically_title.setText(title_array[i].toString());
                         dynamically_title.setPadding(40, 10, 0, 10);
-                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                        dynamically_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                         dynamically_title.setTextColor(Color.rgb(6, 102, 219));
                         dynamically_title.setMaxWidth(350);
                         dynamically_title.setMaxHeight(150);
-
 
                         //顯示每筆TableLayout的SQL資料
                         TextView dynamically_txt;
                         dynamically_txt = new TextView(Week_Work.this);
                         dynamically_txt.setText(JArrayList.get(i));
                         dynamically_txt.setPadding(0, 10, 10, 10);
-                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
                         dynamically_txt.setMaxWidth(350);
-
 
                         TableRow tr3 = new TableRow(Week_Work.this);
                         tr3.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -266,14 +244,11 @@ public class Week_Work extends AppCompatActivity {
                         tr3.addView(dynamically_txt, layoutParams);
 
                         small_tb.addView(tr3, layoutParams);
-
                         //隱藏不需要的SQL資料
                         if (i > 18 || 7 < i && i < 16 || 0 < i && i < 3) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
-
                     }
-
                     big_tbr.addView(small_tb);
 
                     TableRow.LayoutParams the_param3;
@@ -282,12 +257,9 @@ public class Week_Work extends AppCompatActivity {
                     the_param3.width = TableRow.LayoutParams.MATCH_PARENT;
                     small_tb.setLayoutParams(the_param3);
 
-
                     week_work_TableLayout.addView(tr1);
                     week_work_TableLayout.addView(tr2);
                     week_work_TableLayout.addView(big_tbr);
-
-
                     break;
                 default:
                     break;
@@ -295,5 +267,4 @@ public class Week_Work extends AppCompatActivity {
             super.handleMessage(msg);
         }
     };
-
 }

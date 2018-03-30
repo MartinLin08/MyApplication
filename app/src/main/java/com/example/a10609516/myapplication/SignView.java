@@ -44,7 +44,6 @@ public class SignView extends View {
     }
 
     public void initView(Context context) {
-
     }
 
     /**
@@ -58,7 +57,7 @@ public class SignView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setStrokeWidth(10);
+        paint.setStrokeWidth(6);
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.rgb(0,71,171));
         path = new Path();
@@ -87,7 +86,7 @@ public class SignView extends View {
             cacheCanvas.drawPaint(paint);
             paint = new Paint();
             paint.setAntiAlias(true);
-            paint.setStrokeWidth(10);
+            paint.setStrokeWidth(6);
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.rgb(0,71,171));
             invalidate();
@@ -114,13 +113,11 @@ public class SignView extends View {
      */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-
         int curW = cachebBitmap != null ? cachebBitmap.getWidth() : 0;
         int curH = cachebBitmap != null ? cachebBitmap.getHeight() : 0;
         if (curW >= w && curH >= h) {
             return;
         }
-
         if (curW < w)
             curW = w;
         if (curH < h)
@@ -144,7 +141,6 @@ public class SignView extends View {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         float x = event.getX();
         float y = event.getY();
 
@@ -158,21 +154,18 @@ public class SignView extends View {
                 path.moveTo(cur_x, cur_y);
                 break;
             }
-
             case MotionEvent.ACTION_MOVE: {
                 path.quadTo(cur_x, cur_y, x, y);
                 cur_x = x;
                 cur_y = y;
                 break;
             }
-
             case MotionEvent.ACTION_UP: {
                 cacheCanvas.drawPath(path, paint);
                 path.reset();
                 break;
             }
         }
-
         invalidate();
 
         return true;
@@ -192,5 +185,4 @@ public class SignView extends View {
     public void setIsListener(isSignListener isListener) {
         this.isListener = isListener;
     }
-
 }

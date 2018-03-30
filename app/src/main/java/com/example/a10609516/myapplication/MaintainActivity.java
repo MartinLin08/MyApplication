@@ -32,7 +32,6 @@ import okhttp3.Response;
 
 public class MaintainActivity extends AppCompatActivity {
 
-    //private QRCodeActivity mQRCode;
     private ImageView add_qrcode;
     private Button arrive_button, check_button, cancel_button;
     private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, cp_name_txt, esvd_eng_points_txt,
@@ -57,7 +56,6 @@ public class MaintainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maintain);
-
         //動態取得 View 物件
         InItFunction();
         //取得SearchActivity傳遞過來的值
@@ -74,14 +72,12 @@ public class MaintainActivity extends AppCompatActivity {
         ReasonSpinner();
         //無效派工的Spinner
         UselessWorkSpinner();
-
     }
 
     /**
      * 動態取得 View 物件
      */
     private void InItFunction() {
-
         maintain_tablelayot = (TableLayout) findViewById(R.id.maintain_tablelayot);
         qrcode_tablelayot = (TableLayout) findViewById(R.id.qrcode_tablelayot);
         check_button = (Button) findViewById(R.id.check_button);
@@ -116,25 +112,23 @@ public class MaintainActivity extends AppCompatActivity {
 
         //add_qrcode.setOnClickListener監聽器
         add_qrcode.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                    if(getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size()==0)
-                    {
-                        //未安裝
-                        Toast.makeText(MaintainActivity.this, "請至 Play商店 安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
-                    }else{
-                        //SCAN_MODE, 可判別所有支援條碼
-                        //QR_CODE_MODE, 只判別QR_CODE
-                        //PRODUCT_MODE, UPC and EAN條碼
-                        //ONE_D_MODE, 1維條碼
-                        intent.putExtra("SCAN_MODE","SCAN_MODE");
-
-                        //呼叫ZXing Scanner,完成動作後回傳1給onActivityResult的requestCode參數
-                        startActivityForResult(intent,1);
-                    }
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
+                    //未安裝
+                    Toast.makeText(MaintainActivity.this, "請至 Play商店 安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
+                } else {
+                    //SCAN_MODE, 可判別所有支援條碼
+                    //QR_CODE_MODE, 只判別QR_CODE
+                    //PRODUCT_MODE, UPC and EAN條碼
+                    //ONE_D_MODE, 1維條碼
+                    intent.putExtra("SCAN_MODE", "SCAN_MODE");
+                    //呼叫ZXing Scanner,完成動作後回傳1給onActivityResult的requestCode參數
+                    startActivityForResult(intent, 1);
                 }
-            });
+            }
+        });
 
         //check_button.setOnClickListener監聽器
         check_button.setOnClickListener(new View.OnClickListener() {
@@ -167,11 +161,11 @@ public class MaintainActivity extends AppCompatActivity {
                                     Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
                                 } else {
                                     //金額已收齊的OKHttp(工務收錢)
-                                    sendRequestWithOkHttpOfAll();
+                                    sendRequestWithOkHttpForAll();
                                     //是否進入客戶電子簽名頁面
-                                    if((useless_spinner.getSelectedItem().equals("客人不在場"))||(useless_spinner.getSelectedItem().equals("業務取消"))){
+                                    if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                         finish();
-                                    }else {
+                                    } else {
                                         String SN_txt = svd_service_no_txt.getText().toString();
                                         Bundle bundle1 = getIntent().getExtras();
                                         String SEQ_txt = bundle1.getString("ResponseText" + 19);
@@ -193,11 +187,11 @@ public class MaintainActivity extends AppCompatActivity {
                                         Toast.makeText(MaintainActivity.this, "【請輸入收款金額!!!】", Toast.LENGTH_SHORT).show();
                                     } else {
                                         //金額未收齊的OKHttp(工務收錢)
-                                        sendRequestWithOkHttpOfNotAll();
+                                        sendRequestWithOkHttpForNotAll();
                                         //是否進入客戶電子簽名頁面
-                                        if((useless_spinner.getSelectedItem().equals("客人不在場"))||(useless_spinner.getSelectedItem().equals("業務取消"))){
+                                        if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                             finish();
-                                        }else {
+                                        } else {
                                             String SN_txt = svd_service_no_txt.getText().toString();
                                             Bundle bundle1 = getIntent().getExtras();
                                             String SEQ_txt = bundle1.getString("ResponseText" + 19);
@@ -217,11 +211,11 @@ public class MaintainActivity extends AppCompatActivity {
                                     Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
                                 } else {
                                     //金額未收的OKHttp(工務收錢)
-                                    sendRequestWithOkHttpOfNotGet();
+                                    sendRequestWithOkHttpForNotGet();
                                     //是否進入客戶電子簽名頁面
-                                    if((useless_spinner.getSelectedItem().equals("客人不在場"))||(useless_spinner.getSelectedItem().equals("業務取消"))){
+                                    if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                         finish();
-                                    }else {
+                                    } else {
                                         String SN_txt = svd_service_no_txt.getText().toString();
                                         Bundle bundle1 = getIntent().getExtras();
                                         String SEQ_txt = bundle1.getString("ResponseText" + 19);
@@ -244,11 +238,11 @@ public class MaintainActivity extends AppCompatActivity {
                                 Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
                             } else {
                                 //金額已收齊的OKHttp(業務收錢)
-                                sendRequestWithOkHttpOfIsGet();
+                                sendRequestWithOkHttpForIsGet();
                                 //是否進入客戶電子簽名頁面
-                                if((useless_spinner.getSelectedItem().equals("客人不在場"))||(useless_spinner.getSelectedItem().equals("業務取消"))){
+                                if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                     finish();
-                                }else {
+                                } else {
                                     String SN_txt = svd_service_no_txt.getText().toString();
                                     Bundle bundle1 = getIntent().getExtras();
                                     String SEQ_txt = bundle1.getString("ResponseText" + 19);
@@ -279,7 +273,6 @@ public class MaintainActivity extends AppCompatActivity {
      * 取得SearchActivity傳遞過來的值
      */
     private void GetResponseData() {
-
         Bundle bundle = getIntent().getExtras();
         maintain_tablelayot.setStretchAllColumns(true);
         String ResponseText0 = bundle.getString("ResponseText" + 0);
@@ -396,6 +389,7 @@ public class MaintainActivity extends AppCompatActivity {
 
     /**
      * 設置是否已收款的三個CheckBox只能一個被勾選
+     *
      * @param view
      */
     public void onCheckboxClicked(View view) {
@@ -405,53 +399,52 @@ public class MaintainActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.have_get_money_checkBox:
                 if (checked) {
-                    not_get_money_checkBox.setEnabled(false);
+                    have_get_money_edt.setEnabled(true);
+                    not_get_money_checkBox.setChecked(false);
                     //not_get_money_edt.setEnabled(false);
-                    not_get_all_checkBox.setEnabled(false);
+                    not_get_all_checkBox.setChecked(false);
                     not_get_all_edt.setEnabled(false);
                     //not_get_all_reason_edt.setEnabled(false);
                     esvd_is_eng_money_txt.setText("1");
-                } else {
+                } /*else {
                     not_get_money_checkBox.setEnabled(true);
                     //not_get_money_edt.setEnabled(true);
                     not_get_all_checkBox.setEnabled(true);
                     not_get_all_edt.setEnabled(true);
                     //not_get_all_reason_edt.setEnabled(true);
-                }
+                }*/
                 break;
-
             case R.id.not_get_all_checkBox:
                 if (checked) {
-                    have_get_money_checkBox.setEnabled(false);
+                    not_get_all_edt.setEnabled(true);
+                    have_get_money_checkBox.setChecked(false);
                     have_get_money_edt.setEnabled(false);
-                    not_get_money_checkBox.setEnabled(false);
+                    not_get_money_checkBox.setChecked(false);
                     //not_get_money_edt.setEnabled(false);
                     esvd_is_eng_money_txt.setText("1");
-                } else {
+                }/* else {
                     have_get_money_checkBox.setEnabled(true);
                     have_get_money_edt.setEnabled(true);
                     not_get_money_checkBox.setEnabled(true);
                     //not_get_money_edt.setEnabled(true);
-                }
+                }*/
                 break;
-
             case R.id.not_get_money_checkBox:
                 if (checked) {
-                    have_get_money_checkBox.setEnabled(false);
+                    have_get_money_checkBox.setChecked(false);
                     have_get_money_edt.setEnabled(false);
-                    not_get_all_checkBox.setEnabled(false);
+                    not_get_all_checkBox.setChecked(false);
                     not_get_all_edt.setEnabled(false);
                     //not_get_all_reason_edt.setEnabled(false);
                     esvd_is_eng_money_txt.setText("");
-                } else {
+                }/* else {
                     have_get_money_checkBox.setEnabled(true);
                     //have_get_money_edt.setEnabled(true);
                     not_get_all_checkBox.setEnabled(true);
                     not_get_all_edt.setEnabled(true);
                     //not_get_all_reason_edt.setEnabled(true);
-                }
+                }*/
                 break;
-
         }
     }
 
@@ -473,7 +466,6 @@ public class MaintainActivity extends AppCompatActivity {
                 }
             }
         });
-
         not_get_all_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -487,6 +479,7 @@ public class MaintainActivity extends AppCompatActivity {
 
     /**
      * 日期挑選器
+     *
      * @param v
      */
     public void showDatePickerDialog(View v) {
@@ -504,15 +497,12 @@ public class MaintainActivity extends AppCompatActivity {
      * 抵達時間與離開時間的Spinner
      */
     private void TimeSpinner() {
-
         Bundle bundle = getIntent().getExtras();
         String ResponseText14 = bundle.getString("ResponseText" + 14);
         String ResponseText15 = bundle.getString("ResponseText" + 15);
-
         /*time1[0]= ResponseText14;
         Log.i("MaintainActivity",ResponseText14);
         Log.i("MaintainActivity",ResponseText15);*/
-
         time_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time);
         time_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         arrive_spinner.setAdapter(time_listAdapter);
@@ -530,19 +520,16 @@ public class MaintainActivity extends AppCompatActivity {
                 break;
             }
         }
-
         /*time2[0]= ResponseText15;
         time_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time2);
         time_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         leave_spinner.setAdapter(time_listAdapter);*/
-
     }
 
     /**
      * 檢修(一)(二)的主因Spinner
      */
     private void ReasonSpinner() {
-
         reason_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, reason_spinnerprivate);
         reason_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         reason_spinner.setAdapter(reason_listAdapter);
@@ -555,28 +542,24 @@ public class MaintainActivity extends AppCompatActivity {
             reason_txt.setVisibility(View.VISIBLE);
             reason_spinner.setVisibility(View.VISIBLE);
         }
-
     }
 
     /**
      * 無效派工的Spinner
      */
     private void UselessWorkSpinner() {
-
         work_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, useless_work);
         work_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         useless_spinner.setAdapter(work_listAdapter);
-
     }
 
     /**
      * 與OkHttp建立連線(收齊)
      */
-    private void sendRequestWithOkHttpOfAll() {
+    private void sendRequestWithOkHttpForAll() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
@@ -585,7 +568,6 @@ public class MaintainActivity extends AppCompatActivity {
                 Bundle bundle = getIntent().getExtras();
                 String seq_id = bundle.getString("ResponseText" + 19);
                 Log.e("MaintainActivity", seq_id);
-
                 //獲取出勤維護的數據
                 String arrive_date = arrive_button.getText().toString();
                 String get_money = have_get_money_edt.getText().toString();
@@ -596,7 +578,6 @@ public class MaintainActivity extends AppCompatActivity {
                 String work_remark = esvd_remark_txt.getText().toString();
                 String get_money_type = esvd_is_eng_money_txt.getText().toString();
                 String work_points = esvd_eng_points_txt.getText().toString();
-
                 /*if(arrive_date.toString().equals("") ){
                     arrive_date = "1900-01-01";
                 }
@@ -612,8 +593,6 @@ public class MaintainActivity extends AppCompatActivity {
                 if (useless_work.toString() != "無") {
                     work_points = "0.5";
                 }
-
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -642,8 +621,8 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
-                            .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
+                            //.url("http://220.133.80.146/WQP/UpdateMaintainData.php")
+                            .url("http://192.168.0.172/WQP/UpdateMaintainData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -659,11 +638,10 @@ public class MaintainActivity extends AppCompatActivity {
     /**
      * 與OkHttp建立連線(未收齊)
      */
-    private void sendRequestWithOkHttpOfNotAll() {
+    private void sendRequestWithOkHttpForNotAll() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
@@ -672,7 +650,6 @@ public class MaintainActivity extends AppCompatActivity {
                 Bundle bundle = getIntent().getExtras();
                 String seq_id = bundle.getString("ResponseText" + 19);
                 Log.e("MaintainActivity", seq_id);
-
                 //獲取出勤維護的數據
                 String arrive_date = arrive_button.getText().toString();
                 String get_money = not_get_all_edt.getText().toString();
@@ -683,7 +660,6 @@ public class MaintainActivity extends AppCompatActivity {
                 String work_remark = esvd_remark_txt.getText().toString();
                 String get_money_type = esvd_is_eng_money_txt.getText().toString();
                 String work_points = esvd_eng_points_txt.getText().toString();
-
                 /*if(arrive_date.toString().equals("") ){
                     arrive_date = "1900-01-01";
                 }
@@ -699,7 +675,6 @@ public class MaintainActivity extends AppCompatActivity {
                 if (useless_work.toString() != "無") {
                     work_points = "0.5";
                 }
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -728,8 +703,8 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
-                            .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
+                            //.url("http://220.133.80.146/WQP/UpdateMaintainData.php")
+                            .url("http://192.168.0.172/WQP/UpdateMaintainData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -745,7 +720,7 @@ public class MaintainActivity extends AppCompatActivity {
     /**
      * 與OkHttp建立連線(未收)
      */
-    private void sendRequestWithOkHttpOfNotGet() {
+    private void sendRequestWithOkHttpForNotGet() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -758,7 +733,6 @@ public class MaintainActivity extends AppCompatActivity {
                 Bundle bundle = getIntent().getExtras();
                 String seq_id = bundle.getString("ResponseText" + 19);
                 Log.e("MaintainActivity", seq_id);
-
                 //獲取出勤維護的數據
                 String arrive_date = arrive_button.getText().toString();
                 String get_money = not_get_all_edt.getText().toString();
@@ -769,7 +743,6 @@ public class MaintainActivity extends AppCompatActivity {
                 String work_remark = esvd_remark_txt.getText().toString();
                 //String get_money_type = esvd_is_eng_money_txt.getText().toString();
                 String work_points = esvd_eng_points_txt.getText().toString();
-
                 /*if(arrive_date.toString().equals("") ){
                     arrive_date = "1900-01-01";
                 }
@@ -785,7 +758,6 @@ public class MaintainActivity extends AppCompatActivity {
                 if (useless_work.toString() != "無") {
                     work_points = "0.5";
                 }
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -814,8 +786,8 @@ public class MaintainActivity extends AppCompatActivity {
                     //Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
-                            .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
+                            //.url("http://220.133.80.146/WQP/UpdateMaintainData.php")
+                            .url("http://192.168.0.172/WQP/UpdateMaintainData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -831,11 +803,10 @@ public class MaintainActivity extends AppCompatActivity {
     /**
      * 與OkHttp建立連線(不需收)
      */
-    private void sendRequestWithOkHttpOfIsGet() {
+    private void sendRequestWithOkHttpForIsGet() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
@@ -844,7 +815,6 @@ public class MaintainActivity extends AppCompatActivity {
                 Bundle bundle = getIntent().getExtras();
                 String seq_id = bundle.getString("ResponseText" + 19);
                 Log.e("MaintainActivity", seq_id);
-
                 //獲取出勤維護的數據
                 String arrive_date = arrive_button.getText().toString();
                 String get_money = have_get_money_edt.getText().toString();
@@ -855,7 +825,6 @@ public class MaintainActivity extends AppCompatActivity {
                 String work_remark = esvd_remark_txt.getText().toString();
                 //String get_money_type = esvd_is_eng_money_txt.getText().toString();
                 String work_points = esvd_eng_points_txt.getText().toString();
-
                 /*if(arrive_date.toString().equals("") ){
                     arrive_date = "1900-01-01";
                 }
@@ -871,7 +840,6 @@ public class MaintainActivity extends AppCompatActivity {
                 if (useless_work.toString() != "無") {
                     work_points = "0.5";
                 }
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -900,13 +868,13 @@ public class MaintainActivity extends AppCompatActivity {
                     //Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/wqp/UpdateMaintainData.php")
-                            .url("http://192.168.0.172/Test1/UpdateMaintainData.php")
+                            //.url("http://220.133.80.146/WQP/UpdateMaintainData.php")
+                            .url("http://192.168.0.172/WQP/UpdateMaintainData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.i("MaintainActivity", responseData);
+                    Log.e("MaintainActivity", responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -920,21 +888,21 @@ public class MaintainActivity extends AppCompatActivity {
      * @param resultCode
      * @param intent
      */
-    public void onActivityResult(int requestCode, int resultCode, Intent intent){
-        if(requestCode==1){
-            if(resultCode==RESULT_OK){
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
                 //ZXing回傳的內容
                 String contents = intent.getStringExtra("SCAN_RESULT");
 
                 qrcode_tablelayot.setWeightSum(6);
-                TableRow tableRow = new TableRow(MaintainActivity.this);
+                TableRow tableRow1 = new TableRow(MaintainActivity.this);
                 LinearLayout linearLayout = new LinearLayout(MaintainActivity.this);
                 Button delete_btn = new Button(MaintainActivity.this);
                 TextView result_txt = new TextView(MaintainActivity.this);
                 linearLayout.setGravity(Gravity.CENTER_VERTICAL);
 
                 result_txt.setText(contents.toString());
-                result_txt.setPadding(10,3,5,3);
+                result_txt.setPadding(10, 3, 5, 3);
                 result_txt.setTextColor(Color.rgb(6, 102, 219));
                 result_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 result_txt.setGravity(Gravity.CENTER_VERTICAL);
@@ -945,23 +913,21 @@ public class MaintainActivity extends AppCompatActivity {
                 delete_btn.setTextColor(Color.rgb(6, 102, 219));
                 delete_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view)
-                    {
+                    public void onClick(View view) {
                         TableRow tableRow = (TableRow) view.getParent();
                         qrcode_tablelayot.removeView(tableRow);
                     }
                 });
 
                 linearLayout.addView(result_txt);
-                tableRow.addView(linearLayout, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 5));
-                tableRow.addView(delete_btn, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
-                qrcode_tablelayot.addView(tableRow);
-            }else{
-                if(resultCode==RESULT_CANCELED){
+                tableRow1.addView(linearLayout, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 5));
+                tableRow1.addView(delete_btn, new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
+                qrcode_tablelayot.addView(tableRow1);
+            } else {
+                if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(MaintainActivity.this, "取消掃描", Toast.LENGTH_LONG).show();
                 }
             }
         }
     }
-
 }

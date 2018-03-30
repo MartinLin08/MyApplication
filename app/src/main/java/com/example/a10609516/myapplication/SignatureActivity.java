@@ -119,7 +119,6 @@ public class SignatureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signature);
-
         //動態取得 View 物件
         InItFunction();
         client = new OkHttpClient();
@@ -189,16 +188,15 @@ public class SignatureActivity extends AppCompatActivity {
                         .addFormDataPart("img_1", sign_name + ".png", RequestBody.create(MediaType.parse("image/png"),photoBytes));
                 MultipartBody build = builder.build();
                 okhttp3.Request bi = new okhttp3.Request.Builder()
-                        .url("http://192.168.0.172/Test1/SignaturePicture.php")
+                        //.url("http://220.133.80.146/WQP/SignaturePicture.php")
+                        .url("http://192.168.0.172/WQP/SignaturePicture.php")
                         .post(build)
                         .build();
-
                 client.newCall(bi).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Log.i("SignatureActivity","onFailure : 失敗");
                     }
-
                     @Override
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                         Log.i("SignatureActivity","onResponse : "+response.body().string());
@@ -226,7 +224,6 @@ public class SignatureActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
@@ -235,7 +232,6 @@ public class SignatureActivity extends AppCompatActivity {
                 Bundle bundle = getIntent().getExtras();
                 String SN_NO = bundle.getString("ResponseText1");
                 String SEQ_ID = bundle.getString("ResponseText2");
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -250,8 +246,8 @@ public class SignatureActivity extends AppCompatActivity {
                     Log.e("SignatureActivity", SN_NO);
                     Log.e("SignatureActivity", sign_name+".png");
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/wqp/TokenID.php")
-                            .url("http://192.168.0.172/Test1/SignatureLog.php")
+                            //.url("http://220.133.80.146/WQP/SignatureLog.php")
+                            .url("http://192.168.0.172/WQP/SignatureLog.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

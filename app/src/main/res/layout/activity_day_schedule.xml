@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:id="@+id/today_LinearLayout"
-            android:layout_width="250dp"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -42,28 +42,28 @@
 
         <TextView
             android:id="@+id/total_textView"
-            android:layout_width="108dp"
-            android:layout_height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="今日件數:"
             android:textColor="@color/colorAccent"
-            android:textSize="25dp"
+            android:textSize="28dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/today_LinearLayout" />
 
         <TextView
             android:id="@+id/today_sql_total_textView"
-            android:layout_width="80dp"
-            android:layout_height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:gravity="left"
             android:text="0"
-            android:textSize="25dp"
+            android:textSize="28dp"
             app:layout_constraintHorizontal_bias="0.057"
             app:layout_constraintLeft_toRightOf="@+id/total_textView"
             app:layout_constraintRight_toRightOf="parent"
@@ -71,13 +71,14 @@
 
         <Button
             android:id="@+id/more_button1"
-            android:layout_width="88dp"
-            android:layout_height="48dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="10dp"
             android:onClick="get_day_more_Btn"
             android:text="more..."
+            android:textSize="18dp"
             android:textAllCaps="false"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/total_textView" />

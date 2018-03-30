@@ -19,9 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -46,10 +46,11 @@ import okhttp3.Response;
 public class CalendarActivity extends AppCompatActivity {
 
     private LinearLayout search_llt, calendar_llt;
-    private ScrollView calendar_scv;
     private Spinner company_spinner;
-    private TextView date_txt, search_up_txt, search_down_txt;
+    private TextView date_txt, search_up_txt, search_down_txt, dynamically_txt, dynamically_type,
+                     dynamically_customer, dynamically_phone, dynamically_address;
     private Button work_date_btn, last_btn, search_btn, next_btn;
+    private ProgressBar dynamically_PGTime;
 
     int x, y;
     String date, last_date, next_date;
@@ -143,7 +144,6 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-
         //動態取得 View 物件
         InItFunction();
         //分公司的Spinner下拉選單
@@ -160,7 +160,6 @@ public class CalendarActivity extends AppCompatActivity {
     private void InItFunction() {
         search_llt = (LinearLayout) findViewById(R.id.search_llt);
         calendar_llt = (LinearLayout) findViewById(R.id.calendar_llt);
-        calendar_scv = (ScrollView) findViewById(R.id.calendar_scv);
         company_spinner = (Spinner) findViewById(R.id.company_spinner);
         date_txt = (TextView) findViewById(R.id.date_txt);
         search_up_txt = (TextView) findViewById(R.id.search_up_txt);
@@ -313,7 +312,6 @@ public class CalendarActivity extends AppCompatActivity {
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
                 Log.e("CalendarActivity", user_id_data);
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -323,7 +321,8 @@ public class CalendarActivity extends AppCompatActivity {
                             .build();
                     Log.e("CalendarActivity", date);
                     Request request = new Request.Builder()
-                            .url("http://192.168.0.172/Test1/CalendarData.php")
+                            //.url("http://220.133.80.146/WQP/CalendarData.php")
+                            .url("http://192.168.0.172/WQP/CalendarData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -344,7 +343,6 @@ public class CalendarActivity extends AppCompatActivity {
      */
     private void parseJSONWithJSONObjectOfCalendar(String jsonData) {
         try {
-
             JSONArray jsonArray = new JSONArray(jsonData);
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
@@ -396,7 +394,6 @@ public class CalendarActivity extends AppCompatActivity {
 
                 String s_date = work_date_btn.getText().toString();
                 String group_name = String.valueOf(company_spinner.getSelectedItem()).substring(0,5);
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -407,7 +404,8 @@ public class CalendarActivity extends AppCompatActivity {
                             .build();
                     Log.e("CalendarActivity", group_name);
                     Request request = new Request.Builder()
-                            .url("http://192.168.0.172/Test1/CalendarData.php")
+                            //.url("http://220.133.80.146/WQP/CalendarData.php")
+                            .url("http://192.168.0.172/WQP/CalendarData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -428,7 +426,6 @@ public class CalendarActivity extends AppCompatActivity {
      */
     private void parseJSONWithJSONObjectOfSearch(String jsonData) {
         try {
-
             JSONArray jsonArray = new JSONArray(jsonData);
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
@@ -473,9 +470,7 @@ public class CalendarActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 String group_name = String.valueOf(company_spinner.getSelectedItem()).substring(0,5);
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -485,7 +480,8 @@ public class CalendarActivity extends AppCompatActivity {
                             .build();
                     Log.e("CalendarActivity3",last_date);
                     Request request = new Request.Builder()
-                            .url("http://192.168.0.172/Test1/CalendarData.php")
+                            //.url("http://220.133.80.146/WQP/CalendarData.php")
+                            .url("http://192.168.0.172/WQP/CalendarData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -506,7 +502,6 @@ public class CalendarActivity extends AppCompatActivity {
      */
     private void parseJSONWithJSONObjectOfLast(String jsonData) {
         try {
-
             JSONArray jsonArray = new JSONArray(jsonData);
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
@@ -551,9 +546,7 @@ public class CalendarActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 String group_name = String.valueOf(company_spinner.getSelectedItem()).substring(0,5);
-
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -563,7 +556,8 @@ public class CalendarActivity extends AppCompatActivity {
                             .build();
                     Log.e("CalendarActivity3",next_date);
                     Request request = new Request.Builder()
-                            .url("http://192.168.0.172/Test1/CalendarData.php")
+                            //.url("http://220.133.80.146/WQP/CalendarData.php")
+                            .url("http://192.168.0.172/WQP/CalendarData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -584,7 +578,6 @@ public class CalendarActivity extends AppCompatActivity {
      */
     private void parseJSONWithJSONObjectOfNext(String jsonData) {
         try {
-
             JSONArray jsonArray = new JSONArray(jsonData);
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
@@ -628,16 +621,15 @@ public class CalendarActivity extends AppCompatActivity {
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             switch (msg.what) {
                 case 1:
-                    //
+                    //製作Dip
                     Resources resources = getResources();
                     float name_Dip = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, resources.getDisplayMetrics());
                     int name_dip = Math.round(name_Dip);
-                    float type_Dip = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 105, resources.getDisplayMetrics());
+                    float type_Dip = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 125, resources.getDisplayMetrics());
                     int type_dip = Math.round(type_Dip);
-                    float pg_Dip = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, resources.getDisplayMetrics());
+                    float pg_Dip = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 26, resources.getDisplayMetrics());
                     int pg_dip = Math.round(pg_Dip);
 
                     LinearLayout big_llt = new LinearLayout(CalendarActivity.this);
@@ -650,37 +642,35 @@ public class CalendarActivity extends AppCompatActivity {
                     name_llt.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout dynamically_llt = new LinearLayout(CalendarActivity.this);
                     dynamically_llt.setBackgroundResource(R.drawable.calendar_h_divider);
+                    HorizontalScrollView dynamically_hsv = new HorizontalScrollView(CalendarActivity.this);
 
                     Bundle jb = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
                     JArrayList = jb.getStringArrayList("JSON_data");
 
                     for (int i = 0; i < jb.getStringArrayList("JSON_data").size(); i++) {
-
-                        TextView dynamically_txt = new TextView(CalendarActivity.this);
+                        dynamically_txt = new TextView(CalendarActivity.this);
                         dynamically_txt.setText(JArrayList.get(6).replace("A", ""));
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                        dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
                         dynamically_txt.setGravity(Gravity.LEFT);
-                        dynamically_txt.setPadding(10, 5, 0, 0);
+                        dynamically_txt.setPadding(10, 2, 0, 0);
                         dynamically_txt.setWidth(name_dip);
                         dynamically_txt.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
                         dynamically_txt.getPaint().setAntiAlias(true);
 
                         name_llt.addView(dynamically_txt, LinearLayout.LayoutParams.MATCH_PARENT, name_dip);
-
                         if (dynamically_txt.getText().equals("")) {
                             dynamically_txt.setVisibility(View.GONE);
                         }
 
-                        TextView dynamically_type = new TextView(CalendarActivity.this);
+                        dynamically_type = new TextView(CalendarActivity.this);
                         dynamically_type.setText(JArrayList.get(0) + " " + JArrayList.get(2));
                         dynamically_type.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_type.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                        dynamically_type.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                         dynamically_type.setGravity(Gravity.LEFT);
                         dynamically_type.setPadding(5, 0, 0, 4);
                         //dynamically_type.setWidth(type_dip);
-
                         if (JArrayList.get(0).equals("09:00")) {
                             x = 0;
                         }
@@ -759,7 +749,7 @@ public class CalendarActivity extends AppCompatActivity {
                         if (JArrayList.get(1).equals("21:00")) {
                             y = 130;
                         }
-                        ProgressBar dynamically_PGTime = new ProgressBar(CalendarActivity.this, null, android.R.attr.progressBarStyleHorizontal);
+                        dynamically_PGTime = new ProgressBar(CalendarActivity.this, null, android.R.attr.progressBarStyleHorizontal);
                         dynamically_PGTime.setMax(130);
                         dynamically_PGTime.setProgress(x);
                         dynamically_PGTime.setSecondaryProgress(y);
@@ -769,49 +759,46 @@ public class CalendarActivity extends AppCompatActivity {
                         small_llt1.addView(dynamically_type, type_dip, pg_dip);
                         small_llt1.addView(dynamically_PGTime, LinearLayout.LayoutParams.MATCH_PARENT, pg_dip);
 
-                        TextView dynamically_customer = new TextView(CalendarActivity.this);
+                        dynamically_customer = new TextView(CalendarActivity.this);
                         dynamically_customer.setText("客戶名稱 : " + JArrayList.get(3));
                         dynamically_customer.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_customer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                        dynamically_customer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                         dynamically_customer.setGravity(Gravity.LEFT);
                         dynamically_customer.setPadding(5, 0, 0, 0);
 
-                        TextView dynamically_phone = new TextView(CalendarActivity.this);
+                        dynamically_phone = new TextView(CalendarActivity.this);
                         dynamically_phone.setText(" 聯絡電話 : " + JArrayList.get(4));
                         dynamically_phone.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_phone.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                        dynamically_phone.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                         dynamically_phone.setGravity(Gravity.LEFT);
                         dynamically_phone.setPadding(5, 0, 0, 0);
 
-                        TextView dynamically_address = new TextView(CalendarActivity.this);
+                        dynamically_address = new TextView(CalendarActivity.this);
                         dynamically_address.setText(" 派工地址 : " + JArrayList.get(5));
                         dynamically_address.setTextColor(Color.rgb(6, 102, 219));
-                        dynamically_address.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                        dynamically_address.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                         dynamically_address.setGravity(Gravity.LEFT);
                         dynamically_address.setPadding(5, 0, 0, 0);
 
                         small_llt2.addView(dynamically_customer);
                         small_llt2.addView(dynamically_phone);
                         small_llt2.addView(dynamically_address);
-
                     }
-
                     for(int a = 3; a <= 23; a++) {
                         small_llt2.getChildAt(a).setVisibility(View.GONE);
                     }
+                    dynamically_hsv.addView(small_llt2);
 
                     big_llt.addView(name_llt, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     big_llt.addView(small_llt1, LinearLayout.LayoutParams.MATCH_PARENT, pg_dip);
-                    big_llt.addView(small_llt2, LinearLayout.LayoutParams.WRAP_CONTENT, pg_dip);
+                    big_llt.addView(dynamically_hsv, LinearLayout.LayoutParams.WRAP_CONTENT, pg_dip);
                     big_llt.addView(dynamically_llt);
 
                     calendar_llt.addView(big_llt, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-
                     break;
                 default:
                     break;
             }
-
             super.handleMessage(msg);
         }
     };
@@ -820,7 +807,6 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
     }
-
 
     @Override
     protected void onDestroy() {

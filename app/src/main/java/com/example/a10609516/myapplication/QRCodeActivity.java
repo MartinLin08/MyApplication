@@ -108,7 +108,6 @@ public class QRCodeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode);
-
         //動態取得 View 物件
         InItFunction();
         //獲取當天日期
@@ -137,7 +136,6 @@ public class QRCodeActivity extends AppCompatActivity {
                     //PRODUCT_MODE, UPC and EAN條碼
                     //ONE_D_MODE, 1維條碼
                     intent.putExtra("SCAN_MODE","SCAN_MODE");
-
                     //呼叫ZXing Scanner,完成動作後回傳1給onActivityResult的requestCode參數
                     startActivityForResult(intent,1);
                 }

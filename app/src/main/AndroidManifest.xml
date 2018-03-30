@@ -17,6 +17,8 @@
     <!-- 寫入資料許可權 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 加入相機開啟許可權 -->
+    <!--<uses-permission android:name="android.permission.CAMERA"/>-->
 
     <application
         android:allowBackup="true"
@@ -98,6 +100,23 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".MaintainActivity"
+            android:label="出勤回報"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".QRCodeActivity"
+            android:label="QRCode"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".VersionActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
             android:name=".Day_Schedule"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
@@ -107,10 +126,6 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Missing_Date"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".MaintainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -125,11 +140,6 @@
             android:name=".Missing_Date_Record"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".VersionActivity" />
-        <activity
-            android:name=".QRCodeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
 
         <service android:name=".MyFirebaseInstanceIdService">
             <intent-filter>
@@ -141,7 +151,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <!-- 收到通知時, 到狀態列要顯示的 icon -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -150,7 +159,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-
     </application>
 
 </manifest>
