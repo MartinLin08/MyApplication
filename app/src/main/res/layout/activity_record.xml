@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.a10609516.myapplication.RecordActivity">
+        tools:context="com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity">
 
         <TextView
             android:id="@+id/record_textView"

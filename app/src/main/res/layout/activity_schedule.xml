@@ -4,30 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.a10609516.myapplication.ScheduleActivity">
+    tools:context="com.example.a10609516.myapplication.Workers.ScheduleActivity">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <android.support.v4.view.PagerTitleStrip
-                android:id="@+id/pager_title"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp">
+                android:layout_height="wrap_content">
 
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                <android.support.v4.view.PagerTitleStrip
+                    android:id="@+id/pager_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp">
 
-            </android.support.v4.view.PagerTitleStrip>
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-        </android.support.v4.view.ViewPager>
+                </android.support.v4.view.PagerTitleStrip>
+
+            </android.support.v4.view.ViewPager>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/viewpager"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/lin_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

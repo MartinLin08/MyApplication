@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#CEEEEE"
-    tools:context="com.example.a10609516.myapplication.VersionActivity">
+    tools:context="com.example.a10609516.myapplication.Basic.VersionActivity">
 
     <Button
         android:id="@+id/version_btn1"

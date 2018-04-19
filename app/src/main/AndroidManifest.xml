@@ -28,7 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
+            android:name=".Basic.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -38,115 +38,115 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MenuActivity"
+            android:name=".Basic.MenuActivity"
             android:label="首頁"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CalendarActivity"
+            android:name=".Workers.CalendarActivity"
             android:label="派工行事曆"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".Workers.SearchActivity"
             android:label="查詢派工資料"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".SignatureActivity"
+            android:name=".Workers.SignatureActivity"
             android:label="客戶電子簽名"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".BackKeyActivity" />
-        <activity android:name=".DatePickerFragment" />
+        <activity android:name=".Element.BackKeyActivity" />
+        <activity android:name=".Element.DatePickerFragment" />
         <activity
-            android:name=".PictureActivity"
+            android:name=".DepartmentAndDIY.PictureActivity"
             android:label="客戶訂單照片上傳"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CustomerActivity"
+            android:name=".DepartmentAndDIY.CustomerActivity"
             android:label="客戶訂單查詢"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".UploadActivity"
+            android:name=".DepartmentAndDIY.UploadActivity"
             android:label="上傳日報"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CorrectActivity"
+            android:name=".DepartmentAndDIY.CorrectActivity"
             android:label="日報修正"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ScheduleActivity"
+            android:name=".Workers.ScheduleActivity"
             android:label="行程資訊"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".RecordActivity"
+            android:name=".DepartmentAndDIY.RecordActivity"
             android:label="上傳日報紀錄"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".MaintainActivity"
+            android:name=".Workers.MaintainActivity"
             android:label="出勤回報"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".QRCodeActivity"
+            android:name=".Workers.QRCodeActivity"
             android:label="QRCode"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name=".VersionActivity"
+            android:name=".Basic.VersionActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name=".Day_Schedule"
+            android:name=".Workers.Day_Schedule"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Week_Schedule"
+            android:name=".Workers.Week_Schedule"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Missing_Date"
+            android:name=".Workers.Missing_Date"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Day_Work"
+            android:name=".Workers.Day_Work"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Week_Work"
+            android:name=".Workers.Week_Work"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Missing_Date_Record"
+            android:name=".Workers.Missing_Date_Record"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
-        <service android:name=".MyFirebaseInstanceIdService">
+        <service android:name=".FCM.MyFirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name=".FCM.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

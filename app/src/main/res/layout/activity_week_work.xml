@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.a10609516.myapplication.Week_Work">
+    tools:context="com.example.a10609516.myapplication.Workers.Week_Work">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.example.a10609516.myapplication.Week_Work">
+            tools:context="com.example.a10609516.myapplication.Workers.Week_Work">
 
             <TextView
                 android:id="@+id/title_textView"

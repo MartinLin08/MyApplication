@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.a10609516.myapplication.Day_Work">
+    tools:context="com.example.a10609516.myapplication.Workers.Day_Work">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,7 +19,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.example.a10609516.myapplication.Day_Work">
+            tools:context="com.example.a10609516.myapplication.Workers.Day_Work">
 
             <TextView
                 android:id="@+id/title_textView"
