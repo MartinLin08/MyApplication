@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.a10609516.myapplication.Workers.QRCodeActivity">
+    tools:context="com.example.a10609516.myapplication.Basic.QRCodeActivity">
 
     <TextView
         android:id="@+id/view_txt"
@@ -28,7 +28,8 @@
         android:paddingRight="5dp"
         android:text="開啟QR Code掃描"
         android:textColor="@color/colorAccent"
-        android:textSize="18dp" />
+        android:textSize="18dp"
+        android:onClick="scanCode"/>
 
     <TextView
         android:id="@+id/date_title"
@@ -63,6 +64,12 @@
         android:textColor="@color/colorAccent"
         android:textSize="20dp" />
 
+    <WebView
+        android:id="@+id/wv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/result_txt"/>
+
     <Button
         android:id="@+id/upload_btn"
         android:layout_width="match_parent"
@@ -74,6 +81,7 @@
         android:background="@drawable/button"
         android:text="上傳"
         android:textSize="20dp"
-        android:textColor="@color/colorAccent"/>
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"/>
 
 </RelativeLayout>

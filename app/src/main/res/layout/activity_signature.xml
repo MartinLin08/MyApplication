@@ -4,25 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.a10609516.myapplication.Workers.SignatureActivity">
+    tools:context="com.example.a10609516.myapplication.Basic.SignatureActivity">
 
     <FrameLayout
         android:layout_marginBottom="40dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.a10609516.myapplication.Workers.WangGeView
+        <com.example.a10609516.myapplication.Element.WangGeView
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:layout_marginBottom="2dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <com.example.a10609516.myapplication.Workers.SignView
+        <com.example.a10609516.myapplication.Element.SignView
             android:id="@+id/signView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </com.example.a10609516.myapplication.Workers.SignView>
+        </com.example.a10609516.myapplication.Element.SignView>
     </FrameLayout>
 
     <LinearLayout

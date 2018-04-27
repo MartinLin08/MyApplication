@@ -19,7 +19,7 @@ import com.example.a10609516.myapplication.Basic.MenuActivity;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.Basic.VersionActivity;
 import com.example.a10609516.myapplication.Workers.CalendarActivity;
-import com.example.a10609516.myapplication.Workers.QRCodeActivity;
+import com.example.a10609516.myapplication.Basic.QRCodeActivity;
 import com.example.a10609516.myapplication.Workers.ScheduleActivity;
 import com.example.a10609516.myapplication.Workers.SearchActivity;
 

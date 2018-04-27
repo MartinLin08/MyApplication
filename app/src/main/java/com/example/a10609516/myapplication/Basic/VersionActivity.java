@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
@@ -18,16 +19,15 @@ import com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.UploadActivity;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.Workers.CalendarActivity;
-import com.example.a10609516.myapplication.Workers.QRCodeActivity;
 import com.example.a10609516.myapplication.Workers.ScheduleActivity;
 import com.example.a10609516.myapplication.Workers.SearchActivity;
 
 public class VersionActivity extends AppCompatActivity {
 
-    private TextView detail_txt1;
-    private LinearLayout detail_llt1;
-    private Button version_btn1;
-    private Button version_up_btn1;
+    private TextView detail_txt1, detail_txt2;
+    private LinearLayout detail_llt1, detail_llt2;
+    private Button version_btn1, version_btn2;
+    private Button version_up_btn1, version_up_btn2;
 
     /**
      * 創建Menu
@@ -67,9 +67,9 @@ public class VersionActivity extends AppCompatActivity {
                 startActivity(intent2);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            /*case R.id.signature_item:
+            case R.id.signature_item:
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //顯示客戶電子簽名*/
+                break; //進入客戶電子簽名頁面
             case R.id.record_item:
                 Intent intent8 = new Intent(VersionActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -103,6 +103,11 @@ public class VersionActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent11 = new Intent(VersionActivity.this, QuotationActivity.class);
+                startActivity(intent11);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
             default:
         }
         return true;
@@ -112,7 +117,6 @@ public class VersionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_version);
-
         //動態取得 View 物件
         InItFunction();
         //版本詳細資訊
@@ -126,19 +130,24 @@ public class VersionActivity extends AppCompatActivity {
      */
     private void InItFunction(){
         detail_txt1 = (TextView)findViewById(R.id.detail_txt1);
+        detail_txt2 = (TextView)findViewById(R.id.detail_txt2);
         detail_llt1 = (LinearLayout)findViewById(R.id.detail_llt1);
+        detail_llt2 = (LinearLayout)findViewById(R.id.detail_llt2);
         version_btn1 = (Button)findViewById(R.id.version_btn1);
+        version_btn2 = (Button)findViewById(R.id.version_btn2);
         version_up_btn1 = (Button)findViewById(R.id.version_up_btn1);
+        version_up_btn2 = (Button)findViewById(R.id.version_up_btn2);
     }
 
     /**
      * 版本詳細資訊
      */
     private void DetailOfVersion(){
-        detail_txt1.setText("1.新增工務 - 行程資訊、派工行事曆、查詢派工資料 \n" +
-                            "2.新增工務 - 出勤維護回報功能 \n" +
+        detail_txt1.setText("1.新增工務部 - 行程資訊、派工行事曆、查詢派工資料 \n" +
+                            "2.新增工務部 - 出勤維護回報功能 \n" +
                             "3.新增推播功能-工務(新派工、更新派工、取消派工) \n" +
                             "4.新增客戶電子簽名、QRCode功能");
+        detail_txt2.setText("1.新增業務部 - 報價單審核");
     }
 
     /**
@@ -157,6 +166,20 @@ public class VersionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 detail_llt1.setVisibility(View.GONE);
                 version_up_btn1.setVisibility(View.GONE);
+            }
+        });
+        version_btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt2.setVisibility(View.VISIBLE);
+                version_up_btn2.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt2.setVisibility(View.GONE);
+                version_up_btn2.setVisibility(View.GONE);
             }
         });
     }

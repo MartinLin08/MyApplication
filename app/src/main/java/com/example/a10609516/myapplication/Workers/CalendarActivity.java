@@ -27,6 +27,9 @@ import android.widget.Toast;
 
 import android.widget.TextView;
 
+import com.example.a10609516.myapplication.Basic.QRCodeActivity;
+import com.example.a10609516.myapplication.Basic.SignatureActivity;
+import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.myapplication.Element.DatePickerFragment;
@@ -103,11 +106,11 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(intent1);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            /*case R.id.signature_item:
+            case R.id.signature_item:
                 Intent intent2 = new Intent(CalendarActivity.this, SignatureActivity.class);
                 startActivity(intent2);
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //進入客戶電子簽名頁面*/
+                break; //進入客戶電子簽名頁面
             case R.id.record_item:
                 Intent intent8 = new Intent(CalendarActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -143,6 +146,11 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent11 = new Intent(CalendarActivity.this, QuotationActivity.class);
+                startActivity(intent11);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
             default:
         }
         return true;
@@ -642,12 +650,12 @@ public class CalendarActivity extends AppCompatActivity {
 
                     LinearLayout big_llt = new LinearLayout(CalendarActivity.this);
                     big_llt.setOrientation(LinearLayout.VERTICAL);
+                    LinearLayout name_llt = new LinearLayout(CalendarActivity.this);
+                    name_llt.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout small_llt1 = new LinearLayout(CalendarActivity.this);
                     small_llt1.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout small_llt2 = new LinearLayout(CalendarActivity.this);
                     small_llt2.setOrientation(LinearLayout.HORIZONTAL);
-                    LinearLayout name_llt = new LinearLayout(CalendarActivity.this);
-                    name_llt.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout dynamically_llt = new LinearLayout(CalendarActivity.this);
                     dynamically_llt.setBackgroundResource(R.drawable.calendar_h_divider);
                     HorizontalScrollView dynamically_hsv = new HorizontalScrollView(CalendarActivity.this);
@@ -655,7 +663,6 @@ public class CalendarActivity extends AppCompatActivity {
                     Bundle jb = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
                     JArrayList = jb.getStringArrayList("JSON_data");
-
                     for (int i = 0; i < jb.getStringArrayList("JSON_data").size(); i++) {
                         dynamically_txt = new TextView(CalendarActivity.this);
                         dynamically_txt.setText(JArrayList.get(6).replace("A", ""));

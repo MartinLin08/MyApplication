@@ -32,6 +32,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.a10609516.myapplication.Basic.QRCodeActivity;
+import com.example.a10609516.myapplication.Basic.SignatureActivity;
+import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.myapplication.Basic.MenuActivity;
@@ -114,11 +117,11 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(intent2);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; // 進入查詢派工資料頁面
-            /*case R.id.signature_item:
+            case R.id.signature_item:
                 Intent intent3 = new Intent(ScheduleActivity.this, SignatureActivity.class);
                 startActivity(intent3);
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //進入客戶電子簽名頁面*/
+                break; //進入客戶電子簽名頁面
             case R.id.record_item:
                 Intent intent4 = new Intent(ScheduleActivity.this, RecordActivity.class);
                 startActivity(intent4);
@@ -154,6 +157,11 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent11 = new Intent(ScheduleActivity.this, QuotationActivity.class);
+                startActivity(intent11);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
             default:
         }
         return true;
@@ -583,10 +591,11 @@ public class ScheduleActivity extends AppCompatActivity {
     Handler today_mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
-                    "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
-                    "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
-                    "工務點數", "狀態", "今日派工時段 :", "處理方式 :"};
+            final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人",
+                                          "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
+                                          "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
+                                          "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
+                                          "工務點數", "狀態", "今日派工時段 :", "處理方式 :"};
             switch (msg.what) {
                 case 1:
                     Resources resources = getResources();

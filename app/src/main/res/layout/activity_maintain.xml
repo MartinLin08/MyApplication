@@ -696,7 +696,8 @@
                     android:layout_weight="1"
                     android:paddingBottom="3dp"
                     android:paddingTop="3dp"
-                    android:src="@drawable/qr_code" />
+                    android:src="@drawable/qr_code"
+                    android:onClick="scanCode"/>
 
             </TableRow>
 

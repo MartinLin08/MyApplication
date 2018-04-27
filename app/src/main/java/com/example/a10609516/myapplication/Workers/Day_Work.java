@@ -1,36 +1,35 @@
 package com.example.a10609516.myapplication.Workers;
 
 import java.text.SimpleDateFormat;
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-        import android.graphics.Color;
-        import android.graphics.Typeface;
-        import android.os.Handler;
-        import android.os.Message;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.util.TypedValue;
-        import android.view.Gravity;
-        import android.view.View;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-        import android.widget.TableLayout;
-        import android.widget.TableRow;
-        import android.widget.TextView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.example.a10609516.myapplication.R;
 
 import org.json.JSONArray;
-        import org.json.JSONObject;
+import org.json.JSONObject;
 
-        import okhttp3.FormBody;
-        import okhttp3.OkHttpClient;
-        import okhttp3.Request;
-        import okhttp3.RequestBody;
-        import okhttp3.Response;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Day_Work extends AppCompatActivity {
 
@@ -103,6 +102,7 @@ public class Day_Work extends AppCompatActivity {
 
     /**
      * 獲得JSON字串並解析成String字串
+     *
      * @param jsonData
      */
     private void parseJSONWithJSONObjectOfToday(String jsonData) {
@@ -183,10 +183,10 @@ public class Day_Work extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "派工日期時段", "聯絡人",
-                                          "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
-                                          "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
-                                          "結束時間", "任務說明", "料品說明", "工作說明","狀態",
-                                          "今日派工時段 :", "處理方式 :"};
+                    "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
+                    "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
+                    "結束時間", "任務說明", "料品說明", "工作說明", "狀態",
+                    "今日派工時段 :", "處理方式 :"};
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
@@ -212,7 +212,7 @@ public class Day_Work extends AppCompatActivity {
                     dynamically_title2.setPadding(40, 10, 0, 10);
                     dynamically_title2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     dynamically_title2.setTextColor(Color.rgb(6, 102, 219));
-                    dynamically_title2.setTypeface(Typeface.SANS_SERIF,Typeface.BOLD);
+                    dynamically_title2.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
 
                     dynamically_llt.addView(dynamically_title2);
                     TableRow tr1 = new TableRow(Day_Work.this);
@@ -230,7 +230,7 @@ public class Day_Work extends AppCompatActivity {
                     dynamically_title3.setPadding(40, 10, 0, 10);
                     dynamically_title3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     dynamically_title3.setTextColor(Color.rgb(6, 102, 219));
-                    dynamically_title3.setTypeface(Typeface.SANS_SERIF,Typeface.BOLD);
+                    dynamically_title3.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
 
                     dynamically_llt2.addView(dynamically_title3);
                     TableRow tr2 = new TableRow(Day_Work.this);

@@ -15,18 +15,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.UploadActivity;
-import com.example.a10609516.myapplication.Element.BackKeyActivity;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.Workers.CalendarActivity;
-import com.example.a10609516.myapplication.Workers.QRCodeActivity;
 import com.example.a10609516.myapplication.Workers.ScheduleActivity;
 import com.example.a10609516.myapplication.Workers.SearchActivity;
-import com.example.a10609516.myapplication.Workers.SignatureActivity;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -118,6 +116,11 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent11 = new Intent(MenuActivity.this, QuotationActivity.class);
+                startActivity(intent11);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
             default:
         }
         return true;

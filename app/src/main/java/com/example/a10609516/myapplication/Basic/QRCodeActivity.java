@@ -1,31 +1,47 @@
-package com.example.a10609516.myapplication.Workers;
+package com.example.a10609516.myapplication.Basic;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.myapplication.Basic.MenuActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.UploadActivity;
-import com.example.a10609516.myapplication.Basic.VersionActivity;
+import com.example.a10609516.myapplication.Workers.CalendarActivity;
+import com.example.a10609516.myapplication.Element.ScannerActivity;
+import com.example.a10609516.myapplication.Workers.ScheduleActivity;
+import com.example.a10609516.myapplication.Workers.SearchActivity;
 
 import java.text.SimpleDateFormat;
 
 public class QRCodeActivity extends AppCompatActivity {
 
     private Button QRCode_btn;
-    private TextView date_txt,result_txt;
+    private TextView date_txt, result_txt;
+    private WebView mWebView;
+
+    //轉畫面的Activity參數
+    private Class<?> mClss;
+    //ZXING_CAMERA權限
+    private static final int ZXING_CAMERA_PERMISSION = 1;
 
     /**
      * 創建Menu
@@ -68,11 +84,11 @@ public class QRCodeActivity extends AppCompatActivity {
                 startActivity(intent1);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            /*case R.id.signature_item:
-                Intent intent2 = new Intent(CalendarActivity.this, SignatureActivity.class);
+            case R.id.signature_item:
+                Intent intent2 = new Intent(QRCodeActivity.this, SignatureActivity.class);
                 startActivity(intent2);
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //進入客戶電子簽名頁面*/
+                break; //進入客戶電子簽名頁面
             case R.id.record_item:
                 Intent intent8 = new Intent(QRCodeActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -108,6 +124,11 @@ public class QRCodeActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent12 = new Intent(QRCodeActivity.this, QuotationActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
             default:
         }
         return true;
@@ -121,17 +142,20 @@ public class QRCodeActivity extends AppCompatActivity {
         InItFunction();
         //獲取當天日期
         GetDate();
+        //初始畫面設置
+        initSet();
     }
 
     /**
      * 動態取得 View 物件
      */
     private void InItFunction() {
-        QRCode_btn = (Button)findViewById(R.id.QRCode_btn);
-        date_txt = (TextView)findViewById(R.id.date_txt);
-        result_txt = (TextView)findViewById(R.id.result_txt);
+        QRCode_btn = (Button) findViewById(R.id.QRCode_btn);
+        date_txt = (TextView) findViewById(R.id.date_txt);
+        result_txt = (TextView) findViewById(R.id.result_txt);
+        mWebView = (WebView) findViewById(R.id.wv);
 
-        QRCode_btn.setOnClickListener(new View.OnClickListener() {
+        /*QRCode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("com.google.zxing.client.android.SCAN");
@@ -149,7 +173,7 @@ public class QRCodeActivity extends AppCompatActivity {
                     startActivityForResult(intent,1);
                 }
             }
-        });
+        });*/
     }
 
     /**
@@ -158,7 +182,7 @@ public class QRCodeActivity extends AppCompatActivity {
      * @param resultCode
      * @param intent
      */
-    public void onActivityResult(int requestCode, int resultCode, Intent intent){
+    /*public void onActivityResult(int requestCode, int resultCode, Intent intent){
         if(requestCode==1){
             if(resultCode==RESULT_OK){
                 //ZXing回傳的內容
@@ -170,7 +194,7 @@ public class QRCodeActivity extends AppCompatActivity {
                 }
             }
         }
-    }
+    }*/
 
     /**
      * 獲取當天日期
@@ -181,4 +205,54 @@ public class QRCodeActivity extends AppCompatActivity {
         date_txt.setText(date);
     }
 
+    /**
+     * 起始畫面設置
+     */
+    private void initSet() {
+        /**
+         * 以下都是WebView的設定
+         */
+        WebSettings websettings = mWebView.getSettings();
+        websettings.setSupportZoom(true); //啟用內置的縮放功能
+        websettings.setBuiltInZoomControls(true);//啟用內置的縮放功能
+        websettings.setDisplayZoomControls(false);//讓縮放功能的Button消失
+        websettings.setJavaScriptEnabled(true);//使用JavaScript
+        websettings.setAppCacheEnabled(true);//設置啟動緩存
+        websettings.setSaveFormData(true);//設置儲存
+        websettings.setAllowFileAccess(true);//啟用webview訪問文件數據
+        websettings.setDomStorageEnabled(true);//啟用儲存數據
+        mWebView.setWebViewClient(new WebViewClient());
+    }
+
+    //Button的設置
+    public void scanCode(View view) {
+        //startActivityForResult(new Intent(this, ScannerActivity.class), 1);
+        launchActivity(ScannerActivity.class);
+    }
+
+    //轉畫面的封包，兼具權限和Intent跳轉化面
+    public void launchActivity(Class<?> clss) {
+        //假如還「未獲取」權限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            mClss = clss;
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
+        } else {
+            Intent intent = new Intent(this, clss);
+            //startActivity(intent);
+            startActivityForResult(intent, ZXING_CAMERA_PERMISSION);
+        }
+    }
+
+    //當ScannerActivity結束後的回調資訊
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Log.d("checkpoint", "CheckPoint");
+            result_txt.setText(data.getStringExtra("result_text"));
+            mWebView.loadUrl(data.getStringExtra("result_text"));
+        }
+    }
 }

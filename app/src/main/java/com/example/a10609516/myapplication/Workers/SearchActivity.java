@@ -34,6 +34,9 @@ import okhttp3.Response;
 import android.os.Handler;
 import android.os.Message;
 
+import com.example.a10609516.myapplication.Basic.QRCodeActivity;
+import com.example.a10609516.myapplication.Basic.SignatureActivity;
+import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.myapplication.Element.DatePickerFragment;
@@ -93,11 +96,11 @@ public class SearchActivity extends AppCompatActivity {
             case R.id.work_item:
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //顯示查詢派工資料
-            /*case R.id.signature_item:
+            case R.id.signature_item:
                 Intent intent2 = new Intent(SearchActivity.this, SignatureActivity.class);
                 startActivity(intent2);
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //進入客戶電子簽名頁面*/
+                break; //進入客戶電子簽名頁面
             case R.id.record_item:
                 Intent intent8 = new Intent(SearchActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -133,6 +136,11 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent11 = new Intent(SearchActivity.this, QuotationActivity.class);
+                startActivity(intent11);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
             default:
         }
         return true;

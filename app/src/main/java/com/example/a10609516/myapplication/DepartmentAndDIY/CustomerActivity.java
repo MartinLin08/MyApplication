@@ -16,13 +16,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.Element.DatePickerFragment;
 import com.example.a10609516.myapplication.Element.ListViewForScrollView;
 import com.example.a10609516.myapplication.Basic.MenuActivity;
+import com.example.a10609516.myapplication.Basic.SignatureActivity;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.Basic.VersionActivity;
 import com.example.a10609516.myapplication.Workers.CalendarActivity;
-import com.example.a10609516.myapplication.Workers.QRCodeActivity;
+import com.example.a10609516.myapplication.Basic.QRCodeActivity;
 import com.example.a10609516.myapplication.Workers.ScheduleActivity;
 import com.example.a10609516.myapplication.Workers.SearchActivity;
 
@@ -65,11 +67,11 @@ public class CustomerActivity extends AppCompatActivity {
                 startActivity(intent2);
                 Toast.makeText(this, "查詢派工資料",Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            /*case R.id.signature_item:
+            case R.id.signature_item:
                 Intent intent3 = new Intent(CustomerActivity.this, SignatureActivity.class);
                 startActivity(intent3);
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //進入客戶電子簽名頁面*/
+                break; //進入客戶電子簽名頁面
             case R.id.record_item:
                 Intent intent8 = new Intent(CustomerActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -103,6 +105,11 @@ public class CustomerActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent11 = new Intent(CustomerActivity.this, QuotationActivity.class);
+                startActivity(intent11);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
             default:
         }
         return true;

@@ -34,7 +34,9 @@
                 app:layout_constraintHorizontal_bias="0.518"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
 
                 <TextView
                     android:id="@+id/label"
@@ -271,18 +273,13 @@
             <LinearLayout
                 android:id="@+id/separate_linearLayout"
                 android:layout_width="0dp"
-                android:layout_height="7dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_height="0dp"
                 android:background="#082567"
                 android:orientation="horizontal"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"/>
 
             <LinearLayout
                 android:id="@+id/search_LinearLayout"
@@ -295,7 +292,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/separate_linearLayout">
+                app:layout_constraintTop_toBottomOf="@+id/separate_linearLayout"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
 
                 <TableLayout
                     android:id="@+id/search_TableLayout"

@@ -1,10 +1,11 @@
-package com.example.a10609516.myapplication.Workers;
+package com.example.a10609516.myapplication.Basic;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.View.OnClickListener;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,13 +14,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.myapplication.Basic.MenuActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
+import com.example.a10609516.myapplication.Element.SignView;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.UploadActivity;
+import com.example.a10609516.myapplication.Workers.CalendarActivity;
+import com.example.a10609516.myapplication.Workers.ScheduleActivity;
+import com.example.a10609516.myapplication.Workers.SearchActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,10 +56,10 @@ public class SignatureActivity extends AppCompatActivity {
      * @param menu
      * @return
      */
-    /*public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }*/
+    }
 
     /**
      * 進入Menu各個頁面
@@ -84,9 +89,9 @@ public class SignatureActivity extends AppCompatActivity {
                 startActivity(intent2);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            /*case R.id.signature_item:
+            case R.id.signature_item:
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //顯示客戶電子簽名*/
+                break; //顯示客戶電子簽名
             case R.id.record_item:
                 Intent intent8 = new Intent(SignatureActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -117,6 +122,11 @@ public class SignatureActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent11 = new Intent(SignatureActivity.this, QuotationActivity.class);
+                startActivity(intent11);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
             default:
         }
         return true;

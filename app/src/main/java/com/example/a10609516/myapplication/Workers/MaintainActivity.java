@@ -1,10 +1,13 @@
 package com.example.a10609516.myapplication.Workers;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a10609516.myapplication.Element.DatePickerFragment;
+import com.example.a10609516.myapplication.Element.ScannerActivity;
+import com.example.a10609516.myapplication.Basic.SignatureActivity;
 import com.example.a10609516.myapplication.R;
 
 import okhttp3.FormBody;
@@ -56,10 +61,17 @@ public class MaintainActivity extends AppCompatActivity {
     private String[] reason_spinnerprivate = new String[]{"請選擇", "產品瑕疵", "安裝不當", "使用不良", "安裝收尾", "零件老化", "其他", "現場勘查"};
     private String[] useless_work = new String[]{"無", "客人不在場", "現場無法施工", "材料有異", "其他", "業務取消"};
 
+    //轉畫面的Activity參數
+    private Class<?> mClss;
+    //ZXING_CAMERA權限
+    private static final int ZXING_CAMERA_PERMISSION = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maintain);
+        //取消ActionBar
+        getSupportActionBar().hide();
         //動態取得 View 物件
         InItFunction();
         //取得SearchActivity傳遞過來的值
@@ -116,7 +128,7 @@ public class MaintainActivity extends AppCompatActivity {
         add_qrcode = (ImageView) findViewById(R.id.add_qrcode);
 
         //add_qrcode.setOnClickListener監聽器
-        add_qrcode.setOnClickListener(new View.OnClickListener() {
+       /* add_qrcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("com.google.zxing.client.android.SCAN");
@@ -133,7 +145,7 @@ public class MaintainActivity extends AppCompatActivity {
                     startActivityForResult(intent, 1);
                 }
             }
-        });
+        });*/
 
         //check_button.setOnClickListener監聽器
         check_button.setOnClickListener(new View.OnClickListener() {
@@ -895,12 +907,38 @@ public class MaintainActivity extends AppCompatActivity {
     }
 
     /**
+     * Button的設置
+     */
+    public void scanCode(View view) {
+        //startActivityForResult(new Intent(this, ScannerActivity.class), 1);
+        launchActivity(ScannerActivity.class);
+    }
+
+    /**
+     * 轉畫面的封包，兼具權限和Intent跳轉化面
+     */
+    public void launchActivity(Class<?> clss) {
+        //假如還「未獲取」權限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            mClss = clss;
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
+        } else {
+            Intent intent = new Intent(this, clss);
+            //startActivity(intent);
+            startActivityForResult(intent, ZXING_CAMERA_PERMISSION);
+        }
+    }
+
+    /**
      * 取回掃描回傳值或取消掃描
      * @param requestCode
      * @param resultCode
      * @param intent
      */
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 //ZXing回傳的內容
@@ -913,7 +951,7 @@ public class MaintainActivity extends AppCompatActivity {
                 TextView result_txt = new TextView(MaintainActivity.this);
                 linearLayout.setGravity(Gravity.CENTER_VERTICAL);
 
-                result_txt.setText(contents.toString());
+                result_txt.setText(intent.getStringExtra("result_text"));
                 result_txt.setPadding(10, 3, 5, 3);
                 result_txt.setTextColor(Color.rgb(6, 102, 219));
                 result_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);

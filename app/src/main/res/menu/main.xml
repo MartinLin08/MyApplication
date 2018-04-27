@@ -5,7 +5,7 @@
     <item
         android:id="@+id/home_item"
         android:title="首頁" />
-    <item android:title="工務">
+    <item android:title="工務部">
         <menu>
             <item
                 android:id="@+id/schedule_item"
@@ -16,19 +16,20 @@
             <item
                 android:id="@+id/work_item"
                 android:title="查詢派工資料" />
-            <item
-                android:id="@+id/signature_item"
-                android:title="客戶電子簽名" />
-            <item
-                android:id="@+id/QRCode_item"
-                android:title="QRCode" />
         </menu>
     </item>
-    <item android:title="百貨/DIY通路">
+    <item android:title="業務部">
+        <menu>
+            <item
+                android:id="@+id/quotation_item"
+                android:title="報價單審核" />
+        </menu>
+    </item>
+    <item android:title="百貨/DIY通路部">
         <menu>
             <item
                 android:id="@+id/record_item"
-                android:title="上傳日報紀錄" />
+                android:title="上傳日報紀錄(已停用)" />
             <item
                 android:id="@+id/picture_item"
                 android:title="客戶訂單照片上傳" />
@@ -37,12 +38,18 @@
                 android:title="客戶訂單查詢" />
             <item
                 android:id="@+id/upload_item"
-                android:title="上傳日報" />
+                android:title="上傳日報(已停用)" />
             <item
                 android:id="@+id/correct_item"
-                android:title="日報修正" />
+                android:title="日報修正(已停用)" />
         </menu>
     </item>
+    <item
+        android:id="@+id/QRCode_item"
+        android:title="QRCode" />
+    <item
+        android:id="@+id/signature_item"
+        android:title="客戶電子簽名" />
     <item
         android:id="@+id/about_item"
         android:title="版本資訊"/>
