@@ -67,8 +67,21 @@ public class QuotationActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
+        String department_id_data = user_id.getString("D_ID" , "");
+        if (department_id_data.toString().equals("2100")) {
+            getMenuInflater().inflate(R.menu.clerk_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("2200")) {
+            getMenuInflater().inflate(R.menu.diy_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("5200")) {
+            getMenuInflater().inflate(R.menu.workers_menu, menu);
+            return true;
+        }else{
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
     }
 
     /**
@@ -256,6 +269,8 @@ public class QuotationActivity extends AppCompatActivity {
                             .add("TA005", clerk)
                             .add("PROCESS", quotation_mode)
                             .build();
+                    Log.e("QuotationActivity2", user_id_data);
+                    Log.e("QuotationActivity2", clerk);
                     Log.i("QuotationActivity", quotation_type);
                     Log.i("QuotationActivity", quotation_no);
                     Log.i("QuotationActivity", quotation_mode);

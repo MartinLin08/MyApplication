@@ -28,8 +28,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.myapplication.Clerk.QuotationActivity;
+import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.myapplication.Element.HttpParse;
 import com.example.a10609516.myapplication.R;
+import com.example.a10609516.myapplication.Workers.ScheduleActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText accountEdit, passwordEdit;
     private Button login;
     private CheckBox remember_checkBox;
-    private TextView version_no_txt;
+    private TextView version_no_txt, department_txt;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
@@ -85,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.loginBtn);
         remember_checkBox = (CheckBox) findViewById(R.id.remember_checkBox);
         version_no_txt = (TextView) findViewById(R.id.version_no_txt);
+        department_txt = (TextView) findViewById(R.id.department_txt);
         //Button.setOnClickListener監聽器
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +98,8 @@ public class LoginActivity extends AppCompatActivity {
                 sendRequestWithOkHttpOfTokenID();
                 //取得版本號的OKHttp
                 sendRequestWithOkHttpOfVersion();
+                //判斷部門別的OKHttp
+                sendRequestWithOkHttpOfDepartment();
                 if (CheckEditText) {
                     UserLoginFunction(IDEdT, PwdEdT);
                 } else {
@@ -144,6 +150,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     /**
      *確認accountEdit、passwordEdit是否為空值
      */
@@ -156,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
             CheckEditText = true;
         }
     }
+
     /**
      *AsyncTask非同步任務
      */
@@ -175,11 +183,20 @@ public class LoginActivity extends AppCompatActivity {
                 //Log.e("LoginActivity",httpResponseMsg);
                 if (version_no_txt.getText().toString().equals(ver_no)) {
                     if (httpResponseMsg.equalsIgnoreCase("登入成功")) {
-                        finish();
+                        /*finish();
                         Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                         intent.putExtra(Userid, User_id);
                         Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
-                        startActivity(intent);
+                        startActivity(intent);*/
+                        if (department_txt.getText().toString().equals("8888")){
+                            Toast.makeText(LoginActivity.this, "無使用權限", Toast.LENGTH_SHORT).show();
+                        }else{
+                            finish();
+                            Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                            intent.putExtra(Userid, User_id);
+                            Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
+                        }
                     } else {
                         Toast.makeText(LoginActivity.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                     }
@@ -215,9 +232,9 @@ public class LoginActivity extends AppCompatActivity {
                 hashMap.put("User_id", params[0]);
                 hashMap.put("User_password", params[1]);
                 finalResult = httpParse.postRequest(hashMap, HttpURL);
-                //Log.e("LoginActivity",params[0]);
-                //Log.e("LoginActivity",params[1]);
-                //Log.e("LoginActivity",finalResult);
+                Log.e("LoginActivity",params[0]);
+                Log.e("LoginActivity",params[1]);
+                Log.e("LoginActivity",finalResult);
                 return finalResult;
             }
         }
@@ -362,6 +379,52 @@ public class LoginActivity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    /**
+     * 與OkHttp建立連線(UserLogin判斷部門別)
+     */
+    private void sendRequestWithOkHttpOfDepartment() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", IDEdT)
+                            .build();
+                    Log.e("LoginActivity", IDEdT);
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/WQP/DepartmentID.php")
+                            .url("http://192.168.0.172/WQP/DepartmentID.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.i("LoginActivity", responseData);
+                    showResponse(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 在TextView上SHOW出回傳的員工姓名
+     * @param response
+     */
+    private void showResponse(final String response){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                department_txt.setText(response);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("department_id", MODE_PRIVATE);
+                sharedPreferences.edit().putString("D_ID", department_txt.getText().toString()).apply();
+            }
+        });
     }
 }
 
