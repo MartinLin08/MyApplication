@@ -25,10 +25,10 @@ import com.example.a10609516.myapplication.Workers.SearchActivity;
 
 public class VersionActivity extends AppCompatActivity {
 
-    private TextView detail_txt1, detail_txt2;
-    private LinearLayout detail_llt1, detail_llt2;
-    private Button version_btn1, version_btn2;
-    private Button version_up_btn1, version_up_btn2;
+    private TextView detail_txt1, detail_txt2, detail_txt3;
+    private LinearLayout detail_llt1, detail_llt2, detail_llt3;
+    private Button version_btn1, version_btn2, version_btn3;
+    private Button version_up_btn1, version_up_btn2, version_up_btn3;
 
     /**
      * 創建Menu
@@ -147,12 +147,16 @@ public class VersionActivity extends AppCompatActivity {
     private void InItFunction(){
         detail_txt1 = (TextView)findViewById(R.id.detail_txt1);
         detail_txt2 = (TextView)findViewById(R.id.detail_txt2);
+        detail_txt3 = (TextView)findViewById(R.id.detail_txt3);
         detail_llt1 = (LinearLayout)findViewById(R.id.detail_llt1);
         detail_llt2 = (LinearLayout)findViewById(R.id.detail_llt2);
+        detail_llt3 = (LinearLayout)findViewById(R.id.detail_llt3);
         version_btn1 = (Button)findViewById(R.id.version_btn1);
         version_btn2 = (Button)findViewById(R.id.version_btn2);
+        version_btn3 = (Button)findViewById(R.id.version_btn3);
         version_up_btn1 = (Button)findViewById(R.id.version_up_btn1);
         version_up_btn2 = (Button)findViewById(R.id.version_up_btn2);
+        version_up_btn3 = (Button)findViewById(R.id.version_up_btn3);
     }
 
     /**
@@ -164,6 +168,9 @@ public class VersionActivity extends AppCompatActivity {
                             "3.新增推播功能-工務(新派工、更新派工、取消派工) \n" +
                             "4.新增客戶電子簽名、QRCode功能");
         detail_txt2.setText("1.新增業務部 - 報價單審核");
+        detail_txt3.setText("1.關閉工務部 - 客戶電子簽名功能 \n" +
+                            "2.新增工務部 - 回報派工頁面自動帶入當天日期與客戶預約時間 \n" +
+                            "3.新增工務部 - 派工地址可長按點擊複製");
     }
 
     /**
@@ -196,6 +203,20 @@ public class VersionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 detail_llt2.setVisibility(View.GONE);
                 version_up_btn2.setVisibility(View.GONE);
+            }
+        });
+        version_btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt3.setVisibility(View.VISIBLE);
+                version_up_btn3.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt3.setVisibility(View.GONE);
+                version_up_btn3.setVisibility(View.GONE);
             }
         });
     }

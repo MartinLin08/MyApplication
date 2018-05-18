@@ -239,6 +239,7 @@ public class Week_Work extends AppCompatActivity {
                         dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
                         dynamically_txt.setMaxWidth(350);
+                        dynamically_txt.setTextIsSelectable(true);
 
                         TableRow tr3 = new TableRow(Week_Work.this);
                         tr3.setGravity(Gravity.CENTER_HORIZONTAL);

@@ -239,6 +239,7 @@ public class Missing_Date_Record extends AppCompatActivity {
                         dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
                         dynamically_txt.setMaxWidth(350);
+                        dynamically_txt.setTextIsSelectable(true);
 
                         TableRow tr3 = new TableRow(Missing_Date_Record.this);
                         tr3.setGravity(Gravity.CENTER_HORIZONTAL);

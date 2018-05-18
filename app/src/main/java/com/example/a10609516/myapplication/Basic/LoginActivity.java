@@ -100,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                 sendRequestWithOkHttpOfVersion();
                 //判斷部門別的OKHttp
                 sendRequestWithOkHttpOfDepartment();
+
                 if (CheckEditText) {
                     UserLoginFunction(IDEdT, PwdEdT);
                 } else {
@@ -152,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     *確認accountEdit、passwordEdit是否為空值
+     * 確認accountEdit、passwordEdit是否為空值
      */
     public void CheckEditTextIsEmptyOrNot() {
         IDEdT = accountEdit.getText().toString();
@@ -165,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     *AsyncTask非同步任務
+     * AsyncTask非同步任務
      */
     public void UserLoginFunction(final String User_id, final String User_password) {
         class Login extends AsyncTask<String, Void, String> {
@@ -175,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                 super.onPreExecute();
                 progressDialog = ProgressDialog.show(LoginActivity.this, "Loading Data", null, true, true);
             }
+
             //執行後，最後的結果會在這邊
             @Override
             protected void onPostExecute(String httpResponseMsg) {
@@ -188,9 +190,9 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra(Userid, User_id);
                         Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
                         startActivity(intent);*/
-                        if (department_txt.getText().toString().equals("8888")){
+                        if (department_txt.getText().toString().equals("8888")) {
                             Toast.makeText(LoginActivity.this, "無使用權限", Toast.LENGTH_SHORT).show();
-                        }else{
+                        } else {
                             finish();
                             Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                             intent.putExtra(Userid, User_id);
@@ -200,10 +202,10 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(LoginActivity.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                     }
-                }else{
+                } else {
                     new AlertDialog.Builder(LoginActivity.this)
                             .setTitle("更新通知")
-                            .setMessage("檢測到軟體重大更新\n請點擊下方網址下載更新最新版本")
+                            .setMessage("檢測到軟體重大更新\n請前往下載更新最新版本")
                             .setIcon(R.drawable.bwt_icon)
                             .setNegativeButton("確定",
                                     new DialogInterface.OnClickListener() {
@@ -213,8 +215,8 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     }).show();
                     /**
-                                  *動態跑出安裝APK網址
-                                  */
+                     *動態跑出安裝APK網址
+                     */
                     /*TextView Hyperlink_txt = new TextView(LoginActivity.this);
                     Hyperlink_txt.setText("http://m.wqp-water.com.tw/APP");
                     Hyperlink_txt.setAutoLinkMask(Linkify.WEB_URLS);
@@ -226,15 +228,16 @@ public class LoginActivity extends AppCompatActivity {
                     //Toast.makeText(LoginActivity.this, "檢測到最新版本，請前往更新!!!", Toast.LENGTH_SHORT).show();
                 }
             }
+
             //執行中，在背景做任務
             @Override
             protected String doInBackground(String... params) {
                 hashMap.put("User_id", params[0]);
                 hashMap.put("User_password", params[1]);
                 finalResult = httpParse.postRequest(hashMap, HttpURL);
-                Log.e("LoginActivity",params[0]);
-                Log.e("LoginActivity",params[1]);
-                Log.e("LoginActivity",finalResult);
+                Log.e("LoginActivity", params[0]);
+                Log.e("LoginActivity", params[1]);
+                Log.e("LoginActivity", finalResult);
                 return finalResult;
             }
         }
@@ -307,6 +310,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 獲得JSON字串並解析成String字串
+     *
      * @param jsonData
      */
     private void parseJSONWithJSONObjectOfVersion(String jsonData) {
@@ -326,11 +330,11 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * 請求開啟儲存、相機權限
      */
-    private void UsesPermission(){
+    private void UsesPermission() {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(LoginActivity.this,
                 Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED ) {
+                != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this,
                     Manifest.permission.CAMERA)) {
                 new AlertDialog.Builder(LoginActivity.this)
@@ -339,7 +343,8 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ActivityCompat.requestPermissions(LoginActivity.this,
-                                        new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                                        new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE
+                                                , Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
                             }
                         })
@@ -351,13 +356,14 @@ public class LoginActivity extends AppCompatActivity {
                         })
                         .show();
             } else {
-
                 ActivityCompat.requestPermissions(LoginActivity.this,
-                        new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                        new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE
+                                , Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
             }
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -412,10 +418,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * 在TextView上SHOW出回傳的員工姓名
+     * 在TextView上SHOW出回傳的所屬部門
+     *
      * @param response
      */
-    private void showResponse(final String response){
+    private void showResponse(final String response) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -427,7 +434,3 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 }
-
-
-
-

@@ -550,6 +550,8 @@ public class ScheduleActivity extends AppCompatActivity {
                 String esvd_remark = jsonObject.getString("工作說明");
                 String esvd_seq_id = jsonObject.getString("派工資料識別碼");
                 String esvd_eng_points = jsonObject.getString("工務點數");
+                String esvd_booking_period = jsonObject.getString("預約開始時間");
+                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
                 String my_ontype = jsonObject.getString("狀態");
                 String reserve_time = jsonObject.getString("今日派工時段");
                 String work_type = jsonObject.getString("處理方式");
@@ -580,6 +582,8 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(esvd_remark);
                 JArrayList.add(esvd_seq_id);
                 JArrayList.add(esvd_eng_points);
+                JArrayList.add(esvd_booking_period);
+                JArrayList.add(esvd_booking_period_end);
                 JArrayList.add(my_ontype);
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
@@ -608,7 +612,7 @@ public class ScheduleActivity extends AppCompatActivity {
                                           "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
                                           "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
                                           "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
-                                          "工務點數", "狀態", "今日派工時段 :", "處理方式 :"};
+                                          "工務點數", "預約開始時間", "預約結束時間", "狀態", "今日派工時段 :", "處理方式 :"};
             switch (msg.what) {
                 case 1:
                     Resources resources = getResources();
@@ -653,7 +657,7 @@ public class ScheduleActivity extends AppCompatActivity {
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(1);
                                     //派工資料的迴圈
-                                    for (int x = 0; x < 22; x++) {
+                                    for (int x = 0; x < 24; x++) {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置
@@ -697,7 +701,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
                         small_tb.addView(tr1, layoutParams);
                         //隱藏不需要的SQL資料
-                        if (i < 22) {
+                        if (i < 24) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
                     }
@@ -796,6 +800,8 @@ public class ScheduleActivity extends AppCompatActivity {
                 String esvd_remark = jsonObject.getString("工作說明");
                 String esvd_seq_id = jsonObject.getString("派工資料識別碼");
                 String esvd_eng_points = jsonObject.getString("工務點數");
+                String esvd_booking_period = jsonObject.getString("預約開始時間");
+                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
                 String my_ontype = jsonObject.getString("狀態");
                 String reserve_time = jsonObject.getString("派工日期時間");
                 String work_type = jsonObject.getString("處理方式");
@@ -827,6 +833,8 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(esvd_remark);
                 JArrayList.add(esvd_seq_id);
                 JArrayList.add(esvd_eng_points);
+                JArrayList.add(esvd_booking_period);
+                JArrayList.add(esvd_booking_period_end);
                 JArrayList.add(my_ontype);
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
@@ -854,7 +862,7 @@ public class ScheduleActivity extends AppCompatActivity {
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
                     "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
                     "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
-                    "工務點數", "狀態", "派工日期時間 :", "處理方式 :"};
+                    "工務點數", "預約開始時間", "預約結束時間", "狀態", "派工日期時間 :", "處理方式 :"};
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
@@ -891,14 +899,13 @@ public class ScheduleActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             for (int a = 0; a < week_about_ImageView.length; a++) {
                                 if (v.getId() == week_about_ImageView[a].getId()) {
-
                                     Intent intent_maintain = new Intent(ScheduleActivity.this, MaintainActivity.class);
                                     //取得大TableLayout中的大TableRow位置
                                     TableRow tb_tbr = (TableRow) week_TableLayout.getChildAt(a);
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(1);
                                     //派工資料的迴圈
-                                    for (int x = 0; x < 22; x++) {
+                                    for (int x = 0; x < 24; x++) {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置
@@ -941,7 +948,7 @@ public class ScheduleActivity extends AppCompatActivity {
                         tr1.addView(dynamically_txt, layoutParams);
 
                         small_tb.addView(tr1, layoutParams);
-                        if (i < 22) {
+                        if (i < 24) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
                     }
@@ -1040,6 +1047,8 @@ public class ScheduleActivity extends AppCompatActivity {
                 String esvd_remark = jsonObject.getString("工作說明");
                 String esvd_seq_id = jsonObject.getString("派工資料識別碼");
                 String esvd_eng_points = jsonObject.getString("工務點數");
+                String esvd_booking_period = jsonObject.getString("預約開始時間");
+                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
                 String my_ontype = jsonObject.getString("狀態");
                 String reserve_time = jsonObject.getString("派工日期時間");
                 String work_type = jsonObject.getString("處理方式");
@@ -1070,6 +1079,8 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(esvd_remark);
                 JArrayList.add(esvd_seq_id);
                 JArrayList.add(esvd_eng_points);
+                JArrayList.add(esvd_booking_period);
+                JArrayList.add(esvd_booking_period_end);
                 JArrayList.add(my_ontype);
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
@@ -1097,7 +1108,7 @@ public class ScheduleActivity extends AppCompatActivity {
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人", "主要電話",
                     "次要電話", "派工地址", "付款方式", "是否要收款", "應收款金額", "是否已收款", "已收款金額",
                     "抵達日期", "抵達時間", "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
-                    "工務點數", "狀態", "派工日期時間 :", "處理方式 :"};
+                    "工務點數", "預約開始時間", "預約結束時間", "狀態", "派工日期時間 :", "處理方式 :"};
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
@@ -1139,7 +1150,7 @@ public class ScheduleActivity extends AppCompatActivity {
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(1);
                                     //派工資料的迴圈
-                                    for (int x = 0; x < 22; x++) {
+                                    for (int x = 0; x < 24; x++) {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置
@@ -1182,7 +1193,7 @@ public class ScheduleActivity extends AppCompatActivity {
                         tr1.addView(dynamically_txt, layoutParams);
 
                         small_tb.addView(tr1, layoutParams);
-                        if (i < 22) {
+                        if (i < 24) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
                     }

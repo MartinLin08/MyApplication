@@ -14,6 +14,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -260,6 +261,7 @@ public class Day_Work extends AppCompatActivity {
                         dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
                         dynamically_txt.setMaxWidth(350);
+                        dynamically_txt.setTextIsSelectable(true);
 
                         TableRow tr3 = new TableRow(Day_Work.this);
                         tr3.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -271,6 +273,7 @@ public class Day_Work extends AppCompatActivity {
                         if (i > 18 || 7 < i && i < 16 || 0 < i && i < 3) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
+
                     }
                     /*//設置每筆TableLayout的Button監聽器、與動態新增Button的ID
                     int loc = 0;
