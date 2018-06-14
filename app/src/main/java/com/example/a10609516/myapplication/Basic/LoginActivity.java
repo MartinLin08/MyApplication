@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +19,7 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -33,12 +36,26 @@ import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.myapplication.Element.HttpParse;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.Workers.ScheduleActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -52,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button login;
     private CheckBox remember_checkBox;
     private TextView version_no_txt, department_txt;
+    public int badgeCount;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
@@ -100,6 +118,8 @@ public class LoginActivity extends AppCompatActivity {
                 sendRequestWithOkHttpOfVersion();
                 //判斷部門別的OKHttp
                 sendRequestWithOkHttpOfDepartment();
+                //取得未回派工數量
+                sendRequestWithOkHttpOfMissCount();
 
                 if (CheckEditText) {
                     UserLoginFunction(IDEdT, PwdEdT);
@@ -185,11 +205,6 @@ public class LoginActivity extends AppCompatActivity {
                 //Log.e("LoginActivity",httpResponseMsg);
                 if (version_no_txt.getText().toString().equals(ver_no)) {
                     if (httpResponseMsg.equalsIgnoreCase("登入成功")) {
-                        /*finish();
-                        Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                        intent.putExtra(Userid, User_id);
-                        Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
-                        startActivity(intent);*/
                         if (department_txt.getText().toString().equals("8888")) {
                             Toast.makeText(LoginActivity.this, "無使用權限", Toast.LENGTH_SHORT).show();
                         } else {
@@ -205,15 +220,23 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     new AlertDialog.Builder(LoginActivity.this)
                             .setTitle("更新通知")
-                            .setMessage("檢測到軟體重大更新\n請前往下載更新最新版本")
+                            .setMessage("檢測到軟體重大更新\n請更新最新版本")
                             .setIcon(R.drawable.bwt_icon)
                             .setNegativeButton("確定",
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog,
                                                             int which) {
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    super.run();
+                                                    LoginActivity.this.Update();
+                                                }
+                                            }.start();
                                         }
                                     }).show();
+
                     /**
                      *動態跑出安裝APK網址
                      */
@@ -225,7 +248,6 @@ public class LoginActivity extends AppCompatActivity {
                     Hyperlink_txt.setPadding(0,10,0,3);
                     Hyperlink_txt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                     login_llt.addView(Hyperlink_txt);*/
-                    //Toast.makeText(LoginActivity.this, "檢測到最新版本，請前往更新!!!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -321,6 +343,9 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 ver_no = jsonObject.getString("版本");
                 Log.e("LoginActivity", ver_no);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("fb_version", MODE_PRIVATE);
+                sharedPreferences.edit().putString("FB_VER", version_no_txt.getText().toString()).apply();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -430,6 +455,159 @@ public class LoginActivity extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = getSharedPreferences("department_id", MODE_PRIVATE);
                 sharedPreferences.edit().putString("D_ID", department_txt.getText().toString()).apply();
+            }
+        });
+    }
+
+    /**
+     * 確認是否有最新版本，進行更新
+     */
+    private void CheckFirebaseVersion() {
+        SharedPreferences fb_version = getSharedPreferences("fb_version", MODE_PRIVATE);
+        final String version = fb_version.getString("FB_VER", "");
+        Log.e("LoginActivity", version);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("WQP");
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                //String value = dataSnapshot.getValue(String.class);
+                //Log.d("現在在根結點上的資料是:", "Value is: " + value);
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                String data = map.toString().substring(9, 12);
+                Log.e("LoginActivity", "已讀取到值:" + data);
+                if (version.equals(data)) {
+                } else {
+                    new AlertDialog.Builder(LoginActivity.this)
+                            .setTitle("更新通知")
+                            .setMessage("檢測到軟體重大更新\n請更新最新版本")
+                            .setIcon(R.drawable.bwt_icon)
+                            .setNegativeButton("確定",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog,
+                                                            int which) {
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    super.run();
+                                                    LoginActivity.this.Update();
+                                                }
+                                            }.start();
+                                        }
+                                    }).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("LoginActivity", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    /**
+     * 下載新版本APK
+     */
+    public void Update() {
+        try {
+            URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
+            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            //c.setRequestMethod("GET");
+            //c.setDoOutput(true);
+            c.connect();
+
+            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
+            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            File file = new File(PATH);
+            file.mkdirs();
+            File outputFile = new File(file, "wqp_1.4.apk");
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            InputStream is = c.getInputStream();
+
+            byte[] buffer = new byte[1024];
+            int len1 = 0;
+            while ((len1 = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len1);
+            }
+            fos.close();
+            is.close();//till here, it works fine - .apk is download to my sdcard in download file
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            LoginActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("下載錯誤!", e.toString());
+            LoginActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    /**
+     * 與OkHttp建立連線(未回派工數量)
+     */
+    private void sendRequestWithOkHttpOfMissCount() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", IDEdT)
+                            .build();
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/WQP/MissWorkCount.php")
+                            .url("http://192.168.0.172/WQP/MissWorkCount.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("LoginActivity", responseData);
+                    parseJSONWithJSONObjectOfMissCount(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取得未回出勤的數量
+     * @param miss_count
+     */
+    private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("LoginActivity", miss_count);
+                if(miss_count.toString().equals("0")){
+                    badgeCount = 0;
+                    ShortcutBadger.removeCount(LoginActivity.this);
+                }else{
+                    int count = Integer.valueOf(miss_count);
+                    ShortcutBadger.applyCount(LoginActivity.this, count);
+                }
             }
         });
     }

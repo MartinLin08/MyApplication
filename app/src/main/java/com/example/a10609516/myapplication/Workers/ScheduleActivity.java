@@ -1,12 +1,16 @@
 package com.example.a10609516.myapplication.Workers;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +26,16 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTitleStrip;
@@ -43,10 +55,16 @@ import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.UploadActivity;
 import com.example.a10609516.myapplication.Basic.VersionActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -71,12 +89,13 @@ public class ScheduleActivity extends AppCompatActivity {
     private Button more_button1, more_button2, more_button3;
     private TextView today_sql_total_textView, week_sql_total_textView, missing_sql_total_textView;
 
-    private int count;
+    private int count, total;
     private boolean isAutoPlay;
     private int currentItem;
     private Handler handler;
 
     private int delay = 3000;
+    public int badgeCount;
 
     /**
      * 創建Menu
@@ -192,6 +211,8 @@ public class ScheduleActivity extends AppCompatActivity {
         ViewPagerAdapter();
         //設置圓點
         initCircle();
+        //確認是否有最新版本，進行更新
+        CheckFirebaseVersion();
         //計時器
         /*handler = new Handler();
         handler.postDelayed(new TimerRunnable(), 3000);*/
@@ -1214,8 +1235,9 @@ public class ScheduleActivity extends AppCompatActivity {
                         missing_TableLayout.getChildAt(loc).setVisibility(View.GONE);
                     }
                     //顯示一周件數的總數
-                    int total = missing_TableLayout.getChildCount();
+                    total = missing_TableLayout.getChildCount();
                     missing_sql_total_textView.setText(String.valueOf(total));
+                    //ShortcutBadger.applyCount(ScheduleActivity.this, total);
                     break;
                 default:
                     break;
@@ -1224,10 +1246,204 @@ public class ScheduleActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * 確認是否有最新版本，進行更新
+     */
+    private void CheckFirebaseVersion() {
+        SharedPreferences fb_version = getSharedPreferences("fb_version", MODE_PRIVATE);
+        final String version = fb_version.getString("FB_VER", "");
+        Log.e("ScheduleActivity", version);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("WQP");
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                //String value = dataSnapshot.getValue(String.class);
+                //Log.d("現在在根結點上的資料是:", "Value is: " + value);
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                String data = map.toString().substring(9, 12);
+                Log.e("ScheduleActivity", "已讀取到值:" + data);
+                if (version.equals(data)) {
+                } else {
+                    new AlertDialog.Builder(ScheduleActivity.this)
+                            .setTitle("更新通知")
+                            .setMessage("檢測到軟體重大更新\n請更新最新版本")
+                            .setIcon(R.drawable.bwt_icon)
+                            .setNegativeButton("確定",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog,
+                                                            int which) {
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    super.run();
+                                                    ScheduleActivity.this.Update();
+                                                }
+                                            }.start();
+                                        }
+                                    }).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("ScheduleActivity", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    /**
+     * 下載新版本APK
+     */
+    public void Update() {
+        try {
+            URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
+            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            //c.setRequestMethod("GET");
+            //c.setDoOutput(true);
+            c.connect();
+
+            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
+            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            File file = new File(PATH);
+            file.mkdirs();
+            File outputFile = new File(file, "wqp_1.4.apk");
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            InputStream is = c.getInputStream();
+
+            byte[] buffer = new byte[1024];
+            int len1 = 0;
+            while ((len1 = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len1);
+            }
+            fos.close();
+            is.close();//till here, it works fine - .apk is download to my sdcard in download file
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            ScheduleActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("下載錯誤!", e.toString());
+            ScheduleActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    /**
+     * 與OkHttp建立連線(未回派工數量)
+     */
+    private void sendRequestWithOkHttpOfMissCount() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.i("ScheduleActivity", user_id_data);
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .build();
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/WQP/MissWorkCount.php")
+                            .url("http://192.168.0.172/WQP/MissWorkCount.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("ScheduleActivity", responseData);
+                    parseJSONWithJSONObjectOfMissCount(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取得未回出勤的數量
+     * @param miss_count
+     */
+    private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("ScheduleActivity", miss_count);
+                if(miss_count.toString().equals("0")){
+                    badgeCount = 0;
+                    ShortcutBadger.removeCount(ScheduleActivity.this);
+                }else{
+                    int count = Integer.valueOf(miss_count);
+                    ShortcutBadger.applyCount(ScheduleActivity.this, count);
+                }
+            }
+        });
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d("ScheduleActivity", "onDestroy");
         handler = null; //此處在Activity退出時即時回收
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("ScheduleActivity", "onStart");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("ScheduleActivity", "onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("ScheduleActivity", "onResume");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("ScheduleActivity", "onStop");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("ScheduleActivity", "onRestart");
+        today_TableLayout.removeAllViews();
+        week_TableLayout.removeAllViews();
+        missing_TableLayout.removeAllViews();
+        sendRequestWithOkHttpForToday();
+        sendRequestWithOkHttpForWeek();
+        sendRequestWithOkHttpForMissing();
+        sendRequestWithOkHttpOfMissCount();
     }
 }

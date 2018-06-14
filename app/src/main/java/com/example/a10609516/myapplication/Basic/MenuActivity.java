@@ -1,8 +1,12 @@
 package com.example.a10609516.myapplication.Basic;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -25,6 +29,20 @@ import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.Workers.CalendarActivity;
 import com.example.a10609516.myapplication.Workers.ScheduleActivity;
 import com.example.a10609516.myapplication.Workers.SearchActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -35,7 +53,7 @@ import okhttp3.Response;
 public class MenuActivity extends AppCompatActivity {
 
     private ListView announcement_ListView;
-    private String[] show_text = {"","","","","","",""};
+    private String[] show_text = {"", "", "", "", "", "", ""};
     private ArrayAdapter listAdapter;
     private Spinner announcement_spinner;
     private TextView name_textView;
@@ -48,18 +66,18 @@ public class MenuActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID", "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("2200")) {
+        } else if (department_id_data.toString().equals("2200")) {
             getMenuInflater().inflate(R.menu.diy_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("5200")) {
+        } else if (department_id_data.toString().equals("5200")) {
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
-        }else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -67,6 +85,7 @@ public class MenuActivity extends AppCompatActivity {
 
     /**
      * 進入Menu各個頁面
+     *
      * @param item
      * @return
      */
@@ -152,6 +171,8 @@ public class MenuActivity extends AppCompatActivity {
         sendRequestWithOkHttp();
         //公告區的各部門下拉選單
         AnnouncementSpinner();
+        //確認是否有最新版本，進行更新
+        CheckFirebaseVersion();
     }
 
     /**
@@ -184,19 +205,19 @@ public class MenuActivity extends AppCompatActivity {
     /**
      * 與資料庫連線 藉由登入輸入的員工ID取得員工姓名
      */
-    private void sendRequestWithOkHttp(){
+    private void sendRequestWithOkHttp() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 //接收LoginActivity傳過來的值
-                SharedPreferences user_id = getSharedPreferences("user_id_data" , MODE_PRIVATE);
-                String user_id_data = user_id.getString("ID" , "");
-                Log.i("MenuActivity",user_id_data);
-                try{
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.i("MenuActivity", user_id_data);
+                try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("User_id",user_id_data)
+                            .add("User_id", user_id_data)
                             .build();
                     Request request = new Request.Builder()
                             //.url("http://220.133.80.146/WQP/MenuUserName.php")
@@ -205,9 +226,9 @@ public class MenuActivity extends AppCompatActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.i("MenuActivity",responseData);
+                    Log.i("MenuActivity", responseData);
                     showResponse(responseData);
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -216,9 +237,10 @@ public class MenuActivity extends AppCompatActivity {
 
     /**
      * 在TextView上SHOW出回傳的員工姓名
+     *
      * @param response
      */
-    private void showResponse(final String response){
+    private void showResponse(final String response) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -244,10 +266,115 @@ public class MenuActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(MenuActivity.this, "你選的是" + announcement[position], Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    /**
+     * 確認是否有最新版本，進行更新
+     */
+    private void CheckFirebaseVersion() {
+        SharedPreferences fb_version = getSharedPreferences("fb_version", MODE_PRIVATE);
+        final String version = fb_version.getString("FB_VER", "");
+        Log.e("MenuActivity", version);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("WQP");
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                //String value = dataSnapshot.getValue(String.class);
+                //Log.d("現在在根結點上的資料是:", "Value is: " + value);
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                String data = map.toString().substring(9, 12);
+                Log.e("MenuActivity", "已讀取到值:" + data);
+                if (version.equals(data)) {
+                } else {
+                    new AlertDialog.Builder(MenuActivity.this)
+                            .setTitle("更新通知")
+                            .setMessage("檢測到軟體重大更新\n請更新最新版本")
+                            .setIcon(R.drawable.bwt_icon)
+                            .setNegativeButton("確定",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog,
+                                                            int which) {
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    super.run();
+                                                    MenuActivity.this.Update();
+                                                }
+                                            }.start();
+                                        }
+                                    }).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("MenuActivity", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    /**
+     * 下載新版本APK
+     */
+    public void Update() {
+        try {
+            URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
+            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            //c.setRequestMethod("GET");
+            //c.setDoOutput(true);
+            c.connect();
+
+            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
+            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            File file = new File(PATH);
+            file.mkdirs();
+            File outputFile = new File(file, "wqp_1.4.apk");
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            InputStream is = c.getInputStream();
+
+            byte[] buffer = new byte[1024];
+            int len1 = 0;
+            while ((len1 = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len1);
+            }
+            fos.close();
+            is.close();//till here, it works fine - .apk is download to my sdcard in download file
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            MenuActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("下載錯誤!", e.toString());
+            MenuActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     @Override
@@ -266,6 +393,8 @@ public class MenuActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.d("MenuActivity", "omRestart");
+        //確認是否有最新版本，進行更新
+        CheckFirebaseVersion();
     }
 }
 
