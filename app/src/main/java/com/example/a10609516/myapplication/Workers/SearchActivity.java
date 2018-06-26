@@ -224,7 +224,7 @@ public class SearchActivity extends AppCompatActivity {
                 //建立SearchData.php OKHttp連線
                 sendRequestWithOkHttp();
                 //取得未回派工數量
-                sendRequestWithOkHttpOfMissCount();
+                sendRequestWithOkHttpForMissCount();
             }
         });//end setOnItemClickListener
         //Clean_Start_Button.setOnClickListener監聽器  //清空time_start_button內的文字
@@ -681,7 +681,7 @@ public class SearchActivity extends AppCompatActivity {
     /**
      * 與OkHttp建立連線(未回派工數量)
      */
-    private void sendRequestWithOkHttpOfMissCount() {
+    private void sendRequestWithOkHttpForMissCount() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -703,7 +703,7 @@ public class SearchActivity extends AppCompatActivity {
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     Log.e("SearchActivity", responseData);
-                    parseJSONWithJSONObjectOfMissCount(responseData);
+                    parseJSONWithJSONObjectForMissCount(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -715,7 +715,7 @@ public class SearchActivity extends AppCompatActivity {
      * 取得未回出勤的數量
      * @param miss_count
      */
-    private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
+    private void parseJSONWithJSONObjectForMissCount(final String miss_count) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -736,6 +736,6 @@ public class SearchActivity extends AppCompatActivity {
         super.onRestart();
         Log.d("SearchActivity", "onRestart");
         //取得未回派工數量
-        sendRequestWithOkHttpOfMissCount();
+        sendRequestWithOkHttpForMissCount();
     }
 }

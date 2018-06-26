@@ -32,13 +32,16 @@ import com.example.a10609516.myapplication.Element.ScannerActivity;
 import com.example.a10609516.myapplication.Basic.SignatureActivity;
 import com.example.a10609516.myapplication.R;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.BufferedSink;
 
 public class MaintainActivity extends AppCompatActivity {
 
@@ -46,7 +49,7 @@ public class MaintainActivity extends AppCompatActivity {
     private Button arrive_button, check_button, cancel_button;
     private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, cp_name_txt,
                      esvd_eng_points_txt, esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt,
-                     reason_txt, esvd_is_eng_money_txt, maintain_textView, my_on_type;
+                     reason_txt, esvd_is_eng_money_txt, maintain_textView, my_on_type, esvd_eng_money_txt;
     private TableLayout maintain_tablelayot, qrcode_tablelayot;
     private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox, credit_card_checkBox;
     private EditText have_get_money_edt, not_get_money_edt, not_get_all_edt, not_get_all_reason_edt;
@@ -77,6 +80,8 @@ public class MaintainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         //動態取得 View 物件
         InItFunction();
+        //與OKHttp取得連線(取得工務點數分配金額)
+        sendRequestWithOkHttpForWorkPoints();
         //取得SearchActivity傳遞過來的值
         GetResponseData();
         //判斷SearchActivity的是否要收款傳遞過來的值為(是/否)
@@ -116,6 +121,7 @@ public class MaintainActivity extends AppCompatActivity {
         esvd_eng_points_txt = (TextView) findViewById(R.id.esvd_eng_points_txt);
         maintain_textView = (TextView) findViewById(R.id.maintain_textView);
         my_on_type = (TextView) findViewById(R.id.my_on_type);
+        esvd_eng_money_txt = (TextView) findViewById(R.id.esvd_eng_money_txt);
         arrive_button = (Button) findViewById(R.id.arrive_button);
         is_get_money_checkBox = (CheckBox) findViewById(R.id.is_get_money_checkBox);
         have_get_money_checkBox = (CheckBox) findViewById(R.id.have_get_money_checkBox);
@@ -942,6 +948,55 @@ public class MaintainActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    /**
+     * 與OKHttp連線(工務點數)
+     */
+    private void sendRequestWithOkHttpForWorkPoints(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.e("MaintainActivity", user_id_data);
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .build();
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/WQP/WorkPoints.php")
+                            .url("http://192.168.0.172/WQP/WorkPoints.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("MaintainActivity", responseData);
+                    parseJSONWithJSONObjectForWorkPoints(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取得工務點數金額的數量
+     * @param distribution_money
+     */
+    private void parseJSONWithJSONObjectForWorkPoints(final String distribution_money) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("MaintainActivity","MONEY : " + distribution_money);
+                float points = Float.parseFloat(esvd_eng_points_txt.getText().toString());
+                int money = Integer.parseInt(distribution_money.toString());
+                esvd_eng_money_txt.setText(String.valueOf(points * money));
+            }
+        });
     }
 
     /**
