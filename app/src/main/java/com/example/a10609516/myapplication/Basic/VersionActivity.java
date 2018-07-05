@@ -58,18 +58,18 @@ public class VersionActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences department_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = department_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID", "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("2200")) {
+        } else if (department_id_data.toString().equals("2200")) {
             getMenuInflater().inflate(R.menu.diy_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("5200")) {
+        } else if (department_id_data.toString().equals("5200")) {
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
-        }else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -77,6 +77,7 @@ public class VersionActivity extends AppCompatActivity {
 
     /**
      * 進入Menu各個頁面
+     *
      * @param item
      * @return
      */
@@ -91,7 +92,7 @@ public class VersionActivity extends AppCompatActivity {
             case R.id.schedule_item:
                 Intent intent7 = new Intent(VersionActivity.this, ScheduleActivity.class);
                 startActivity(intent7);
-                Toast.makeText(this, "行程資訊",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "行程資訊", Toast.LENGTH_SHORT).show();
                 break; //進入行程資訊頁面
             case R.id.calendar_item:
                 Intent intent1 = new Intent(VersionActivity.this, CalendarActivity.class);
@@ -109,7 +110,7 @@ public class VersionActivity extends AppCompatActivity {
             case R.id.record_item:
                 Intent intent8 = new Intent(VersionActivity.this, RecordActivity.class);
                 startActivity(intent8);
-                Toast.makeText(this, "上傳日報紀錄",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "上傳日報紀錄", Toast.LENGTH_SHORT).show();
                 break; //進入上傳日報紀錄頁面
             case R.id.picture_item:
                 Intent intent3 = new Intent(VersionActivity.this, PictureActivity.class);
@@ -171,33 +172,33 @@ public class VersionActivity extends AppCompatActivity {
     /**
      * 動態取得 View 物件
      */
-    private void InItFunction(){
-        detail_txt0 = (TextView)findViewById(R.id.detail_txt0);
-        detail_txt1 = (TextView)findViewById(R.id.detail_txt1);
-        detail_txt2 = (TextView)findViewById(R.id.detail_txt2);
-        detail_txt3 = (TextView)findViewById(R.id.detail_txt3);
-        detail_txt4 = (TextView)findViewById(R.id.detail_txt4);
-        detail_llt0 = (LinearLayout)findViewById(R.id.detail_llt0);
-        detail_llt1 = (LinearLayout)findViewById(R.id.detail_llt1);
-        detail_llt2 = (LinearLayout)findViewById(R.id.detail_llt2);
-        detail_llt3 = (LinearLayout)findViewById(R.id.detail_llt3);
-        detail_llt4 = (LinearLayout)findViewById(R.id.detail_llt4);
-        version_btn0 = (Button)findViewById(R.id.version_btn0);
-        version_btn1 = (Button)findViewById(R.id.version_btn1);
-        version_btn2 = (Button)findViewById(R.id.version_btn2);
-        version_btn3 = (Button)findViewById(R.id.version_btn3);
-        version_btn4 = (Button)findViewById(R.id.version_btn4);
-        version_up_btn0 = (Button)findViewById(R.id.version_up_btn0);
-        version_up_btn1 = (Button)findViewById(R.id.version_up_btn1);
-        version_up_btn2 = (Button)findViewById(R.id.version_up_btn2);
-        version_up_btn3 = (Button)findViewById(R.id.version_up_btn3);
-        version_up_btn4 = (Button)findViewById(R.id.version_up_btn4);
+    private void InItFunction() {
+        detail_txt0 = (TextView) findViewById(R.id.detail_txt0);
+        detail_txt1 = (TextView) findViewById(R.id.detail_txt1);
+        detail_txt2 = (TextView) findViewById(R.id.detail_txt2);
+        detail_txt3 = (TextView) findViewById(R.id.detail_txt3);
+        detail_txt4 = (TextView) findViewById(R.id.detail_txt4);
+        detail_llt0 = (LinearLayout) findViewById(R.id.detail_llt0);
+        detail_llt1 = (LinearLayout) findViewById(R.id.detail_llt1);
+        detail_llt2 = (LinearLayout) findViewById(R.id.detail_llt2);
+        detail_llt3 = (LinearLayout) findViewById(R.id.detail_llt3);
+        detail_llt4 = (LinearLayout) findViewById(R.id.detail_llt4);
+        version_btn0 = (Button) findViewById(R.id.version_btn0);
+        version_btn1 = (Button) findViewById(R.id.version_btn1);
+        version_btn2 = (Button) findViewById(R.id.version_btn2);
+        version_btn3 = (Button) findViewById(R.id.version_btn3);
+        version_btn4 = (Button) findViewById(R.id.version_btn4);
+        version_up_btn0 = (Button) findViewById(R.id.version_up_btn0);
+        version_up_btn1 = (Button) findViewById(R.id.version_up_btn1);
+        version_up_btn2 = (Button) findViewById(R.id.version_up_btn2);
+        version_up_btn3 = (Button) findViewById(R.id.version_up_btn3);
+        version_up_btn4 = (Button) findViewById(R.id.version_up_btn4);
     }
 
     /**
      * 版本詳細資訊
      */
-    private void DetailOfVersion(){
+    private void DetailOfVersion() {
         detail_txt0.setText("1.新增工務部 - 行程資訊、派工行事曆、查詢派工資料 \n" +
                             "2.新增工務部 - 出勤維護回報功能 \n" +
                             "3.新增推播功能-工務(新派工、更新派工、取消派工) \n" +
@@ -332,6 +333,7 @@ public class VersionActivity extends AppCompatActivity {
                                     }).show();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
