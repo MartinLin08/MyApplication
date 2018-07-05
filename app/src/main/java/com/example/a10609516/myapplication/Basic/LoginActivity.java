@@ -16,12 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.util.Log;
-import android.util.StringBuilderPrinter;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,11 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a10609516.myapplication.Clerk.QuotationActivity;
-import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
-import com.example.a10609516.myapplication.Element.HttpParse;
+import com.example.a10609516.myapplication.Tools.HttpParse;
 import com.example.a10609516.myapplication.R;
-import com.example.a10609516.myapplication.Workers.ScheduleActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -265,6 +257,59 @@ public class LoginActivity extends AppCompatActivity {
         }
         Login userLoginClass = new Login();
         userLoginClass.execute(User_id, User_password);
+    }
+
+    /**
+     * 下載新版本APK
+     */
+    public void Update() {
+        try {
+            URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
+            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            //c.setRequestMethod("GET");
+            //c.setDoOutput(true);
+            c.connect();
+
+            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
+            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            File file = new File(PATH);
+            file.mkdirs();
+            File outputFile = new File(file, "wqp_1.5.apk");
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            InputStream is = c.getInputStream();
+
+            byte[] buffer = new byte[1024];
+            int len1 = 0;
+            while ((len1 = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len1);
+            }
+            fos.close();
+            is.close();//till here, it works fine - .apk is download to my sdcard in download file
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            LoginActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("下載錯誤!", e.toString());
+            LoginActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     /**
@@ -508,59 +553,6 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e("LoginActivity", "Failed to read value.", error.toException());
             }
         });
-    }
-
-    /**
-     * 下載新版本APK
-     */
-    public void Update() {
-        try {
-            URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
-            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
-            HttpURLConnection c = (HttpURLConnection) url.openConnection();
-            //c.setRequestMethod("GET");
-            //c.setDoOutput(true);
-            c.connect();
-
-            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
-            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
-            File file = new File(PATH);
-            file.mkdirs();
-            File outputFile = new File(file, "wqp_1.5.apk");
-            FileOutputStream fos = new FileOutputStream(outputFile);
-
-            InputStream is = c.getInputStream();
-
-            byte[] buffer = new byte[1024];
-            int len1 = 0;
-            while ((len1 = is.read(buffer)) != -1) {
-                fos.write(buffer, 0, len1);
-            }
-            fos.close();
-            is.close();//till here, it works fine - .apk is download to my sdcard in download file
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-
-            LoginActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
-                }
-            });
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            Log.e("下載錯誤!", e.toString());
-            LoginActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
     }
 
     /**

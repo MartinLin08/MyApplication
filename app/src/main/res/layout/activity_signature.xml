@@ -11,18 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.a10609516.myapplication.Element.WangGeView
+        <com.example.a10609516.myapplication.Tools.WangGeView
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:layout_marginBottom="2dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <com.example.a10609516.myapplication.Element.SignView
+        <com.example.a10609516.myapplication.Tools.SignView
             android:id="@+id/signView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </com.example.a10609516.myapplication.Element.SignView>
+        </com.example.a10609516.myapplication.Tools.SignView>
     </FrameLayout>
 
     <LinearLayout

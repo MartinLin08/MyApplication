@@ -27,6 +27,7 @@ import com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.UploadActivity;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.Workers.CalendarActivity;
+import com.example.a10609516.myapplication.Workers.PointsActivity;
 import com.example.a10609516.myapplication.Workers.ScheduleActivity;
 import com.example.a10609516.myapplication.Workers.SearchActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -154,6 +155,11 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(intent11);
                 Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
                 break; //進入報價單審核頁面
+            case R.id.points_item:
+                Intent intent12 = new Intent(MenuActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;
@@ -220,8 +226,8 @@ public class MenuActivity extends AppCompatActivity {
                             .add("User_id", user_id_data)
                             .build();
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/WQP/MenuUserName.php")
-                            .url("http://192.168.0.172/WQP/MenuUserName.php")
+                            //.url("http://220.133.80.146/WQP/UserName.php")
+                            .url("http://192.168.0.172/WQP/UserName.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

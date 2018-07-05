@@ -18,14 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a10609516.myapplication.Clerk.QuotationActivity;
-import com.example.a10609516.myapplication.Element.DatePickerFragment;
-import com.example.a10609516.myapplication.Element.ListViewForScrollView;
+import com.example.a10609516.myapplication.Tools.DatePickerFragment;
+import com.example.a10609516.myapplication.Tools.ListViewForScrollView;
 import com.example.a10609516.myapplication.Basic.MenuActivity;
 import com.example.a10609516.myapplication.Basic.SignatureActivity;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.Basic.VersionActivity;
 import com.example.a10609516.myapplication.Workers.CalendarActivity;
 import com.example.a10609516.myapplication.Basic.QRCodeActivity;
+import com.example.a10609516.myapplication.Workers.PointsActivity;
 import com.example.a10609516.myapplication.Workers.ScheduleActivity;
 import com.example.a10609516.myapplication.Workers.SearchActivity;
 
@@ -47,8 +48,8 @@ public class CustomerActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id" , MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID" , "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
@@ -130,6 +131,11 @@ public class CustomerActivity extends AppCompatActivity {
                 startActivity(intent11);
                 Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
                 break; //進入報價單審核頁面
+            case R.id.points_item:
+                Intent intent12 = new Intent(CustomerActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;

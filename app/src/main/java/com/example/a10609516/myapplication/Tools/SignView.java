@@ -1,4 +1,4 @@
-package com.example.a10609516.myapplication.Element;
+package com.example.a10609516.myapplication.Tools;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,7 +12,6 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 
 public class SignView extends View {
 

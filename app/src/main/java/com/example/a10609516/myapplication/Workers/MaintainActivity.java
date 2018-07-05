@@ -27,21 +27,18 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a10609516.myapplication.Element.DatePickerFragment;
-import com.example.a10609516.myapplication.Element.ScannerActivity;
+import com.example.a10609516.myapplication.Tools.DatePickerFragment;
+import com.example.a10609516.myapplication.Tools.ScannerActivity;
 import com.example.a10609516.myapplication.Basic.SignatureActivity;
 import com.example.a10609516.myapplication.R;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
 
 public class MaintainActivity extends AppCompatActivity {
 
@@ -51,7 +48,7 @@ public class MaintainActivity extends AppCompatActivity {
                      esvd_eng_points_txt, esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt,
                      reason_txt, esvd_is_eng_money_txt, maintain_textView, my_on_type, esvd_eng_money_txt;
     private TableLayout maintain_tablelayot, qrcode_tablelayot;
-    private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox, credit_card_checkBox;
+    private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox;
     private EditText have_get_money_edt, not_get_money_edt, not_get_all_edt, not_get_all_reason_edt;
     private Spinner arrive_spinner, leave_spinner, reason_spinner, useless_spinner, cp_name_spinner;
     private ArrayAdapter<String> time_listAdapter, work_listAdapter, reason_listAdapter, pay_listAdapter;
@@ -127,7 +124,6 @@ public class MaintainActivity extends AppCompatActivity {
         have_get_money_checkBox = (CheckBox) findViewById(R.id.have_get_money_checkBox);
         not_get_money_checkBox = (CheckBox) findViewById(R.id.not_get_money_checkBox);
         not_get_all_checkBox = (CheckBox) findViewById(R.id.not_get_all_checkBox);
-        credit_card_checkBox = (CheckBox) findViewById(R.id.credit_card_checkBox);
         have_get_money_edt = (EditText) findViewById(R.id.have_get_money_edt);
         //not_get_money_edt = (EditText) findViewById(R.id.not_get_money_edt);
         not_get_all_edt = (EditText) findViewById(R.id.not_get_all_edt);
@@ -261,29 +257,6 @@ public class MaintainActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-                                /*if (credit_card_checkBox.isChecked()) {
-                                    if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
-                                        Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        //信用卡已收齊的OKHttp(工務收錢)
-                                        sendRequestWithOkHttpForAll();
-                                        //是否進入客戶電子簽名頁面
-                                        if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
-                                            finish();
-                                        } else {
-                                            String SN_txt = svd_service_no_txt.getText().toString();
-                                            Bundle bundle1 = getIntent().getExtras();
-                                            String SEQ_txt = bundle1.getString("ResponseText" + 19);
-                                            Intent intent = new Intent(MaintainActivity.this, SignatureActivity.class);
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("ResponseText1", SN_txt);
-                                            bundle.putString("ResponseText2", SEQ_txt);
-                                            intent.putExtras(bundle);//可放所有基本類別
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                    }
-                                }*/
                                 if (have_get_money_checkBox.isChecked() || not_get_all_checkBox.isChecked() || not_get_money_checkBox.isChecked()/* || credit_card_checkBox.isChecked()*/) {
                                 } else {
                                     Toast.makeText(MaintainActivity.this, "【請勾選是否已收款!!!】", Toast.LENGTH_SHORT).show();
