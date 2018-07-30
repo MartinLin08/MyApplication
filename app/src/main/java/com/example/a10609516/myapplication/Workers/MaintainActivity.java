@@ -32,6 +32,9 @@ import com.example.a10609516.myapplication.Tools.ScannerActivity;
 import com.example.a10609516.myapplication.Basic.SignatureActivity;
 import com.example.a10609516.myapplication.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 
 import okhttp3.FormBody;
@@ -44,12 +47,12 @@ public class MaintainActivity extends AppCompatActivity {
 
     private ImageView add_qrcode;
     private Button arrive_button, check_button, cancel_button;
-    private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, cp_name_txt,
-                     esvd_eng_points_txt, esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt,
-                     reason_txt, esvd_is_eng_money_txt, maintain_textView, my_on_type, esvd_eng_money_txt;
+    private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, esv_address_txt, cp_name_txt,
+            esvd_eng_points_txt, esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt,
+            reason_txt, esvd_is_eng_money_txt, maintain_textView, my_on_type, esvd_eng_money_txt, esvd_a_points_txt, esvd_b_points_txt;
     private TableLayout maintain_tablelayot, qrcode_tablelayot;
     private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox;
-    private EditText have_get_money_edt, not_get_money_edt, not_get_all_edt, not_get_all_reason_edt;
+    private EditText have_get_money_edt, not_get_money_edt, not_get_all_edt, not_get_all_reason_edt, esvd_remark_txt, esvd_customer_remark_txt;
     private Spinner arrive_spinner, leave_spinner, reason_spinner, useless_spinner, cp_name_spinner;
     private ArrayAdapter<String> time_listAdapter, work_listAdapter, reason_listAdapter, pay_listAdapter;
     private String[] time = new String[]{"選擇", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"
@@ -60,8 +63,8 @@ public class MaintainActivity extends AppCompatActivity {
             , "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"
             , "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30"
             , "23:00", "23:30", "00:00"};*/
-    private String[] reason_spinnerprivate = new String[]{"請選擇", "產品瑕疵", "安裝不當", "使用不良", "安裝收尾", "零件老化", "其他", "現場勘查"};
-    private String[] useless_work = new String[]{"無", "客人不在場", "現場無法施工", "材料有異", "其他", "業務取消"};
+    private String[] reason_spinnerprivate = new String[]{"請選擇", "產品瑕疵", "安裝不當", "使用不良", "安裝收尾", "零件老化", "現場勘查", "其他"};
+    private String[] useless_work = new String[]{"請選擇", "客人不在場", "現場無法施工", "材料有異", "業務取消", "其他"};
     private String[] pay_mode = new String[]{"無", "現金", "匯款", "支票", "信用卡"};
 
     //轉畫面的Activity參數
@@ -78,6 +81,8 @@ public class MaintainActivity extends AppCompatActivity {
         //動態取得 View 物件
         InItFunction();
         //與OKHttp取得連線(取得工務點數分配金額)
+        sendRequestWithOkHttpForWorkMoney();
+        //與OKHttp取得連線(取得工務點數)
         sendRequestWithOkHttpForWorkPoints();
         //取得SearchActivity傳遞過來的值
         GetResponseData();
@@ -109,16 +114,18 @@ public class MaintainActivity extends AppCompatActivity {
         svd_service_no_txt = (TextView) findViewById(R.id.svd_service_no_txt);
         esv_note_txt = (TextView) findViewById(R.id.esv_note_txt);
         time_period_name_txt = (TextView) findViewById(R.id.time_period_name_txt);
+        esv_address_txt = (TextView) findViewById(R.id.esv_address_txt);
         esvd_is_money_txt = (TextView) findViewById(R.id.esvd_is_money_txt);
         esvd_booking_remark_txt = (TextView) findViewById(R.id.esvd_booking_remark_txt);
         have_get_money_txt = (TextView) findViewById(R.id.have_get_money_txt);
-        esvd_remark_txt = (TextView) findViewById(R.id.esvd_remark_txt);
         reason_txt = (TextView) findViewById(R.id.reason_txt);
         esvd_is_eng_money_txt = (TextView) findViewById(R.id.esvd_is_eng_money_txt);
         esvd_eng_points_txt = (TextView) findViewById(R.id.esvd_eng_points_txt);
         maintain_textView = (TextView) findViewById(R.id.maintain_textView);
         my_on_type = (TextView) findViewById(R.id.my_on_type);
         esvd_eng_money_txt = (TextView) findViewById(R.id.esvd_eng_money_txt);
+        esvd_a_points_txt = (TextView) findViewById(R.id.esvd_a_points_txt);
+        esvd_b_points_txt = (TextView) findViewById(R.id.esvd_b_points_txt);
         arrive_button = (Button) findViewById(R.id.arrive_button);
         is_get_money_checkBox = (CheckBox) findViewById(R.id.is_get_money_checkBox);
         have_get_money_checkBox = (CheckBox) findViewById(R.id.have_get_money_checkBox);
@@ -127,6 +134,8 @@ public class MaintainActivity extends AppCompatActivity {
         have_get_money_edt = (EditText) findViewById(R.id.have_get_money_edt);
         //not_get_money_edt = (EditText) findViewById(R.id.not_get_money_edt);
         not_get_all_edt = (EditText) findViewById(R.id.not_get_all_edt);
+        esvd_remark_txt = (EditText) findViewById(R.id.esvd_remark_txt);
+        //esvd_customer_remark_txt = (EditText) findViewById(R.id.esvd_customer_remark_txt);
         //not_get_all_reason_edt = (EditText) findViewById(R.id.not_get_all_reason_edt);
         arrive_spinner = (Spinner) findViewById(R.id.arrive_spinner);
         leave_spinner = (Spinner) findViewById(R.id.leave_spinner);
@@ -159,63 +168,39 @@ public class MaintainActivity extends AppCompatActivity {
         check_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(my_on_type.getText().toString().equals("2")){
+                if (my_on_type.getText().toString().equals("2")) {
                     Toast.makeText(MaintainActivity.this, "【此派工已結案】", Toast.LENGTH_SHORT).show();
-                }else{
-                    if (arrive_button.getText().toString().equals("") || arrive_spinner.getSelectedItem().equals("選擇") || leave_spinner.getSelectedItem().equals("選擇")) {
-                        if (arrive_button.getText().toString().equals("")) {
-                            Toast.makeText(MaintainActivity.this, "【請選擇抵達日期!!!】", Toast.LENGTH_SHORT).show();
-                        }
-                        if (arrive_spinner.getSelectedItem().equals("選擇")) {
-                            Toast.makeText(MaintainActivity.this, "【請選擇抵達時間!!!】", Toast.LENGTH_SHORT).show();
-                        }
-                        if (leave_spinner.getSelectedItem().equals("選擇")) {
-                            Toast.makeText(MaintainActivity.this, "【請選擇離開時間!!!】", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        String arrive_txt = String.valueOf(arrive_spinner.getSelectedItem());
-                        String leave_txt = String.valueOf(leave_spinner.getSelectedItem());
-                        String start_txt = arrive_txt.replace(":", "");
-                        String end_txt = leave_txt.replace(":", "");
-                        int time1 = Integer.parseInt(start_txt);
-                        int time2 = Integer.parseInt(end_txt);
-                        int result = time1 - time2;
-                        if (result > 0) {
-                            Toast.makeText(MaintainActivity.this, "【離開時間不能小於抵達時間!!!】", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (String.valueOf(useless_spinner.getSelectedItem()).equals("請選擇")) {
+                        if (arrive_button.getText().toString().equals("") || arrive_spinner.getSelectedItem().equals("選擇") || leave_spinner.getSelectedItem().equals("選擇")) {
+                            if (arrive_button.getText().toString().equals("")) {
+                                Toast.makeText(MaintainActivity.this, "【請選擇抵達日期!!!】", Toast.LENGTH_SHORT).show();
+                            }
+                            if (arrive_spinner.getSelectedItem().equals("選擇")) {
+                                Toast.makeText(MaintainActivity.this, "【請選擇抵達時間!!!】", Toast.LENGTH_SHORT).show();
+                            }
+                            if (leave_spinner.getSelectedItem().equals("選擇")) {
+                                Toast.makeText(MaintainActivity.this, "【請選擇離開時間!!!】", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-                            if (is_get_money_checkBox.isChecked()) {
-                                if (have_get_money_checkBox.isChecked()) {
-                                    if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
-                                        Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        //金額已收齊的OKHttp(工務收錢)
-                                        sendRequestWithOkHttpForAll();
-                                        //是否進入客戶電子簽名頁面
-                                        if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
-                                            finish();
+                            String arrive_txt = String.valueOf(arrive_spinner.getSelectedItem());
+                            String leave_txt = String.valueOf(leave_spinner.getSelectedItem());
+                            String start_txt = arrive_txt.replace(":", "");
+                            String end_txt = leave_txt.replace(":", "");
+                            int time1 = Integer.parseInt(start_txt);
+                            int time2 = Integer.parseInt(end_txt);
+                            int result = time1 - time2;
+                            if (result > 0) {
+                                Toast.makeText(MaintainActivity.this, "【離開時間不能小於抵達時間!!!】", Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (is_get_money_checkBox.isChecked()) {
+                                    if (have_get_money_checkBox.isChecked()) {
+                                        if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                            Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            String SN_txt = svd_service_no_txt.getText().toString();
-                                            Bundle bundle1 = getIntent().getExtras();
-                                            String SEQ_txt = bundle1.getString("ResponseText" + 19);
-                                            Intent intent = new Intent(MaintainActivity.this, SignatureActivity.class);
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("ResponseText1", SN_txt);
-                                            bundle.putString("ResponseText2", SEQ_txt);
-                                            intent.putExtras(bundle);//可放所有基本類別
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                    }
-                                }
-                                if (not_get_all_checkBox.isChecked()) {
-                                    if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
-                                        Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        if (not_get_all_edt.getText().toString().equals("")) {
-                                            Toast.makeText(MaintainActivity.this, "【請輸入收款金額!!!】", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            //金額未收齊的OKHttp(工務收錢)
-                                            sendRequestWithOkHttpForNotAll();
+                                            //金額已收齊的OKHttp(工務收錢)
+                                            sendRequestWithOkHttpForAll();
+                                            //sendRequestWithOkHttpForCustomerRemark();
                                             //是否進入客戶電子簽名頁面
                                             if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                                 finish();
@@ -233,13 +218,69 @@ public class MaintainActivity extends AppCompatActivity {
                                             }
                                         }
                                     }
-                                }
-                                if (not_get_money_checkBox.isChecked()) {
+                                    if (not_get_all_checkBox.isChecked()) {
+                                        if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                            Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            if (not_get_all_edt.getText().toString().equals("")) {
+                                                Toast.makeText(MaintainActivity.this, "【請輸入收款金額!!!】", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                //金額未收齊的OKHttp(工務收錢)
+                                                sendRequestWithOkHttpForNotAll();
+                                                //sendRequestWithOkHttpForCustomerRemark();
+                                                //是否進入客戶電子簽名頁面
+                                                if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
+                                                    finish();
+                                                } else {
+                                                    String SN_txt = svd_service_no_txt.getText().toString();
+                                                    Bundle bundle1 = getIntent().getExtras();
+                                                    String SEQ_txt = bundle1.getString("ResponseText" + 19);
+                                                    Intent intent = new Intent(MaintainActivity.this, SignatureActivity.class);
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString("ResponseText1", SN_txt);
+                                                    bundle.putString("ResponseText2", SEQ_txt);
+                                                    intent.putExtras(bundle);//可放所有基本類別
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (not_get_money_checkBox.isChecked()) {
+                                        if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
+                                            Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            //金額未收的OKHttp(工務收錢)
+                                            sendRequestWithOkHttpForNotGet();
+                                            //sendRequestWithOkHttpForCustomerRemark();
+                                            //是否進入客戶電子簽名頁面
+                                            if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
+                                                finish();
+                                            } else {
+                                                String SN_txt = svd_service_no_txt.getText().toString();
+                                                Bundle bundle1 = getIntent().getExtras();
+                                                String SEQ_txt = bundle1.getString("ResponseText" + 19);
+                                                Intent intent = new Intent(MaintainActivity.this, SignatureActivity.class);
+                                                Bundle bundle = new Bundle();
+                                                bundle.putString("ResponseText1", SN_txt);
+                                                bundle.putString("ResponseText2", SEQ_txt);
+                                                intent.putExtras(bundle);//可放所有基本類別
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+                                    }
+                                    if (have_get_money_checkBox.isChecked() || not_get_all_checkBox.isChecked() || not_get_money_checkBox.isChecked()/* || credit_card_checkBox.isChecked()*/) {
+                                    } else {
+                                        Toast.makeText(MaintainActivity.this, "【請勾選是否已收款!!!】", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
                                     if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
                                         Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        //金額未收的OKHttp(工務收錢)
-                                        sendRequestWithOkHttpForNotGet();
+                                        //不須收款的OKHttp
+                                        sendRequestWithOkHttpForIsGet();
+                                        //sendRequestWithOkHttpForCustomerRemark();
                                         //是否進入客戶電子簽名頁面
                                         if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                             finish();
@@ -257,34 +298,13 @@ public class MaintainActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-                                if (have_get_money_checkBox.isChecked() || not_get_all_checkBox.isChecked() || not_get_money_checkBox.isChecked()/* || credit_card_checkBox.isChecked()*/) {
-                                } else {
-                                    Toast.makeText(MaintainActivity.this, "【請勾選是否已收款!!!】", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                if ((work_type_name_txt.getText().equals("檢修(一)") && reason_spinner.getSelectedItem().equals("請選擇")) || (work_type_name_txt.getText().equals("檢修(二)") && reason_spinner.getSelectedItem().equals("請選擇"))) {
-                                    Toast.makeText(MaintainActivity.this, "【請選擇檢修主因!!!】", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    //金額已收齊的OKHttp(業務收錢)
-                                    sendRequestWithOkHttpForIsGet();
-                                    //是否進入客戶電子簽名頁面
-                                    if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
-                                        finish();
-                                    } else {
-                                        String SN_txt = svd_service_no_txt.getText().toString();
-                                        Bundle bundle1 = getIntent().getExtras();
-                                        String SEQ_txt = bundle1.getString("ResponseText" + 19);
-                                        Intent intent = new Intent(MaintainActivity.this, SignatureActivity.class);
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("ResponseText1", SN_txt);
-                                        bundle.putString("ResponseText2", SEQ_txt);
-                                        intent.putExtras(bundle);//可放所有基本類別
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
                             }
                         }
+                    } else {
+                        //不須收款的OKHttp
+                        sendRequestWithOkHttpForIsGet();
+                        //sendRequestWithOkHttpForCustomerRemark();
+                        finish();
                     }
                 }
             }
@@ -312,6 +332,8 @@ public class MaintainActivity extends AppCompatActivity {
         esv_note_txt.setText(ResponseText2);
         String ResponseText3 = bundle.getString("ResponseText" + 3);
         time_period_name_txt.setText(ResponseText3);
+        String ResponseText7 = bundle.getString("ResponseText" + 7);
+        esv_address_txt.setText(ResponseText7);
         String ResponseText10 = bundle.getString("ResponseText" + 10);
         esvd_is_money_txt.setText(ResponseText10);
         String ResponseText16 = bundle.getString("ResponseText" + 16);
@@ -324,7 +346,7 @@ public class MaintainActivity extends AppCompatActivity {
         esvd_eng_points_txt.setText(ResponseText20);
         String ResponseText23 = bundle.getString("ResponseText" + 23);
         my_on_type.setText(ResponseText23);
-        Log.e("MaintainActivity",ResponseText23);
+        Log.e("MaintainActivity", ResponseText23);
 
         //如果日期為0000-00-00,則把該TextView改為空值
         if (arrive_button.getText().toString().equals("1900-01-01")) {
@@ -526,7 +548,7 @@ public class MaintainActivity extends AppCompatActivity {
     /**
      * 付款方式的Spinner
      */
-    private void PayModeSpinner(){
+    private void PayModeSpinner() {
         Bundle bundle = getIntent().getExtras();
         String ResponseText8 = bundle.getString("ResponseText" + 8);
         pay_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pay_mode);
@@ -546,32 +568,66 @@ public class MaintainActivity extends AppCompatActivity {
      */
     private void TimeSpinner() {
         Bundle bundle = getIntent().getExtras();
+        String ResponseText14 = bundle.getString("ResponseText" + 14);
+        String ResponseText15 = bundle.getString("ResponseText" + 15);
         String ResponseText21 = bundle.getString("ResponseText" + 21);
         String ResponseText22 = bundle.getString("ResponseText" + 22);
+        String ResponseText23 = bundle.getString("ResponseText" + 23);
+        char on_type = ResponseText23.charAt(0);
+        switch (on_type) {
+            case '0':
         /*time1[0]= ResponseText14;
         Log.e("MaintainActivity",ResponseText21);
         Log.e("MaintainActivity",ResponseText22);*/
-        time_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time);
-        time_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        arrive_spinner.setAdapter(time_listAdapter);
-        //當迴圈與ResponseText內容一致時跳出迴圈 並顯示該ResponseText的Spinner位置
-        for (int i = 0; i < time.length; i++) {
-            if (time[i].equals(ResponseText21)) {
-                arrive_spinner.setSelection(i, true);
-                break;
-            }
-        }
-        leave_spinner.setAdapter(time_listAdapter);
-        for (int i = 0; i < time.length; i++) {
-            if (time[i].equals(ResponseText22)) {
-                leave_spinner.setSelection(i, true);
-                break;
-            }
-        }
+                time_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time);
+                time_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                arrive_spinner.setAdapter(time_listAdapter);
+                //當迴圈與ResponseText內容一致時跳出迴圈 並顯示該ResponseText的Spinner位置
+                for (int i = 0; i < time.length; i++) {
+                    if (time[i].equals(ResponseText21)) {
+                        arrive_spinner.setSelection(i, true);
+                        break;
+                    }
+                }
+                leave_spinner.setAdapter(time_listAdapter);
+                for (int i = 0; i < time.length; i++) {
+                    if (time[i].equals(ResponseText22)) {
+                        leave_spinner.setSelection(i, true);
+                        break;
+                    }
+                }
         /*time2[0]= ResponseText15;
         time_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time2);
         time_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         leave_spinner.setAdapter(time_listAdapter);*/
+                break;
+            default:
+                /*time1[0]= ResponseText14;
+        Log.e("MaintainActivity",ResponseText21);
+        Log.e("MaintainActivity",ResponseText22);*/
+                time_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time);
+                time_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                arrive_spinner.setAdapter(time_listAdapter);
+                //當迴圈與ResponseText內容一致時跳出迴圈 並顯示該ResponseText的Spinner位置
+                for (int i = 0; i < time.length; i++) {
+                    if (time[i].equals(ResponseText14)) {
+                        arrive_spinner.setSelection(i, true);
+                        break;
+                    }
+                }
+                leave_spinner.setAdapter(time_listAdapter);
+                for (int i = 0; i < time.length; i++) {
+                    if (time[i].equals(ResponseText15)) {
+                        leave_spinner.setSelection(i, true);
+                        break;
+                    }
+                }
+        /*time2[0]= ResponseText15;
+        time_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time2);
+        time_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        leave_spinner.setAdapter(time_listAdapter);*/
+                break;
+        }
 
         //抵達日期Button自動帶入當天日期
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -636,10 +692,13 @@ public class MaintainActivity extends AppCompatActivity {
                 if (check_reason.toString().equals("請選擇")) {
                     check_reason = "";
                 }
-                if (useless_work.toString() != "無") {
+                if (useless_work.toString().equals("請選擇")) {
+                    useless_work = "無";
+                }
+                if (useless_work.toString() != "請選擇") {
                     work_points = "0.5";
                 }
-                if (pay_mode.toString() == "無"){
+                if (pay_mode.toString() == "無") {
                     pay_mode = "";
                 }
                 try {
@@ -715,10 +774,13 @@ public class MaintainActivity extends AppCompatActivity {
                 if (check_reason.toString().equals("請選擇")) {
                     check_reason = "";
                 }
-                if (useless_work.toString() != "無") {
+                if (useless_work.toString().equals("請選擇")) {
+                    useless_work = "無";
+                }
+                if (useless_work.toString() != "請選擇") {
                     work_points = "0.5";
                 }
-                if (pay_mode.toString() == "無"){
+                if (pay_mode.toString() == "無") {
                     pay_mode = "";
                 }
                 try {
@@ -771,7 +833,6 @@ public class MaintainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
@@ -795,10 +856,13 @@ public class MaintainActivity extends AppCompatActivity {
                 if (check_reason.toString().equals("請選擇")) {
                     check_reason = "";
                 }
-                if (useless_work.toString() != "無") {
+                if (useless_work.toString().equals("請選擇")) {
+                    useless_work = "無";
+                }
+                if (useless_work.toString() != "請選擇") {
                     work_points = "0.5";
                 }
-                if (pay_mode.toString() == "無"){
+                if (pay_mode.toString() == "無") {
                     pay_mode = "";
                 }
                 try {
@@ -874,10 +938,13 @@ public class MaintainActivity extends AppCompatActivity {
                 if (check_reason.toString().equals("請選擇")) {
                     check_reason = "";
                 }
-                if (useless_work.toString() != "無") {
+                if (useless_work.toString().equals("請選擇")) {
+                    useless_work = "無";
+                }
+                if (useless_work.toString() != "請選擇") {
                     work_points = "0.5";
                 }
-                if (pay_mode.toString() == "無"){
+                if (pay_mode.toString() == "無") {
                     pay_mode = "";
                 }
                 try {
@@ -924,9 +991,9 @@ public class MaintainActivity extends AppCompatActivity {
     }
 
     /**
-     * 與OKHttp連線(工務點數)
+     * 與OKHttp連線(工務獎金)
      */
-    private void sendRequestWithOkHttpForWorkPoints(){
+    private void sendRequestWithOkHttpForWorkMoney() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -939,6 +1006,64 @@ public class MaintainActivity extends AppCompatActivity {
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
                             .add("User_id", user_id_data)
+                            .build();
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/WQP/WorkMoney.php")
+                            .url("http://192.168.0.172/WQP/WorkMoney.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("MaintainActivity", responseData);
+                    parseJSONWithJSONObjectForWorkMoney(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取得工務點數獎金
+     *
+     * @param distribution_money
+     */
+    private void parseJSONWithJSONObjectForWorkMoney(final String distribution_money) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("MaintainActivity", "MONEY : " + distribution_money);
+                float points = Float.parseFloat(esvd_eng_points_txt.getText().toString());
+                int money = Integer.parseInt(distribution_money.toString());
+                esvd_eng_money_txt.setText(String.valueOf(points * money));
+            }
+        });
+    }
+
+    /**
+     * 與OKHttp連線(工務點數)
+     */
+    private void sendRequestWithOkHttpForWorkPoints() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.e("MaintainActivity", user_id_data);
+
+                Bundle bundle = getIntent().getExtras();
+                String seq_id = bundle.getString("ResponseText" + 19);
+                String service_no = bundle.getString("ResponseText" + 1);
+                Log.e("MaintainActivity", seq_id);
+
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .add("ESVD_SEQ_ID", seq_id)
+                            .add("ESVD_SERVICE_NO", service_no)
                             .build();
                     Request request = new Request.Builder()
                             //.url("http://220.133.80.146/WQP/WorkPoints.php")
@@ -957,20 +1082,76 @@ public class MaintainActivity extends AppCompatActivity {
     }
 
     /**
-     * 取得工務點數金額的數量
-     * @param distribution_money
+     * 取得工務點數(A、B)
+     *
+     * @param jsonData
      */
-    private void parseJSONWithJSONObjectForWorkPoints(final String distribution_money) {
-        runOnUiThread(new Runnable() {
+    private void parseJSONWithJSONObjectForWorkPoints(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                final String esvd_a_point = jsonObject.getString("A點數");
+                final String esvd_b_point = jsonObject.getString("B點數");
+
+                Log.e("MaintainActivity1", esvd_a_point);
+                Log.e("MaintainActivity2", esvd_b_point);
+
+                MaintainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        esvd_a_points_txt.setText(esvd_a_point);
+                        esvd_b_points_txt.setText(esvd_b_point);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 與OKHttp連線(客戶說明)
+     */
+    /*private void sendRequestWithOkHttpForCustomerRemark() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.e("MaintainActivity","MONEY : " + distribution_money);
-                float points = Float.parseFloat(esvd_eng_points_txt.getText().toString());
-                int money = Integer.parseInt(distribution_money.toString());
-                esvd_eng_money_txt.setText(String.valueOf(points * money));
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.e("MaintainActivity", user_id_data);
+
+                String service_no = svd_service_no_txt.getText().toString();
+                String customer_address = esv_address_txt.getText().toString();
+                String customer_remark = esvd_customer_remark_txt.getText().toString();
+                Log.e("MaintainActivity", customer_remark);
+
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .add("CUST_ID", service_no)
+                            .add("CUST_ADDRESS", customer_address)
+                            .add("CUST_REMARK", customer_remark)
+                            .build();
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/WQP/CustomerRemark.php")
+                            .url("http://192.168.0.172/WQP/CustomerRemark.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("MaintainActivity", responseData);
+                    parseJSONWithJSONObjectForWorkPoints(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        });
-    }
+        }).start();
+    }*/
 
     /**
      * Button的設置
@@ -999,6 +1180,7 @@ public class MaintainActivity extends AppCompatActivity {
 
     /**
      * 取回掃描回傳值或取消掃描
+     *
      * @param requestCode
      * @param resultCode
      * @param intent

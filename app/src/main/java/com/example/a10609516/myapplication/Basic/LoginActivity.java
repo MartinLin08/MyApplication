@@ -54,6 +54,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class LoginActivity extends AppCompatActivity {
 
     private LinearLayout login_llt;
@@ -119,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "請輸入員工ID及密碼", Toast.LENGTH_LONG).show();
                 }
                 if (remember_checkBox.isChecked()) { //檢測使用者帳號密碼
-                    SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
+                    SharedPreferences remdname = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor edit = remdname.edit();
                     edit.putString("account", accountEdit.getText().toString());
                     edit.putString("password", passwordEdit.getText().toString());
@@ -135,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
      * 記住帳密功能
      */
     private void SharedPreferencesWithLogin() {
-        SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
+        SharedPreferences remdname = getPreferences(MODE_PRIVATE);
         //SharedPreferences將account 和 password 記錄起來 每次進去APP時 開始從中讀取資料 放入accountEdit，passwordEdit中
         String account_str = remdname.getString("account", "");
         String password_str = remdname.getString("password", "");
@@ -147,14 +149,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
+                    SharedPreferences remdname = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor edit = remdname.edit();
                     edit.putString("account", accountEdit.getText().toString());
                     edit.putString("password", passwordEdit.getText().toString());
                     edit.commit();
                 }
                 if (!isChecked) {
-                    SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
+                    SharedPreferences remdname = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor edit = remdname.edit();
                     edit.putString("account", "");
                     edit.putString("password", "");
@@ -264,8 +266,8 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
-            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
+            URL url = new URL("http://192.168.0.201/wqp_1.6.apk");
+            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.6.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -275,7 +277,7 @@ public class LoginActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.5.apk");
+            File outputFile = new File(file, "wqp_1.6.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -289,7 +291,7 @@ public class LoginActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.6.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
