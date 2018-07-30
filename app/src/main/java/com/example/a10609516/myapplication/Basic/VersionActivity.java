@@ -367,7 +367,6 @@ public class VersionActivity extends AppCompatActivity {
                                     }).show();
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
