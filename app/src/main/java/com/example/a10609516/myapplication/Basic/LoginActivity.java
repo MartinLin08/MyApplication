@@ -3,15 +3,18 @@ package com.example.a10609516.myapplication.Basic;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.myapplication.BuildConfig;
 import com.example.a10609516.myapplication.Tools.HttpParse;
 import com.example.a10609516.myapplication.R;
 import com.google.firebase.database.DataSnapshot;
@@ -266,18 +270,19 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://192.168.0.201/wqp_1.6.apk");
-            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.6.apk");
+            URL url = new URL("http://192.168.0.201/wqp_1.7.apk");
+            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.7.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
             c.connect();
 
-            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
-            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            String PATH = Environment.getExternalStorageDirectory() + "/Download/";
+            //String PATH2 = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.6.apk");
+            File outputFile = new File(file, "wqp_1.7.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -290,9 +295,20 @@ public class LoginActivity extends AppCompatActivity {
             fos.close();
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
+            /*File apkFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "wqp_1.7.apk");
+            Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);*/
+
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.6.apk")), "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            } else {*/
+                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.7.apk")), "application/vnd.android.package-archive");
+                //intent.setDataAndType(Uri.fromFile(new File(System.getenv("SECONDARY_STORAGE") + "/Download/" + "wqp_1.7.apk")), "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            /*}*/
             startActivity(intent);
 
             LoginActivity.this.runOnUiThread(new Runnable() {
