@@ -299,7 +299,7 @@ public class LoginActivity extends AppCompatActivity {
             Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);*/
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
