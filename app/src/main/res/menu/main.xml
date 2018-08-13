@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/home_item"
@@ -50,6 +50,19 @@
                 android:title="日報修正(已停用)" />
         </menu>
     </item>
+    <item android:title="管理部">
+        <menu>
+            <item
+                android:id="@+id/inventory_item"
+                android:title="倉庫盤點管理" />
+            <item
+                android:id="@+id/purchase_item"
+                android:title="倉庫進貨管理" />
+            <item
+                android:id="@+id/return_item"
+                android:title="倉庫調撥管理" />
+        </menu>
+    </item>
     <item
         android:id="@+id/QRCode_item"
         android:title="QRCode" />
@@ -58,6 +71,6 @@
         android:title="客戶電子簽名" />
     <item
         android:id="@+id/about_item"
-        android:title="版本資訊"/>
+        android:title="版本資訊" />
 
 </menu>

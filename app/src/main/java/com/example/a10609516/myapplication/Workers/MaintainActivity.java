@@ -692,11 +692,11 @@ public class MaintainActivity extends AppCompatActivity {
                 if (check_reason.toString().equals("請選擇")) {
                     check_reason = "";
                 }
-                if (useless_work.toString().equals("請選擇")) {
-                    useless_work = "無";
-                }
                 if (useless_work.toString() != "請選擇") {
                     work_points = "0.5";
+                }
+                if (useless_work.toString().equals("請選擇")) {
+                    useless_work = "無";
                 }
                 if (pay_mode.toString() == "無") {
                     pay_mode = "";
@@ -774,11 +774,11 @@ public class MaintainActivity extends AppCompatActivity {
                 if (check_reason.toString().equals("請選擇")) {
                     check_reason = "";
                 }
-                if (useless_work.toString().equals("請選擇")) {
-                    useless_work = "無";
-                }
                 if (useless_work.toString() != "請選擇") {
                     work_points = "0.5";
+                }
+                if (useless_work.toString().equals("請選擇")) {
+                    useless_work = "無";
                 }
                 if (pay_mode.toString() == "無") {
                     pay_mode = "";
@@ -856,11 +856,11 @@ public class MaintainActivity extends AppCompatActivity {
                 if (check_reason.toString().equals("請選擇")) {
                     check_reason = "";
                 }
-                if (useless_work.toString().equals("請選擇")) {
-                    useless_work = "無";
-                }
                 if (useless_work.toString() != "請選擇") {
                     work_points = "0.5";
+                }
+                if (useless_work.toString().equals("請選擇")) {
+                    useless_work = "無";
                 }
                 if (pay_mode.toString() == "無") {
                     pay_mode = "";
@@ -938,11 +938,11 @@ public class MaintainActivity extends AppCompatActivity {
                 if (check_reason.toString().equals("請選擇")) {
                     check_reason = "";
                 }
-                if (useless_work.toString().equals("請選擇")) {
-                    useless_work = "無";
-                }
                 if (useless_work.toString() != "請選擇") {
                     work_points = "0.5";
+                }
+                if (useless_work.toString().equals("請選擇")) {
+                    useless_work = "無";
                 }
                 if (pay_mode.toString() == "無") {
                     pay_mode = "";

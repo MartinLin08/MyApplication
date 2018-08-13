@@ -270,8 +270,8 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://192.168.0.201/wqp_1.7.apk");
-            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.7.apk");
+            URL url = new URL("http://192.168.0.201/wqp_1.9.apk");
+            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.9.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -282,7 +282,7 @@ public class LoginActivity extends AppCompatActivity {
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.7.apk");
+            File outputFile = new File(file, "wqp_1.9.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -295,7 +295,7 @@ public class LoginActivity extends AppCompatActivity {
             fos.close();
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
-            /*File apkFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "wqp_1.7.apk");
+            /*File apkFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "wqp_1.9.apk");
             Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);*/
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -305,9 +305,12 @@ public class LoginActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             } else {*/
-                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.7.apk")), "application/vnd.android.package-archive");
-                //intent.setDataAndType(Uri.fromFile(new File(System.getenv("SECONDARY_STORAGE") + "/Download/" + "wqp_1.7.apk")), "application/vnd.android.package-archive");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.9.apk")), "application/vnd.android.package-archive");
+            //intent.setDataAndType(Uri.fromFile(new File(System.getenv("SECONDARY_STORAGE") + "/Download/" + "wqp_1.9.apk")), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             /*}*/
             startActivity(intent);
 
@@ -565,6 +568,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }).show();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -604,6 +608,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 取得未回出勤的數量
+     *
      * @param miss_count
      */
     private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
@@ -611,10 +616,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.e("LoginActivity", miss_count);
-                if(miss_count.toString().equals("0")){
+                if (miss_count.toString().equals("0")) {
                     badgeCount = 0;
                     ShortcutBadger.removeCount(LoginActivity.this);
-                }else{
+                } else {
                     int count = Integer.valueOf(miss_count);
                     ShortcutBadger.applyCount(LoginActivity.this, count);
                 }
