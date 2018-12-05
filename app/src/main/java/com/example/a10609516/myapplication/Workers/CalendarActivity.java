@@ -36,6 +36,7 @@ import com.example.a10609516.myapplication.Basic.SignatureActivity;
 import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
+import com.example.a10609516.myapplication.Manager.InventoryActivity;
 import com.example.a10609516.myapplication.Tools.DatePickerFragment;
 import com.example.a10609516.myapplication.Basic.MenuActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
@@ -97,7 +98,7 @@ public class CalendarActivity extends AppCompatActivity {
         String user_id_data = user_id.getString("ID", "");
         SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
         String department_id_data = department_id.getString("D_ID", "");
-        if ((user_id_data.toString().equals("9706013")) || user_id_data.toString().equals("9908023") || user_id_data.toString().equals("10010039")
+        if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
                 || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
             getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
             return true;
@@ -198,6 +199,21 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(intent14);
                 Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
                 break; //進入工務未回單數量頁面
+            case R.id.inventory_item:
+                Intent intent15 = new Intent(CalendarActivity.this, InventoryActivity.class);
+                startActivity(intent15);
+                Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
+                break; //進入倉庫盤點管理頁面
+            case R.id.map_item:
+                Intent intent17 = new Intent(CalendarActivity.this, GPSActivity.class);
+                startActivity(intent17);
+                Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
+                break; //進入GPS地圖頁面
+            case R.id.eng_points_item:
+                Intent intent18 = new Intent(CalendarActivity.this, EngPointsActivity.class);
+                startActivity(intent18);
+                Toast.makeText(this, "工務點數明細", Toast.LENGTH_SHORT).show();
+                break; //進入工務點數明細頁面
             default:
         }
         return true;

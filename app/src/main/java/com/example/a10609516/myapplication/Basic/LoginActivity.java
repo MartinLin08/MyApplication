@@ -295,8 +295,8 @@ public class LoginActivity extends AppCompatActivity {
             fos.close();
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
-            /*File apkFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "wqp_1.9.apk");
-            Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);*/
+            File apkFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "wqp_1.9.apk");
+            Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
             /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -435,7 +435,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 ActivityCompat.requestPermissions(LoginActivity.this,
                                         new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE
-                                                , Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
+                                                , Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
                             }
                         })
@@ -449,7 +449,7 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 ActivityCompat.requestPermissions(LoginActivity.this,
                         new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE
-                                , Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
+                                , Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
             }
         }

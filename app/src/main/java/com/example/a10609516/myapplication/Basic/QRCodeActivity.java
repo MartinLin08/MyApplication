@@ -28,11 +28,14 @@ import com.example.a10609516.myapplication.Clerk.QuotationActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
+import com.example.a10609516.myapplication.Manager.InventoryActivity;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.UploadActivity;
 import com.example.a10609516.myapplication.Workers.CalendarActivity;
 import com.example.a10609516.myapplication.Tools.ScannerActivity;
+import com.example.a10609516.myapplication.Workers.EngPointsActivity;
+import com.example.a10609516.myapplication.Workers.GPSActivity;
 import com.example.a10609516.myapplication.Workers.MaintainActivity;
 import com.example.a10609516.myapplication.Workers.MissCountActivity;
 import com.example.a10609516.myapplication.Workers.PointsActivity;
@@ -69,12 +72,6 @@ public class QRCodeActivity extends AppCompatActivity {
     private TextView date_txt, result_txt;
     private WebView mWebView;
 
-    private TextView item_number_txt, item_name_txt, item_format_txt, unit_txt;
-    private EditText reserve_edt;
-    private TextView purchase_item_number_txt, purchase_item_name_txt, purchase_item_format_txt, purchase_unit_txt;
-    private EditText purchase_reserve_edt;
-    private Button upload_btn, purchase_upload_btn;
-
     //轉畫面的Activity參數
     private Class<?> mClss;
     //ZXING_CAMERA權限
@@ -93,11 +90,11 @@ public class QRCodeActivity extends AppCompatActivity {
         String user_id_data = user_id.getString("ID", "");
         SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
         String department_id_data = department_id.getString("D_ID", "");
-        if ((user_id_data.toString().equals("9706013")) || user_id_data.toString().equals("9908023") || user_id_data.toString().equals("10010039")
+        if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
                 || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
             getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("2100")) {
+        } else if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
         } else if (department_id_data.toString().equals("2200")) {
@@ -145,7 +142,7 @@ public class QRCodeActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(QRCodeActivity.this, SignatureActivity.class);
                 startActivity(intent2);
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //進入客戶電子簽名頁面
+                break; //進入客戶電子簽名頁面*/
             case R.id.record_item:
                 Intent intent8 = new Intent(QRCodeActivity.this, RecordActivity.class);
                 startActivity(intent8);
@@ -196,6 +193,21 @@ public class QRCodeActivity extends AppCompatActivity {
                 startActivity(intent14);
                 Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
                 break; //進入工務未回單數量頁面
+            case R.id.inventory_item:
+                Intent intent15 = new Intent(QRCodeActivity.this, InventoryActivity.class);
+                startActivity(intent15);
+                Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
+                break; //進入倉庫盤點管理頁面
+            case R.id.map_item:
+                Intent intent17 = new Intent(QRCodeActivity.this, GPSActivity.class);
+                startActivity(intent17);
+                Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
+                break; //進入GPS地圖頁面
+            case R.id.eng_points_item:
+                Intent intent18 = new Intent(QRCodeActivity.this, EngPointsActivity.class);
+                startActivity(intent18);
+                Toast.makeText(this, "工務點數明細", Toast.LENGTH_SHORT).show();
+                break; //進入工務點數明細頁面
             default:
         }
         return true;
@@ -210,7 +222,7 @@ public class QRCodeActivity extends AppCompatActivity {
         //獲取當天日期
         GetDate();
         //初始畫面設置
-        /*initSet();*/
+        initSet();
         //確認是否有最新版本，進行更新
         CheckFirebaseVersion();
     }
@@ -221,19 +233,8 @@ public class QRCodeActivity extends AppCompatActivity {
     private void InItFunction() {
         QRCode_btn = (Button) findViewById(R.id.QRCode_btn);
         date_txt = (TextView) findViewById(R.id.date_txt);
-        item_number_txt = (TextView) findViewById(R.id.item_number_txt);
-        item_name_txt = (TextView) findViewById(R.id.item_name_txt);
-        item_format_txt = (TextView) findViewById(R.id.item_format_txt);
-        unit_txt = (TextView) findViewById(R.id.unit_txt);
-        reserve_edt = (EditText) findViewById(R.id.reserve_edt);
-        purchase_item_number_txt = (TextView) findViewById(R.id.purchase_item_number_txt);
-        purchase_item_name_txt = (TextView) findViewById(R.id.purchase_item_name_txt);
-        purchase_item_format_txt = (TextView) findViewById(R.id.purchase_item_format_txt);
-        purchase_unit_txt = (TextView) findViewById(R.id.purchase_unit_txt);
-        purchase_reserve_edt = (EditText) findViewById(R.id.purchase_reserve_edt);
-        upload_btn = (Button) findViewById(R.id.upload_btn);
-        purchase_upload_btn = (Button) findViewById(R.id.purchase_upload_btn);
-
+        result_txt = (TextView) findViewById(R.id.result_txt);
+        mWebView = (WebView) findViewById(R.id.wv);
 
         /*QRCode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,25 +250,12 @@ public class QRCodeActivity extends AppCompatActivity {
                     //PRODUCT_MODE, UPC and EAN條碼
                     //ONE_D_MODE, 1維條碼
                     intent.putExtra("SCAN_MODE","SCAN_MODE");
+
                     //呼叫ZXing Scanner,完成動作後回傳1給onActivityResult的requestCode參數
                     startActivityForResult(intent,1);
                 }
             }
         });*/
-
-        upload_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRequestWithOkHttpForWareHouseInventory();
-            }
-        });
-
-        purchase_upload_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRequestWithOkHttpForWareHousePurchase();
-            }
-        });
     }
 
     /**
@@ -313,6 +301,7 @@ public class QRCodeActivity extends AppCompatActivity {
                                     }).show();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -326,19 +315,17 @@ public class QRCodeActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://192.168.0.201/wqp_1.9.apk");
-            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.9.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.9.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
             c.connect();
 
             String PATH = Environment.getExternalStorageDirectory() + "/Download/";
-            //String PATH2 = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.9.apk");
+            File outputFile = new File(file, "wqp_1.9apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -382,21 +369,19 @@ public class QRCodeActivity extends AppCompatActivity {
      * @param resultCode
      * @param intent
      */
-    public void onActivityResult(int requestCode, int resultCode, Intent intent){
+    /*public void onActivityResult(int requestCode, int resultCode, Intent intent){
         if(requestCode==1){
             if(resultCode==RESULT_OK){
                 //ZXing回傳的內容
                 String contents = intent.getStringExtra("SCAN_RESULT");
-                item_number_txt.setText(intent.getStringExtra("result_text"));
-                purchase_item_number_txt.setText(intent.getStringExtra("result_text"));
-                sendRequestWithOkHttpForWareHouseSearch();
+                result_txt.setText(contents.toString());
             }else{
                 if(resultCode==RESULT_CANCELED){
                     Toast.makeText(QRCodeActivity.this, "取消掃描", Toast.LENGTH_LONG).show();
                 }
             }
         }
-    }
+    }*/
 
     /**
      * 獲取當天日期
@@ -410,10 +395,10 @@ public class QRCodeActivity extends AppCompatActivity {
     /**
      * 起始畫面設置
      */
-    /*private void initSet() {
-        *//**
+    private void initSet() {
+        /**
          * 以下都是WebView的設定
-         *//*
+         */
         WebSettings websettings = mWebView.getSettings();
         websettings.setSupportZoom(true); //啟用內置的縮放功能
         websettings.setBuiltInZoomControls(true);//啟用內置的縮放功能
@@ -424,7 +409,7 @@ public class QRCodeActivity extends AppCompatActivity {
         websettings.setAllowFileAccess(true);//啟用webview訪問文件數據
         websettings.setDomStorageEnabled(true);//啟用儲存數據
         mWebView.setWebViewClient(new WebViewClient());
-    }*/
+    }
 
     /**
      * Button的設置
@@ -454,7 +439,7 @@ public class QRCodeActivity extends AppCompatActivity {
     /**
      * 當ScannerActivity結束後的回調資訊
      */
-    /*@Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
@@ -462,142 +447,5 @@ public class QRCodeActivity extends AppCompatActivity {
             result_txt.setText(data.getStringExtra("result_text"));
             mWebView.loadUrl(data.getStringExtra("result_text"));
         }
-    }*/
-
-    /**
-     * 與OKHttp連線(查詢倉庫盤點資料)
-     */
-    private void sendRequestWithOkHttpForWareHouseSearch() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String MB001 = item_number_txt.getText().toString();
-                Log.e("QRCodeActivity", MB001);
-
-                try {
-                    OkHttpClient client = new OkHttpClient();
-                    //POST
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("MB001", MB001)
-                            .build();
-                    Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/WQP/WareHouseSearch.php")
-                            .url("http://192.168.0.172/WQP/WareHouseSearch.php")
-                            .post(requestBody)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    Log.e("QRCodeActivity", responseData);
-                    parseJSONWithJSONObjectForWareHouseSearch(responseData);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    /**
-     * 取得盤點貨物之品名、規格、數量、單位
-     *
-     * @param jsonData
-     */
-    private void parseJSONWithJSONObjectForWareHouseSearch(String jsonData) {
-        try {
-            JSONArray jsonArray = new JSONArray(jsonData);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                //JSON格式改為字串
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                final String MB002 = jsonObject.getString("品名");
-                final String MB003 = jsonObject.getString("規格");
-                final String MB004 = jsonObject.getString("單位");
-                final String MB064 = jsonObject.getString("數量");
-
-                Log.e("QRCodeActivity", MB002);
-                Log.e("QRCodeActivity", MB064);
-
-                QRCodeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        item_name_txt.setText(MB002.toString());
-                        item_format_txt.setText(MB003.toString());
-                        unit_txt.setText(MB004.toString());
-                        reserve_edt.setText(MB064.toString());
-                        purchase_item_name_txt.setText(MB002.toString());
-                        purchase_item_format_txt.setText(MB003.toString());
-                        purchase_unit_txt.setText(MB004.toString());
-                    }
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 與OKHttp連線(上傳盤點數量)
-     */
-    private void sendRequestWithOkHttpForWareHouseInventory() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String MB001 = item_number_txt.getText().toString();
-                String MB064 = reserve_edt.getText().toString();
-                Log.e("QRCodeActivity", MB001);
-                Log.e("QRCodeActivity", MB064);
-
-                try {
-                    OkHttpClient client = new OkHttpClient();
-                    //POST
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("MB001", MB001)
-                            .add("MB064", MB064)
-                            .build();
-                    Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/WQP/WareHouseInventory.php")
-                            .url("http://192.168.0.172/WQP/WareHouseInventory.php")
-                            .post(requestBody)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    Log.e("QRCodeActivity", responseData);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    /**
-     * 與OKHttp連線(上傳盤點數量)
-     */
-    private void sendRequestWithOkHttpForWareHousePurchase() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String MB001 = purchase_item_number_txt.getText().toString();
-                String MB064 = purchase_reserve_edt.getText().toString();
-                Log.e("QRCodeActivity", MB001);
-                Log.e("QRCodeActivity", MB064);
-
-                try {
-                    OkHttpClient client = new OkHttpClient();
-                    //POST
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("MB001", MB001)
-                            .add("MB064", MB064)
-                            .build();
-                    Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/WQP/WareHousePurchase.php")
-                            .url("http://192.168.0.172/WQP/WareHousePurchase.php")
-                            .post(requestBody)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    Log.e("QRCodeActivity", responseData);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 }

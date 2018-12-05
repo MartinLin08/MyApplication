@@ -23,8 +23,11 @@ import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.myapplication.DepartmentAndDIY.UploadActivity;
+import com.example.a10609516.myapplication.Manager.InventoryActivity;
 import com.example.a10609516.myapplication.R;
 import com.example.a10609516.myapplication.Workers.CalendarActivity;
+import com.example.a10609516.myapplication.Workers.EngPointsActivity;
+import com.example.a10609516.myapplication.Workers.GPSActivity;
 import com.example.a10609516.myapplication.Workers.MissCountActivity;
 import com.example.a10609516.myapplication.Workers.PointsActivity;
 import com.example.a10609516.myapplication.Workers.ScheduleActivity;
@@ -47,13 +50,13 @@ import java.util.Map;
 public class VersionActivity extends AppCompatActivity {
 
     private TextView detail_txt0, detail_txt1, detail_txt2, detail_txt3, detail_txt4, detail_txt5
-                    , detail_txt6;
+            , detail_txt6, detail_txt7, detail_txt8;
     private LinearLayout detail_llt0, detail_llt1, detail_llt2, detail_llt3, detail_llt4, detail_llt5
-                    , detail_llt6;
+            , detail_llt6, detail_llt7, detail_llt8;
     private Button version_btn0, version_btn1, version_btn2, version_btn3, version_btn4, version_btn5
-                    , version_btn6;
+            , version_btn6, version_btn7, version_btn8;
     private Button version_up_btn0, version_up_btn1, version_up_btn2, version_up_btn3, version_up_btn4, version_up_btn5
-                    , version_up_btn6;
+            , version_up_btn6, version_up_btn7, version_up_btn8;
 
     /**
      * 創建Menu
@@ -68,7 +71,7 @@ public class VersionActivity extends AppCompatActivity {
         String user_id_data = user_id.getString("ID", "");
         SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
         String department_id_data = department_id.getString("D_ID", "");
-        if ((user_id_data.toString().equals("9706013")) || user_id_data.toString().equals("9908023") || user_id_data.toString().equals("10010039")
+        if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
                 || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
             getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
             return true;
@@ -167,6 +170,21 @@ public class VersionActivity extends AppCompatActivity {
                 startActivity(intent14);
                 Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
                 break; //進入工務未回單數量頁面
+            case R.id.inventory_item:
+                Intent intent15 = new Intent(VersionActivity.this, InventoryActivity.class);
+                startActivity(intent15);
+                Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
+                break; //進入倉庫盤點管理頁面
+            case R.id.map_item:
+                Intent intent17 = new Intent(VersionActivity.this, GPSActivity.class);
+                startActivity(intent17);
+                Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
+                break; //進入GPS地圖頁面
+            case R.id.eng_points_item:
+                Intent intent18 = new Intent(VersionActivity.this, EngPointsActivity.class);
+                startActivity(intent18);
+                Toast.makeText(this, "工務點數明細", Toast.LENGTH_SHORT).show();
+                break; //進入工務點數明細頁面
             default:
         }
         return true;
@@ -197,6 +215,8 @@ public class VersionActivity extends AppCompatActivity {
         detail_txt4 = (TextView) findViewById(R.id.detail_txt4);
         detail_txt5 = (TextView) findViewById(R.id.detail_txt5);
         detail_txt6 = (TextView) findViewById(R.id.detail_txt6);
+        detail_txt7 = (TextView) findViewById(R.id.detail_txt7);
+        detail_txt8 = (TextView) findViewById(R.id.detail_txt8);
         detail_llt0 = (LinearLayout) findViewById(R.id.detail_llt0);
         detail_llt1 = (LinearLayout) findViewById(R.id.detail_llt1);
         detail_llt2 = (LinearLayout) findViewById(R.id.detail_llt2);
@@ -204,6 +224,8 @@ public class VersionActivity extends AppCompatActivity {
         detail_llt4 = (LinearLayout) findViewById(R.id.detail_llt4);
         detail_llt5 = (LinearLayout) findViewById(R.id.detail_llt5);
         detail_llt6 = (LinearLayout) findViewById(R.id.detail_llt6);
+        detail_llt7 = (LinearLayout) findViewById(R.id.detail_llt7);
+        detail_llt8 = (LinearLayout) findViewById(R.id.detail_llt8);
         version_btn0 = (Button) findViewById(R.id.version_btn0);
         version_btn1 = (Button) findViewById(R.id.version_btn1);
         version_btn2 = (Button) findViewById(R.id.version_btn2);
@@ -211,6 +233,8 @@ public class VersionActivity extends AppCompatActivity {
         version_btn4 = (Button) findViewById(R.id.version_btn4);
         version_btn5 = (Button) findViewById(R.id.version_btn5);
         version_btn6 = (Button) findViewById(R.id.version_btn6);
+        version_btn7 = (Button) findViewById(R.id.version_btn7);
+        version_btn8 = (Button) findViewById(R.id.version_btn8);
         version_up_btn0 = (Button) findViewById(R.id.version_up_btn0);
         version_up_btn1 = (Button) findViewById(R.id.version_up_btn1);
         version_up_btn2 = (Button) findViewById(R.id.version_up_btn2);
@@ -218,6 +242,8 @@ public class VersionActivity extends AppCompatActivity {
         version_up_btn4 = (Button) findViewById(R.id.version_up_btn4);
         version_up_btn5 = (Button) findViewById(R.id.version_up_btn5);
         version_up_btn6 = (Button) findViewById(R.id.version_up_btn6);
+        version_up_btn7 = (Button) findViewById(R.id.version_up_btn7);
+        version_up_btn8 = (Button) findViewById(R.id.version_up_btn8);
     }
 
     /**
@@ -225,23 +251,26 @@ public class VersionActivity extends AppCompatActivity {
      */
     private void DetailOfVersion() {
         detail_txt0.setText("1.新增工務部 - 行程資訊、派工行事曆、查詢派工資料 \n" +
-                            "2.新增工務部 - 出勤維護回報功能 \n" +
-                            "3.新增推播功能-工務(新派工、更新派工、取消派工) \n" +
-                            "4.新增客戶電子簽名、QRCode功能");
+                "2.新增工務部 - 出勤維護回報功能 \n" +
+                "3.新增推播功能-工務(新派工、更新派工、取消派工) \n" +
+                "4.新增客戶電子簽名、QRCode功能");
         detail_txt1.setText("1.新增業務部 - 報價單審核");
         detail_txt2.setText("1.關閉工務部 - 客戶電子簽名功能 \n" +
-                            "2.新增工務部 - 回報派工頁面自動帶入當天日期與客戶預約時間 \n" +
-                            "3.新增工務部 - 派工地址可長按點擊複製");
+                "2.新增工務部 - 回報派工頁面自動帶入當天日期與客戶預約時間 \n" +
+                "3.新增工務部 - 派工地址可長按點擊複製");
         detail_txt3.setText("1.新增APP線上更新功能 \n" +
-                            "2.新增工務部 - 出勤回報的付款方式可更改(現金、匯款、支票、信用卡)");
+                "2.新增工務部 - 出勤回報的付款方式可更改(現金、匯款、支票、信用卡)");
         detail_txt4.setText("1.新增工務部 - 可檢視當天當工的工務點數與工務獎金 \n" +
-                            "2.新增工務部 - 工務點數獎金查詢(可查詢A點數、B點數、D點數、AB點數合計、工務獎金) \n" +
-                            "3.新增業務部 - 報價單已讀功能");
+                "2.新增工務部 - 工務點數獎金查詢(可查詢A點數、B點數、D點數、AB點數合計、工務獎金) \n" +
+                "3.新增業務部 - 報價單已讀功能");
         detail_txt5.setText("1.新增工務部 - 可檢視當天當工的A點數與B點數 \n" +
-                            "2.新增工務部 - 回報派工頁面可檢視客戶地址 \n" +
-                            "3.新增工務部 - 工作說明的留言功能(工務秘書可見)");
+                "2.新增工務部 - 回報派工頁面可檢視客戶地址 \n" +
+                "3.新增工務部 - 工作說明的留言功能(工務秘書可見)");
         detail_txt6.setText("1.部分內容修正及優化 \n" +
-                            "2.修正1.5版本前部分機型無法自動更新的問題");
+                "2.修正1.5版本前部分機型無法自動更新的問題");
+        detail_txt7.setText("1.部分內容修正bug及優化");
+        detail_txt8.setText("1.部分內容修正bug及優化 \n" +
+                "2.新增工務部 - 工務點數明細(可直接查詢一個月內所有派工出勤的點數)");
     }
 
     /**
@@ -344,6 +373,34 @@ public class VersionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 detail_llt6.setVisibility(View.GONE);
                 version_up_btn6.setVisibility(View.GONE);
+            }
+        });
+        version_btn7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt7.setVisibility(View.VISIBLE);
+                version_up_btn7.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt7.setVisibility(View.GONE);
+                version_up_btn7.setVisibility(View.GONE);
+            }
+        });
+        version_btn8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt8.setVisibility(View.VISIBLE);
+                version_up_btn8.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt8.setVisibility(View.GONE);
+                version_up_btn8.setVisibility(View.GONE);
             }
         });
     }
