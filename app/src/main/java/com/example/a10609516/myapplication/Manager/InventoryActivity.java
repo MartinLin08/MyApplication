@@ -85,7 +85,6 @@ import okhttp3.Response;
 public class InventoryActivity extends WQPServiceActivity {
 
     private TextView date_txt;
-
     private ScrollView inventory_scv;
     private LinearLayout warehouse_llt, inventory_record_llt, loss_llt, stock_llt, vendor_llt;
     private TextView item_number_txt, item_name_txt, item_format_txt, stock_txt, unit_txt1,
