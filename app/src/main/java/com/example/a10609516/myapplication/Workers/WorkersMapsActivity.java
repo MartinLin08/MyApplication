@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class WorkersMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -45,11 +45,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Bundle bundle = getIntent().getExtras();
         String gps_location1 = bundle.getString("gps_location"+ 1).substring(6);
         String gps_location4 = bundle.getString("gps_location"+ 4).substring(7);
-        Log.e("MapsActivity", gps_location4);
+        Log.e("WorkersMapsActivity", gps_location4);
         String gps_x = gps_location4.substring(0, gps_location4.indexOf(","));
         String gps_y = gps_location4.substring(gps_location4.indexOf(",") + 1, gps_location4.length());
-        Log.e("MapsActivity", gps_x);
-        Log.e("MapsActivity", gps_y);
+        Log.e("WorkersMapsActivity", gps_x);
+        Log.e("WorkersMapsActivity", gps_y);
         double x= Double.parseDouble(gps_x);
         double y= Double.parseDouble(gps_y);
 
@@ -64,8 +64,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setCompassEnabled(true);       // 左上角的指南針，要兩指旋轉才會出現
         mMap.getUiSettings().setMapToolbarEnabled(true);    // 右下角的導覽及開啟 Google Map功能
 
-        Log.d("MapsActivity", "最高放大層級："+mMap.getMaxZoomLevel());
-        Log.d("MapsActivity", "最低放大層級："+mMap.getMinZoomLevel());
+        Log.d("WorkersMapsActivity", "最高放大層級："+mMap.getMaxZoomLevel());
+        Log.d("WorkersMapsActivity", "最低放大層級："+mMap.getMinZoomLevel());
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16));     // 放大地圖到 16 倍大

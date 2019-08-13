@@ -352,6 +352,10 @@ public class MaintainActivity extends AppCompatActivity {
         if (arrive_button.getText().toString().equals("1900-01-01")) {
             arrive_button.setText("");
         }
+        //如果派工類別為"臨時取消",則把OK按鈕隱藏
+        if(ResponseText0.equals("臨時取消")) {
+            check_button.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -633,6 +637,14 @@ public class MaintainActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = simpleDateFormat.format(new java.util.Date());
         arrive_button.setText(date);
+
+        Log.e("MaintainActivity", time_period_name_txt.getText().toString());
+
+        //String booking_date = time_period_name_txt.getText().toString().substring(0, 11);
+        StringBuilder work_date = new StringBuilder();
+        work_date.append(time_period_name_txt.getText().toString().substring(0, 11));
+        arrive_button.setText(work_date);
+
     }
 
     /**
@@ -735,6 +747,7 @@ public class MaintainActivity extends AppCompatActivity {
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
+                    Log.e("MaintainActivity1", request.toString());
                     String responseData = response.body().string();
                     Log.e("MaintainActivity1", responseData);
                 } catch (Exception e) {
