@@ -1,14 +1,9 @@
 package com.example.a10609516.myapplication.DepartmentAndDIY;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,23 +12,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a10609516.myapplication.Clerk.QuotationActivity;
-import com.example.a10609516.myapplication.Manager.InventoryActivity;
 import com.example.a10609516.myapplication.Tools.DatePickerFragment;
 import com.example.a10609516.myapplication.Tools.ListViewForScrollView;
-import com.example.a10609516.myapplication.Basic.MenuActivity;
-import com.example.a10609516.myapplication.Basic.SignatureActivity;
 import com.example.a10609516.myapplication.R;
-import com.example.a10609516.myapplication.Basic.VersionActivity;
 import com.example.a10609516.myapplication.Tools.WQPServiceActivity;
-import com.example.a10609516.myapplication.Workers.CalendarActivity;
-import com.example.a10609516.myapplication.Basic.QRCodeActivity;
-import com.example.a10609516.myapplication.Workers.EngPointsActivity;
-import com.example.a10609516.myapplication.Workers.GPSActivity;
-import com.example.a10609516.myapplication.Workers.MissCountActivity;
-import com.example.a10609516.myapplication.Workers.PointsActivity;
-import com.example.a10609516.myapplication.Workers.ScheduleActivity;
-import com.example.a10609516.myapplication.Workers.SearchActivity;
 
 public class CustomerActivity extends WQPServiceActivity {
 

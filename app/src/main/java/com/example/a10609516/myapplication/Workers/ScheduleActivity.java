@@ -1,41 +1,25 @@
 package com.example.a10609516.myapplication.Workers;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTitleStrip;
@@ -44,24 +28,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.a10609516.myapplication.Basic.QRCodeActivity;
-import com.example.a10609516.myapplication.Basic.SignatureActivity;
-import com.example.a10609516.myapplication.Clerk.QuotationActivity;
-import com.example.a10609516.myapplication.DepartmentAndDIY.CorrectActivity;
-import com.example.a10609516.myapplication.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.myapplication.Basic.MenuActivity;
-import com.example.a10609516.myapplication.DepartmentAndDIY.PictureActivity;
-import com.example.a10609516.myapplication.Manager.InventoryActivity;
 import com.example.a10609516.myapplication.R;
-import com.example.a10609516.myapplication.DepartmentAndDIY.RecordActivity;
-import com.example.a10609516.myapplication.DepartmentAndDIY.UploadActivity;
-import com.example.a10609516.myapplication.Basic.VersionActivity;
 import com.example.a10609516.myapplication.Tools.WQPServiceActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

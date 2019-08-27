@@ -67,6 +67,9 @@
             <item
                 android:id="@+id/return_item"
                 android:title="倉庫調撥管理" />
+            <item
+                android:id="@+id/picking_item"
+                android:title="撿料單" />
         </menu>
     </item>
     <item

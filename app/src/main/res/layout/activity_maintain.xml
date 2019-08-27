@@ -191,8 +191,8 @@
                     android:paddingLeft="8dp"
                     android:text=""
                     android:textColor="@color/colorAccent"
-                    android:textSize="17sp"
-                    android:textIsSelectable="true"/>
+                    android:textIsSelectable="true"
+                    android:textSize="17sp" />
 
             </TableRow>
 
@@ -728,11 +728,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginBottom="3dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="3dp"
-            android:background="@drawable/titleline">
+            android:background="@drawable/titleline"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"

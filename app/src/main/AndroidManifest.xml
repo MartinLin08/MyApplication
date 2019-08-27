@@ -90,7 +90,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Basic.SignatureActivity"
+            android:name=".Workers.Worker_SignatureActivity"
             android:label="客戶電子簽名"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -206,6 +206,18 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Manager.OrderSearchActivity"
+            android:label="撿料單建立"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Manager.PickingActivity"
+            android:label="撿料單"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <!-- Tools -->
         <activity android:name=".Tools.BackKeyActivity" />
         <activity android:name=".Tools.DatePickerFragment" />
@@ -260,8 +272,7 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
-
-        <activity android:name=".Manager.PickingActivity"></activity>
+        <activity android:name=".Manager.Picking_SignatureActivity"></activity>
     </application>
 
 </manifest>
