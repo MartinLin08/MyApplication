@@ -11,18 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.a10609516.app.Tools.WangGeView
+        <com.example.a10609516.myapplication.Tools.WangGeView
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:layout_marginBottom="2dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <com.example.a10609516.app.Tools.SignView
+        <com.example.a10609516.myapplication.Tools.SignView
             android:id="@+id/signView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </com.example.a10609516.app.Tools.SignView>
+        </com.example.a10609516.myapplication.Tools.SignView>
     </FrameLayout>
 
     <LinearLayout
@@ -52,7 +52,7 @@
             android:textSize="15dp"
             android:gravity="center"
             android:textColor="@color/colorAccent"
-            android:background="@drawable/button"
+            android:background="@drawable/cancel_button"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
             android:text="清除" />

@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.example.a10609516.myapplication.Basic.MenuActivity;
 import com.example.a10609516.myapplication.Basic.QRCodeActivity;
+import com.example.a10609516.myapplication.Basic.RequisitionActivity;
+import com.example.a10609516.myapplication.Basic.RequisitionSearchActivity;
 import com.example.a10609516.myapplication.Manager.OrderSearchActivity;
 import com.example.a10609516.myapplication.Workers.Worker_SignatureActivity;
 import com.example.a10609516.myapplication.Basic.VersionActivity;
@@ -73,22 +75,28 @@ public class WQPServiceActivity extends AppCompatActivity {
         SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
         String department_id_data = department_id.getString("D_ID", "");
         if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
-                || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
+                || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10304116") || user_id_data.toString().equals("10405235")) {
+            //工務主管  //09706013 周威廷  //09908023 劉欣亨  //10010039 劉英任  //10012043 洪寬耀  //10304116 陳信華  //10405235 郭哲毓
             getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
             return true;
         }else if (department_id_data.toString().equals("1100")) {
+            //內勤
             getMenuInflater().inflate(R.menu.logistics_menu, menu);
             return true;
         }else if (department_id_data.toString().equals("2100")) {
+            //業務主管
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
         } else if (department_id_data.toString().equals("2200")) {
+            //外點業務
             getMenuInflater().inflate(R.menu.diy_menu, menu);
             return true;
         } else if (department_id_data.toString().equals("5200")) {
+            //工務
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
         } else {
+            //超級使用者
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -106,7 +114,7 @@ public class WQPServiceActivity extends AppCompatActivity {
                 Intent intent0 = new Intent(this, MenuActivity.class);
                 startActivity(intent0);
                 Toast.makeText(this, "HOME",Toast.LENGTH_SHORT).show();
-                finish();
+                //finish();
                 break; //返回首頁
             /**工務部Menu*/
             case R.id.schedule_item:
@@ -188,8 +196,8 @@ public class WQPServiceActivity extends AppCompatActivity {
                 Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
                 break; //進入倉庫盤點管理頁面
             case R.id.picking_item:
-                Intent intent19 = new Intent(this, OrderSearchActivity.class);
-                startActivity(intent19);
+                Intent intent32 = new Intent(this, OrderSearchActivity.class);
+                startActivity(intent32);
                 Toast.makeText(this, "撿料單", Toast.LENGTH_SHORT).show();
                 break; //進入撿料單頁面
             /**共用Menu*/
@@ -198,6 +206,16 @@ public class WQPServiceActivity extends AppCompatActivity {
                 startActivity(intent41);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.requisition_item:
+                Intent intent44 = new Intent(this, RequisitionActivity.class);
+                startActivity(intent44);
+                Toast.makeText(this, "需求申請單", Toast.LENGTH_SHORT).show();
+                break; //進入需求單頁面
+            case R.id.progress_item:
+                Intent intent45 = new Intent(this, RequisitionSearchActivity.class);
+                startActivity(intent45);
+                Toast.makeText(this, "需求單進度查詢", Toast.LENGTH_SHORT).show();
+                break; //進入需求單頁面
             case R.id.about_item:
                 Intent intent43 = new Intent(this, VersionActivity.class);
                 startActivity(intent43);
@@ -278,8 +296,8 @@ public class WQPServiceActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://192.168.0.201/wqp_2.1.apk");
-            //URL url = new URL("http://m.wqp-water.com.tw/wqp_2.1.apk");
+            URL url = new URL("http://192.168.0.201/wqp_2.2.apk");
+            //URL url = new URL("http://m.wqp-water.com.tw/wqp_2.2.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -290,7 +308,7 @@ public class WQPServiceActivity extends AppCompatActivity {
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_2.1.apk");
+            File outputFile = new File(file, "wqp_2.2.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -304,7 +322,7 @@ public class WQPServiceActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.1.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.2.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
