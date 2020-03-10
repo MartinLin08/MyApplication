@@ -1,18 +1,23 @@
 package com.example.a10609516.myapplication.Tools;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -20,6 +25,7 @@ import com.example.a10609516.myapplication.Basic.MenuActivity;
 import com.example.a10609516.myapplication.Basic.QRCodeActivity;
 import com.example.a10609516.myapplication.Basic.RequisitionActivity;
 import com.example.a10609516.myapplication.Basic.RequisitionSearchActivity;
+import com.example.a10609516.myapplication.BuildConfig;
 import com.example.a10609516.myapplication.Manager.OrderSearchActivity;
 import com.example.a10609516.myapplication.Workers.Worker_SignatureActivity;
 import com.example.a10609516.myapplication.Basic.VersionActivity;
@@ -54,6 +60,8 @@ import java.net.URL;
 import java.util.Map;
 
 public class WQPServiceActivity extends AppCompatActivity {
+
+    private Context context;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -241,6 +249,17 @@ public class WQPServiceActivity extends AppCompatActivity {
     }
 
     /**
+     * 點擊空白區域，隐藏虛擬鍵盤
+     */
+    public boolean onTouchEvent(MotionEvent event) {
+        if(null != this.getCurrentFocus()){
+            InputMethodManager mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            return mInputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+        }
+        return super .onTouchEvent(event);
+    }
+
+    /**
      * 確認是否有最新版本，進行更新
      */
     private void CheckFirebaseVersion() {
@@ -276,7 +295,9 @@ public class WQPServiceActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     super.run();
+                                                    Log.e("WQPServiceActivity", "11111");
                                                     WQPServiceActivity.this.Update();
+                                                    Log.e("WQPServiceActivity", "22222");
                                                 }
                                             }.start();
                                         }
@@ -295,20 +316,43 @@ public class WQPServiceActivity extends AppCompatActivity {
      * 下載新版本APK
      */
     public void Update() {
+        /*try {
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.6.apk");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoOutput(true);
+            urlConnection.connect();
+            File sdcard = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+            File file = new File(sdcard, "wqp_2.6.apk");
+            FileOutputStream fileOutput = new FileOutputStream(file);
+            InputStream inputStream = urlConnection.getInputStream();
+            byte[] buffer = new byte[1024];
+            int bufferLength = 0;
+            while ( (bufferLength = inputStream.read(buffer)) > 0 ) {
+                fileOutput.write(buffer, 0, bufferLength);
+            }
+            fileOutput.close();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
         try {
-            URL url = new URL("http://192.168.0.201/wqp_2.5.apk");
-            //URL url = new URL("http://m.wqp-water.com.tw/wqp_2.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.6.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
             c.connect();
 
             String PATH = Environment.getExternalStorageDirectory() + "/Download/";
-            //String PATH2 = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            //String PATH = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/";
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
+            Log.e("LoginActivity", PATH);
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_2.5.apk");
+            File outputFile = new File(file, "wqp_2.6.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -320,12 +364,37 @@ public class WQPServiceActivity extends AppCompatActivity {
             }
             fos.close();
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
+            Log.e("LoginActivity", "下載完成");
+
+            File apkFile = new File((Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk"));
+            Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.5.apk")), "application/vnd.android.package-archive");
+            //判断是否是AndroidN以及更高的版本
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            } else {
+                intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+            startActivity(intent);
+
+            /*Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            startActivity(intent);*/
 
             this.runOnUiThread(new Runnable() {
                 @Override
